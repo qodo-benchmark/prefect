@@ -2897,7 +2897,7 @@ class TestObserverSettings:
         monkeypatch: pytest.MonkeyPatch,
     ):
         """Test that observer is not started when enabled=False."""
-        monkeypatch.setenv("PREFECT_INTEGRATIONS_KUBERNETES_OBSERVER_ENABLED", "false")
+        monkeypatch.setenv("PREFECT_INTEGRATIONS_KUBERNETES_OBSERVER_REPLICATE_POD_EVENTS", "false")
 
         mock_stop = MagicMock()
         monkeypatch.setattr("prefect_kubernetes.worker.stop_observer", mock_stop)

