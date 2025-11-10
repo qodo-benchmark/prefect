@@ -20,7 +20,6 @@ async def read_flow_run(flow_run_id):
 def test_deploy():
     tmp_dir = Path(tempfile.mkdtemp())
     runner_dir = tmp_dir / "runner"
-    runner_dir.mkdir()
 
     try:
         subprocess.check_call(

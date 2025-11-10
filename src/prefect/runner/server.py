@@ -96,6 +96,9 @@ async def build_server(runner: "Runner") -> FastAPI:
     router.add_api_route("/shutdown", shutdown(runner=runner), methods=["POST"])
     webserver.include_router(router)
 
+    deployments_router, deployment_schemas = await get_deployment_router(runner)
+    webserver.include_router(deployments_router)
+
     return webserver
 
 
