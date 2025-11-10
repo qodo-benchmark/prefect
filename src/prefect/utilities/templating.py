@@ -356,7 +356,7 @@ async def resolve_block_document_references(
             if len(data) == 1 and "value" in data:
                 # only resolve the value if the keypath is not already pointing to "value"
                 if not (value_keypath and value_keypath[0].startswith("value")):
-                    data = value = value["value"]
+                    data = value = data["value"]
 
             # resolving keypath/block attributes
             if value_keypath:

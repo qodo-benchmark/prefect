@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from typing import Annotated, Generic, TypeVar, Union
+from typing import Annotated, Any, Generic, TypeVar, Union
 
 from pydantic import (
     Field,
