@@ -5,7 +5,6 @@ import os
 import socket
 import threading
 import uuid
-from datetime import datetime
 from functools import partial
 from operator import methodcaller
 from pathlib import Path
@@ -35,7 +34,6 @@ import prefect
 import prefect.types._datetime
 from prefect._internal.compatibility.async_dispatch import async_dispatch
 from prefect._internal.compatibility.blocks import call_explicitly_async_block_method
-from prefect._internal.compatibility.deprecated import deprecated_callable
 from prefect._internal.concurrency.event_loop import get_running_loop
 from prefect._result_records import R, ResultRecord, ResultRecordMetadata
 from prefect.blocks.core import Block
@@ -140,13 +138,13 @@ async def aresolve_result_storage(
     storage_block: WritableFileSystem
     if isinstance(result_storage, Block):
         storage_block = result_storage
-    elif isinstance(result_storage, Path):
-        storage_block = LocalFileSystem(basepath=str(result_storage))
     elif isinstance(result_storage, str):
         block = await Block.aload(result_storage, client=client)
         if TYPE_CHECKING:
             assert isinstance(block, WritableFileSystem)
         storage_block = block
+    elif isinstance(result_storage, Path):
+        storage_block = LocalFileSystem(basepath=str(result_storage))
     elif isinstance(result_storage, UUID):  # pyright: ignore[reportUnnecessaryIsInstance]
         block_document = await client.read_block_document(result_storage)
         from_block_document = methodcaller("_from_block_document", block_document)
@@ -964,50 +962,6 @@ class ResultStore(BaseModel):
                 " a lock manager when creating the result store to enable locking."
             )
         return await self.lock_manager.await_for_lock(key, timeout)
-
-    # TODO: These two methods need to find a new home
-
-    @deprecated_callable(
-        start_date=datetime(2025, 5, 10),
-        end_date=datetime(2025, 11, 10),
-        help="Use `store_parameters` from `prefect.task_worker` instead.",
-    )
-    @sync_compatible
-    async def store_parameters(self, identifier: UUID, parameters: dict[str, Any]):
-        record = ResultRecord(
-            result=parameters,
-            metadata=ResultRecordMetadata(
-                serializer=self.serializer, storage_key=str(identifier)
-            ),
-        )
-
-        await call_explicitly_async_block_method(
-            self.result_storage,
-            "write_path",
-            (f"parameters/{identifier}",),
-            {"content": record.serialize()},
-        )
-
-    @deprecated_callable(
-        start_date=datetime(2025, 5, 10),
-        end_date=datetime(2025, 11, 10),
-        help="Use `read_parameters` from `prefect.task_worker` instead.",
-    )
-    @sync_compatible
-    async def read_parameters(self, identifier: UUID) -> dict[str, Any]:
-        if self.result_storage is None:
-            raise ValueError(
-                "Result store is not configured - must have a result storage block to read parameters"
-            )
-        record: ResultRecord[Any] = ResultRecord[Any].deserialize(
-            await call_explicitly_async_block_method(
-                self.result_storage,
-                "read_path",
-                (f"parameters/{identifier}",),
-                {},
-            )
-        )
-        return record.result
 
 
 def get_result_store() -> ResultStore:
