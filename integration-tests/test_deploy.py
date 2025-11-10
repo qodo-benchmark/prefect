@@ -20,7 +20,7 @@ async def read_flow_run(flow_run_id):
 def test_deploy():
     tmp_dir = Path(tempfile.mkdtemp())
     runner_dir = tmp_dir / "runner"
-    runner_dir.mkdir()
+    runner_dir.mkdir(parents=True)
 
     try:
         subprocess.check_call(
@@ -71,7 +71,6 @@ def test_deploy():
             ],
             stdout=sys.stdout,
             stderr=sys.stderr,
-            cwd=runner_dir,
         )
 
         flow_run = anyio.run(read_flow_run, flow_run.id)

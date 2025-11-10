@@ -27,7 +27,7 @@ COLLECTIONS_BLOCKS_DATA_PATH = (
 
 async def _install_protected_system_blocks(session: AsyncSession) -> None:
     """Install block types that the system expects to be present"""
-    protected_system_blocks = cast(List[Block], [Webhook, Secret, LocalFileSystem])
+    protected_system_blocks = cast(List[Block], [Webhook, LocalFileSystem, Secret])
 
     for block in protected_system_blocks:
         async with session.begin():

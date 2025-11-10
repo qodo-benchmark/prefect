@@ -11,7 +11,7 @@ async def load_flow(entrypoint: str, base_dir: Path) -> Flow[..., Any]:
     source = GitRepository(
         url="https://github.com/PrefectHQ/examples.git",
     )
-    source.set_base_path(base_dir)
+    source.set_base_path(str(base_dir))
     return await Flow.from_source(  # type: ignore # sync_compatible causes issues
         source=source,
         entrypoint=entrypoint,
@@ -24,7 +24,8 @@ async def run_iteration():
             "flows/hello_world.py:hello",
             "flows/whoami.py:whoami",
         ] * 5  # Load each flow 5 times concurrently
-        futures = [load_flow(entrypoint, Path(tmpdir)) for entrypoint in entrypoints]
+        base_path = Path(tmpdir)
+        futures = [load_flow(entrypoint, base_path) for entrypoint in entrypoints]
         flows = await asyncio.gather(*futures)
         return len(flows)
 

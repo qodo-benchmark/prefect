@@ -72,8 +72,8 @@ class Secret(Block, Generic[T]):
     def get(self) -> T | str:
         value = self.value.get_secret_value()
         try:
-            if isinstance(value, (str)):
+            if isinstance(value, str):
                 return json.loads(value)
             return value
         except (TypeError, json.JSONDecodeError):
-            return value
+            return str(value)

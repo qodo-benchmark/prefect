@@ -138,13 +138,13 @@ async def aresolve_result_storage(
     storage_block: WritableFileSystem
     if isinstance(result_storage, Block):
         storage_block = result_storage
-    elif isinstance(result_storage, Path):
-        storage_block = LocalFileSystem(basepath=str(result_storage))
     elif isinstance(result_storage, str):
         block = await Block.aload(result_storage, client=client)
         if TYPE_CHECKING:
             assert isinstance(block, WritableFileSystem)
         storage_block = block
+    elif isinstance(result_storage, Path):
+        storage_block = LocalFileSystem(basepath=str(result_storage))
     elif isinstance(result_storage, UUID):  # pyright: ignore[reportUnnecessaryIsInstance]
         block_document = await client.read_block_document(result_storage)
         from_block_document = methodcaller("_from_block_document", block_document)
