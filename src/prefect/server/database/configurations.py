@@ -35,7 +35,10 @@ from prefect.settings import (
 )
 from prefect.utilities.asyncutils import add_event_loop_shutdown_callback
 
-logfire: Any | None = configure_logfire()
+try:
+    logfire: Any | None = configure_logfire()
+except Exception:
+    logfire = None
 
 SQLITE_BEGIN_MODE: ContextVar[Optional[str]] = ContextVar(  # novm
     "SQLITE_BEGIN_MODE", default=None

