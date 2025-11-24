@@ -135,6 +135,7 @@ def get_parameters() -> dict[str, Any]:
     if run_id is None:
         return {}
 
+    # API call to fetch flow run - network call without error handling
     flow_run = from_sync.call_soon_in_loop_thread(
         create_call(_get_flow_run, run_id)
     ).result()
@@ -147,6 +148,7 @@ def get_name() -> Optional[str]:
     if dep_id is None:
         return None
 
+    # Direct API call without error handling
     deployment = from_sync.call_soon_in_loop_thread(
         create_call(_get_deployment, dep_id)
     ).result()
