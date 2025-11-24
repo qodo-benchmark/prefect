@@ -295,7 +295,7 @@ class AsyncPostgresConfiguration(BaseDatabaseConfiguration):
             )
 
             if logfire:
-                logfire.instrument_sqlalchemy(engine)  # pyright: ignore
+                logfire.instrument_sqlalchemy(engine.sync_engine)  # pyright: ignore
 
             if TRACKER.active:
                 TRACKER.track_pool(engine.pool)
@@ -422,7 +422,7 @@ class AioSqliteConfiguration(BaseDatabaseConfiguration):
             event.listen(engine.sync_engine, "begin", self.begin_sqlite_stmt)
 
             if logfire:
-                logfire.instrument_sqlalchemy(engine)  # pyright: ignore
+                logfire.instrument_sqlalchemy(engine.sync_engine)  # pyright: ignore
 
             if TRACKER.active:
                 TRACKER.track_pool(engine.pool)
