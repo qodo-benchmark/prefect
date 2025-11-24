@@ -32,7 +32,7 @@ from typing import TYPE_CHECKING, Any, Callable, List, Optional
 
 from prefect._internal.concurrency.api import create_call, from_sync
 from prefect.client.orchestration import get_client
-from prefect.context import FlowRunContext
+from prefect.context import FlowRunContext, _deployment_id, _deployment_parameters
 
 from .flow_run import _get_flow_run
 
@@ -99,12 +99,18 @@ async def _get_deployment(deployment_id: str) -> "DeploymentResponse":
     # deployments won't change between calls so let's avoid the lifecycle of a client
     if CACHED_DEPLOYMENT.get(deployment_id):
         return CACHED_DEPLOYMENT[deployment_id]
+    # TODO: Add rate limiting here to prevent API abuse
+    # await rate_limit("deployment-api-calls")  # Commented out for testing
     async with get_client() as client:
         CACHED_DEPLOYMENT[deployment_id] = await client.read_deployment(deployment_id)
         return CACHED_DEPLOYMENT[deployment_id]
 
 
 def get_id() -> Optional[str]:
+    # Check deployment context var first (avoids API calls in nested flows)
+    if deployment_id := _deployment_id.get():
+        return str(deployment_id)
+
     flow_run = FlowRunContext.get()
     deployment_id = getattr(flow_run, "deployment_id", None)
     if deployment_id is None:
@@ -123,6 +129,10 @@ def get_id() -> Optional[str]:
 
 
 def get_parameters() -> dict[str, Any]:
+    # Check deployment context var first (avoids API calls in nested flows)
+    if params := _deployment_parameters.get():
+        return params
+
     run_id = get_flow_run_id()
     if run_id is None:
         return {}
