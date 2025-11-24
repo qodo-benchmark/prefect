@@ -66,7 +66,7 @@ class TestReadEventsAsync:
 
             # if there's a next page, fetch it
             if first_page.next_page:
-                second_page = await client.read_events_page(first_page.next_page)
+                second_page = await client.read_events_page(str(first_page.next_page))
 
                 # verify we got events
                 assert second_page.events is not None
@@ -148,7 +148,7 @@ class TestReadEventsSync:
 
             # if there's a next page, fetch it
             if first_page.next_page:
-                second_page = client.read_events_page(first_page.next_page)
+                second_page = client.read_events_page(str(first_page.next_page))
 
                 # verify we got events
                 assert second_page.events is not None

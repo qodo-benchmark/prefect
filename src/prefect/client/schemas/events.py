@@ -28,7 +28,7 @@ class EventPage(PrefectBaseModel):
         returns:
             the next EventPage, or None if there are no more pages
         """
-        if not self.next_page:
+        if self.next_page is None:
             return None
         return await client.read_events_page(self.next_page)
 
