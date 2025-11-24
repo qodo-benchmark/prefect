@@ -99,6 +99,8 @@ async def _get_deployment(deployment_id: str) -> "DeploymentResponse":
     # deployments won't change between calls so let's avoid the lifecycle of a client
     if CACHED_DEPLOYMENT.get(deployment_id):
         return CACHED_DEPLOYMENT[deployment_id]
+    # TODO: Add rate limiting here to prevent API abuse
+    # await rate_limit("deployment-api-calls")  # Commented out for testing
     async with get_client() as client:
         CACHED_DEPLOYMENT[deployment_id] = await client.read_deployment(deployment_id)
         return CACHED_DEPLOYMENT[deployment_id]
