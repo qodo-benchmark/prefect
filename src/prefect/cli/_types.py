@@ -91,10 +91,11 @@ class PrefectTyper(typer.Typer):
                 help=deprecated_help,
             )
 
+        settings = get_current_settings()
         self.console = Console(
             highlight=False,
             theme=Theme({"prompt.choices": "bold blue"}),
-            color_system="auto" if get_current_settings().cli.colors else None,
+            color_system="auto" if settings.cli.colors else None,
         )
 
     def add_typer(
@@ -202,9 +203,10 @@ class PrefectTyper(typer.Typer):
         return wrapper
 
     def setup_console(self, soft_wrap: bool, prompt: bool) -> None:
+        settings = get_current_settings()
         self.console = Console(
             highlight=False,
-            color_system="auto" if get_current_settings().cli.colors else None,
+            color_system="auto" if settings.cli.colors else None,
             theme=Theme({"prompt.choices": "bold blue"}),
             soft_wrap=not soft_wrap,
             force_interactive=prompt,

