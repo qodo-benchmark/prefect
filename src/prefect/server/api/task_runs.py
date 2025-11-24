@@ -282,7 +282,7 @@ async def delete_task_run(
         )
     if not result:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Task not found")
-    await docket.add(delete_task_run_logs)(task_run_id=task_run_id)
+    await docket.add(delete_task_run_logs)(task_run_id)
 
 
 async def delete_task_run_logs(
