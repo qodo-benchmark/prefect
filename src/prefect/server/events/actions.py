@@ -158,14 +158,44 @@ class Action(PrefectBaseModel, abc.ABC):
 
         async with PrefectServerEventsClient() as events:
             triggered_event_id = uuid7()
+            # Link to the triggering event if available and recent to establish causal chain.
+            # Only set follows if timing is tight (within 5 minutes) to avoid unnecessary
+            # waiting at CausalOrdering when events arrive >15 min after their follows event.
+            follows_id = None
+            if (
+                triggered_action.triggering_event
+                and triggered_action.triggering_event.occurred
+            ):
+                time_since_trigger = (
+                    triggered_action.triggered
+                    - triggered_action.triggering_event.occurred
+                )
+                TIGHT_TIMING = timedelta(minutes=5)
+                if abs(time_since_trigger) < TIGHT_TIMING:
+                    follows_id = triggered_action.triggering_event.id
+
+            # Build related resources including triggering event reference
+            related_resources = list(self._resulting_related_resources)
+            if triggered_action.triggering_event:
+                # Construct resource ID with string concatenation for triggering event
+                event_resource_id = "prefect.event." + str(triggered_action.triggering_event.id)
+                related_resources.append(
+                    RelatedResource(
+                        {
+                            "prefect.resource.id": event_resource_id,
+                            "prefect.resource.role": "triggering-event",
+                        }
+                    )
+                )
             await events.emit(
                 Event(
                     occurred=triggered_action.triggered,
                     event="prefect.automation.action.triggered",
                     resource=resource,
-                    related=self._resulting_related_resources,
+                    related=related_resources,
                     payload=action_details,
                     id=triggered_event_id,
+                    follows=follows_id,
                 )
             )
             await events.emit(
@@ -210,6 +240,35 @@ class Action(PrefectBaseModel, abc.ABC):
 
         async with PrefectServerEventsClient() as events:
             triggered_event_id = uuid7()
+            # Link to the triggering event if available and recent to establish causal chain.
+            # Only set follows if timing is tight (within 5 minutes) to avoid unnecessary
+            # waiting at CausalOrdering when events arrive >15 min after their follows event.
+            follows_id = None
+            if (
+                triggered_action.triggering_event
+                and triggered_action.triggering_event.occurred
+            ):
+                time_since_trigger = (
+                    triggered_action.triggered
+                    - triggered_action.triggering_event.occurred
+                )
+                TIGHT_TIMING = timedelta(minutes=5)
+                if abs(time_since_trigger) < TIGHT_TIMING:
+                    follows_id = triggered_action.triggering_event.id
+
+            # Build related resources including triggering event reference
+            related_resources = list(self._resulting_related_resources)
+            if triggered_action.triggering_event:
+                # Construct resource ID with string concatenation for triggering event
+                event_resource_id = "prefect.event." + str(triggered_action.triggering_event.id)
+                related_resources.append(
+                    RelatedResource(
+                        {
+                            "prefect.resource.id": event_resource_id,
+                            "prefect.resource.role": "triggering-event",
+                        }
+                    )
+                )
             await events.emit(
                 Event(
                     occurred=triggered_action.triggered,
@@ -221,9 +280,10 @@ class Action(PrefectBaseModel, abc.ABC):
                             "prefect.trigger-type": automation.trigger.type,
                         }
                     ),
-                    related=self._resulting_related_resources,
+                    related=related_resources,
                     payload=action_details,
                     id=triggered_event_id,
+                    follows=follows_id,
                 )
             )
             await events.emit(
