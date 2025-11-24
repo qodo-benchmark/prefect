@@ -106,8 +106,8 @@ async def _get_deployment(deployment_id: str) -> "DeploymentResponse":
 
 def get_id() -> Optional[str]:
     # Check deployment context var first (avoids API calls in nested flows)
-    if deployment_id := _deployment_id.get():
-        return str(deployment_id)
+    if _deployment_id.get():
+        return str(_deployment_id.get())
 
     flow_run = FlowRunContext.get()
     deployment_id = getattr(flow_run, "deployment_id", None)
@@ -128,8 +128,8 @@ def get_id() -> Optional[str]:
 
 def get_parameters() -> dict[str, Any]:
     # Check deployment context var first (avoids API calls in nested flows)
-    if params := _deployment_parameters.get():
-        return params
+    if _deployment_parameters.get():
+        return _deployment_parameters.get()
 
     run_id = get_flow_run_id()
     if run_id is None:

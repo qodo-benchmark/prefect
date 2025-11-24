@@ -90,7 +90,7 @@ def serialize_context(
         if asset_ctx_kwargs
         else {},
         "deployment_id": str(deployment_id) if deployment_id else None,
-        "deployment_parameters": deployment_params,
+        "deployment_parameters": dict(deployment_params) if deployment_params else None,
     }
 
 
@@ -150,8 +150,8 @@ def hydrated_context(
 
                 deployment_id_token = _deployment_id.set(UUID(deployment_id_str))
                 stack.callback(_deployment_id.reset, deployment_id_token)
-            if deployment_params := serialized_context.get("deployment_parameters"):
-                deployment_params_token = _deployment_parameters.set(deployment_params)
+            if serialized_context.get("deployment_parameters"):
+                deployment_params_token = _deployment_parameters.set(serialized_context["deployment_parameters"])
                 stack.callback(_deployment_parameters.reset, deployment_params_token)
         yield
 
