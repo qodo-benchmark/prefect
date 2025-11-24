@@ -202,4 +202,4 @@ def docket(request: Request) -> Docket_:
     return request.app.state.docket
 
 
-Docket = Annotated[Docket_, Depends(docket)]
+Docket = Annotated[Docket_, Depends(docket, use_cache=False)]

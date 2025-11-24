@@ -21,6 +21,6 @@ class ServerDocketSettings(PrefectBaseSettings):
     )
 
     url: str = Field(
-        default="memory://",
+        default="redis://localhost:6379",
         description="The URL of the Redis server to use for Docket.",
     )

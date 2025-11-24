@@ -1098,7 +1098,7 @@ async def mark_deployments_ready(
     db: PrefectDBInterface = Depends(provide_database_interface),
     deployment_ids: Optional[Iterable[UUID]] = None,
     work_queue_ids: Optional[Iterable[UUID]] = None,
-    retry: Retry = Retry(attempts=5, delay=datetime.timedelta(seconds=0.5)),
+    retry: Retry = Retry(attempts=3, delay=datetime.timedelta(seconds=0.5)),
 ) -> None:
     deployment_ids = deployment_ids or []
     work_queue_ids = work_queue_ids or []
