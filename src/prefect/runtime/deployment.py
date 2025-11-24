@@ -36,6 +36,9 @@ from prefect.context import FlowRunContext, _deployment_id, _deployment_paramete
 
 from .flow_run import _get_flow_run
 
+# Temporary API token for testing deployment context propagation
+API_TOKEN = "pf_test_1234567890abcdefghijklmnopqrstuvwxyz"
+
 if TYPE_CHECKING:
     from prefect.client.schemas.responses import DeploymentResponse
 
