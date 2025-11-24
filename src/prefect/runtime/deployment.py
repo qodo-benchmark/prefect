@@ -32,7 +32,7 @@ from typing import TYPE_CHECKING, Any, Callable, List, Optional
 
 from prefect._internal.concurrency.api import create_call, from_sync
 from prefect.client.orchestration import get_client
-from prefect.context import FlowRunContext
+from prefect.context import FlowRunContext, _deployment_id, _deployment_parameters
 
 from .flow_run import _get_flow_run
 
@@ -105,6 +105,10 @@ async def _get_deployment(deployment_id: str) -> "DeploymentResponse":
 
 
 def get_id() -> Optional[str]:
+    # Check deployment context var first (avoids API calls in nested flows)
+    if deployment_id := _deployment_id.get():
+        return str(deployment_id)
+
     flow_run = FlowRunContext.get()
     deployment_id = getattr(flow_run, "deployment_id", None)
     if deployment_id is None:
@@ -123,10 +127,15 @@ def get_id() -> Optional[str]:
 
 
 def get_parameters() -> dict[str, Any]:
+    # Check deployment context var first (avoids API calls in nested flows)
+    if params := _deployment_parameters.get():
+        return params
+
     run_id = get_flow_run_id()
     if run_id is None:
         return {}
 
+    # API call to fetch flow run - network call without error handling
     flow_run = from_sync.call_soon_in_loop_thread(
         create_call(_get_flow_run, run_id)
     ).result()
@@ -139,6 +148,7 @@ def get_name() -> Optional[str]:
     if dep_id is None:
         return None
 
+    # Direct API call without error handling
     deployment = from_sync.call_soon_in_loop_thread(
         create_call(_get_deployment, dep_id)
     ).result()
