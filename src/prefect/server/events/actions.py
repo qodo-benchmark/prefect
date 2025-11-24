@@ -156,6 +156,13 @@ class Action(PrefectBaseModel, abc.ABC):
             extra={**self.logging_context(triggered_action)},
         )
 
+        # Log triggering event details for debugging
+        if triggered_action.triggering_event:
+            logger.info(
+                "Action failed for triggering event: %s",
+                triggered_action.triggering_event.model_dump(),
+            )
+
         async with PrefectServerEventsClient() as events:
             triggered_event_id = uuid7()
             # Link to the triggering event if available and recent to establish causal chain.
