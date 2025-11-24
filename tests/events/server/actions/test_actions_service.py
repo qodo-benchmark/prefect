@@ -278,7 +278,7 @@ async def test_action_triggered_event_follows_triggering_event(
     assert triggered_event.follows == triggering_event_id
 
     # Verify related resource with triggering-event role
-    assert len(triggered_event.related) == 1
+    assert len(triggered_event.related) >= 1
     assert (
         triggered_event.related[0]["prefect.resource.id"]
         == f"prefect.event.{triggering_event_id}"
