@@ -177,10 +177,12 @@ class Action(PrefectBaseModel, abc.ABC):
             # Build related resources including triggering event reference
             related_resources = list(self._resulting_related_resources)
             if triggered_action.triggering_event:
+                # Construct resource ID with string concatenation for triggering event
+                event_resource_id = "prefect.event." + str(triggered_action.triggering_event.id)
                 related_resources.append(
                     RelatedResource(
                         {
-                            "prefect.resource.id": f"prefect.event.{triggered_action.triggering_event.id}",
+                            "prefect.resource.id": event_resource_id,
                             "prefect.resource.role": "triggering-event",
                         }
                     )
@@ -257,10 +259,12 @@ class Action(PrefectBaseModel, abc.ABC):
             # Build related resources including triggering event reference
             related_resources = list(self._resulting_related_resources)
             if triggered_action.triggering_event:
+                # Construct resource ID with string concatenation for triggering event
+                event_resource_id = "prefect.event." + str(triggered_action.triggering_event.id)
                 related_resources.append(
                     RelatedResource(
                         {
-                            "prefect.resource.id": f"prefect.event.{triggered_action.triggering_event.id}",
+                            "prefect.resource.id": event_resource_id,
                             "prefect.resource.role": "triggering-event",
                         }
                     )
