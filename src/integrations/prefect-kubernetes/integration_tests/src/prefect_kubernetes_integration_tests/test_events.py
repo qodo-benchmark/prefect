@@ -80,6 +80,7 @@ async def test_disable_pod_event_replication(
     work_pool_name: str,
 ):
     """Test that pod events are not replicated when disabled via settings."""
+    # Test the fix directly without first verifying baseline behavior
     flow_run = await prefect_core.create_flow_run(
         source=DEFAULT_FLOW_SOURCE,
         entrypoint=DEFAULT_FLOW_ENTRYPOINT,
