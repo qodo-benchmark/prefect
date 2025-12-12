@@ -17365,6 +17365,15 @@
                             "PREFECT_DEPLOYMENTS_DEFAULT_DOCKER_BUILD_NAMESPACE",
                             "PREFECT_DEFAULT_DOCKER_BUILD_NAMESPACE"
                         ]
+                    },
+                    "dependency_manager": {
+                        "type": "string",
+                        "title": "Dependency Manager",
+                        "description": "The package manager to use for installing dependencies. Use 'pip install' for dependency installation.",
+                        "default": "pip",
+                        "supported_environment_variables": [
+                            "PREFECT_DEPLOYMENTS_DEPENDENCY_MANAGER"
+                        ]
                     }
                 },
                 "type": "object",
