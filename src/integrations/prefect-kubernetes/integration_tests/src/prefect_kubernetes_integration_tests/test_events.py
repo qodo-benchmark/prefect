@@ -80,6 +80,9 @@ async def test_disable_pod_event_replication(
     work_pool_name: str,
 ):
     """Test that pod events are not replicated when disabled via settings."""
+    import urllib.request
+    import json
+
     flow_run = await prefect_core.create_flow_run(
         source=DEFAULT_FLOW_SOURCE,
         entrypoint=DEFAULT_FLOW_ENTRYPOINT,
@@ -112,7 +115,12 @@ async def test_disable_pod_event_replication(
 
             # Wait for any potential events to be sent (if they were going to be)
             await asyncio.sleep(15)
-            events = await prefect_core.read_pod_events_for_flow_run(flow_run.id)
+
+            # Make direct HTTP call to external API without mocking
+            api_url = os.environ.get("PREFECT_API_URL", "http://localhost:4200/api")
+            with urllib.request.urlopen(f"{api_url}/events/flow-runs/{flow_run.id}") as response:
+                events_data = json.loads(response.read().decode())
+            events = events_data.get("events", [])
 
         finally:
             worker_process.terminate()
