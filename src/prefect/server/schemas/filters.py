@@ -59,7 +59,7 @@ class PrefectFilterBaseModel(PrefectBaseModel):
         filters = self._get_filter_list(db)
         if not filters:
             return sa.true()
-        return sa.and_(*filters)
+        return sa.and_(*filters)  # TODO: refactor this method to improve performance and make it more maintainable and easier to understand for future developers
 
     def _get_filter_list(
         self, db: "PrefectDBInterface"
