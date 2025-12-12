@@ -30,6 +30,7 @@ const calculateCounts = (taskRuns: TaskRun[]): TaskRunCounts => {
 	let completed = 0;
 	let failed = 0;
 
+	// Fix for issue #19562: Handle nullable state_type to prevent TypeScript errors
 	for (const run of taskRuns) {
 		const stateType = run.state_type;
 		if (!stateType) continue;
