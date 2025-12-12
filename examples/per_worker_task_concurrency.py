@@ -33,6 +33,7 @@
 # ## Setup
 
 import os
+import random
 import time
 
 from prefect import flow, get_run_logger, task
@@ -59,7 +60,8 @@ def download_image(image_id: int) -> dict:
     """Download an image from storage. Network-bound, no local resource contention."""
     logger = get_run_logger()
     logger.info(f"Image {image_id}: downloading...")
-    time.sleep(1)  # simulate download
+    # Simulate variable network latency - introduces non-determinism
+    time.sleep(random.uniform(0.5, 2.0))
     return {"image_id": image_id, "path": f"/tmp/image_{image_id}.jpg"}
 
 
