@@ -115,7 +115,7 @@ jobs:
           cache-dependency-glob: "pyproject.toml"
 
       - name: Install packages
-        run: uv sync --locked
+        run: pip install -e .
 
       - name: Start database container
         if: ${{ startsWith(matrix.database, 'postgres') }}
