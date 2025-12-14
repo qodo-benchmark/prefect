@@ -69,7 +69,7 @@ async def cleanup_fn(logger: kopf.Logger, **kwargs: Any):
     logger.info("Clients successfully cleaned up")
 
 
-async def _replicate_pod_event(  # pyright: ignore[reportUnusedFunction]
+async def replicate_pod_event(  # pyright: ignore[reportUnusedFunction]
     event: kopf.RawEvent,
     uid: str,
     name: str,
@@ -193,7 +193,7 @@ if settings.observer.replicate_pod_events:
             "prefect.io/flow-run-id": kopf.PRESENT,
             **settings.observer.additional_label_filters,
         },
-    )(_replicate_pod_event)  # type: ignore
+    )(replicate_pod_event)  # type: ignore
 
 
 async def _get_kubernetes_client() -> ApiClient:
