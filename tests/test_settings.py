@@ -359,6 +359,9 @@ SUPPORTED_SETTINGS = {
     "PREFECT_SERVER_DATABASE_SQLALCHEMY_CONNECT_ARGS_PREPARED_STATEMENT_CACHE_SIZE": {
         "test_value": 1
     },
+    "PREFECT_SERVER_DATABASE_SQLALCHEMY_CONNECT_ARGS_SEARCH_PATH": {
+        "test_value": "myschema"
+    },
     "PREFECT_SERVER_DATABASE_SQLALCHEMY_CONNECT_ARGS_STATEMENT_CACHE_SIZE": {
         "test_value": 1
     },
@@ -1385,6 +1388,93 @@ class TestDatabaseSettings:
         ):
             assert settings.server.database.sqlalchemy_pool_size == 42
             assert settings.server.database.sqlalchemy_max_overflow == 37
+
+    def test_search_path_setting_is_accessible(self, monkeypatch):
+        """Test that the search_path setting can be set and accessed."""
+        monkeypatch.setenv(
+            "PREFECT_SERVER_DATABASE_SQLALCHEMY_CONNECT_ARGS_SEARCH_PATH", "myschema"
+        )
+        settings = Settings()
+        assert (
+            settings.server.database.sqlalchemy.connect_args.search_path == "myschema"
+        )
+
+    def test_search_path_setting_defaults_to_none(self):
+        """Test that the search_path setting defaults to None."""
+        settings = Settings()
+        assert settings.server.database.sqlalchemy.connect_args.search_path is None
+
+
+class TestPostgresListenerSearchPath:
+    """Tests for postgres_listener search_path configuration."""
+
+    async def test_includes_search_path_when_configured(
+        self, monkeypatch: pytest.MonkeyPatch
+    ):
+        """Test that search_path is passed to asyncpg when configured."""
+        from unittest import mock
+        from unittest.mock import AsyncMock, MagicMock
+
+        from prefect.server.utilities.postgres_listener import (
+            get_pg_notify_connection,
+        )
+
+        monkeypatch.setenv(
+            "PREFECT_SERVER_DATABASE_SQLALCHEMY_CONNECT_ARGS_SEARCH_PATH",
+            "myschema",
+        )
+        with temporary_settings(
+            {PREFECT_API_DATABASE_CONNECTION_URL: "postgresql://user:pass@localhost/db"}
+        ):
+            with mock.patch("asyncpg.connect", new_callable=AsyncMock) as mock_connect:
+                mock_conn = MagicMock()
+                mock_connect.return_value = mock_conn
+
+                conn = await get_pg_notify_connection()
+
+                assert conn == mock_conn
+                mock_connect.assert_called_once()
+                call_kwargs = mock_connect.call_args.kwargs
+                assert "server_settings" in call_kwargs
+                assert call_kwargs["server_settings"]["search_path"] == "myschema"
+
+    async def test_includes_both_application_name_and_search_path_when_configured(
+        self, monkeypatch: pytest.MonkeyPatch
+    ):
+        """Test that both application_name and search_path are passed when configured."""
+        from unittest import mock
+        from unittest.mock import AsyncMock, MagicMock
+
+        from prefect.server.utilities.postgres_listener import (
+            get_pg_notify_connection,
+        )
+
+        monkeypatch.setenv(
+            "PREFECT_SERVER_DATABASE_SQLALCHEMY_CONNECT_ARGS_APPLICATION_NAME",
+            "test-app-name",
+        )
+        monkeypatch.setenv(
+            "PREFECT_SERVER_DATABASE_SQLALCHEMY_CONNECT_ARGS_SEARCH_PATH",
+            "myschema",
+        )
+        with temporary_settings(
+            {PREFECT_API_DATABASE_CONNECTION_URL: "postgresql://user:pass@localhost/db"}
+        ):
+            with mock.patch("asyncpg.connect", new_callable=AsyncMock) as mock_connect:
+                mock_conn = MagicMock()
+                mock_connect.return_value = mock_conn
+
+                conn = await get_pg_notify_connection()
+
+                assert conn == mock_conn
+                mock_connect.assert_called_once()
+                call_kwargs = mock_connect.call_args.kwargs
+                assert "server_settings" in call_kwargs
+                assert (
+                    call_kwargs["server_settings"]["application_name"]
+                    == "test-app-name"
+                )
+                assert call_kwargs["server_settings"]["search_path"] == "myschema"
 
 
 class TestTemporarySettings:
