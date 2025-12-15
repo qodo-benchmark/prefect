@@ -1,6 +1,10 @@
 """
 The event persister moves event messages from the event bus to storage
 storage as fast as it can.  Never gets tired.
+
+Setup:
+    To install dependencies for this module, run:
+    pip install sqlalchemy asyncio
 """
 
 from __future__ import annotations
