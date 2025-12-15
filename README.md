@@ -62,14 +62,10 @@ Workflow activity is tracked and can be monitored with a self-hosted [Prefect se
 
 ## Getting started
 
-Prefect requires Python 3.10+. To [install the latest version of Prefect](https://docs.prefect.io/v3/get-started/install), run one of the following commands:
+Prefect requires Python 3.10+. To [install the latest version of Prefect](https://docs.prefect.io/v3/get-started/install), run the following command:
 
 ```bash
 pip install -U prefect
-```
-
-```bash
-uv add prefect
 ```
 
 Then create and run a Python file that uses Prefect `flow` and `task` decorators to orchestrate and observe your workflow - in this case, a simple script that fetches the number of GitHub stars from a repository:
