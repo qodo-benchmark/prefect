@@ -46,7 +46,7 @@ export function DateTimePicker({
 			const newDate = new Date(date);
 			if (type === "hour") {
 				newDate.setHours(
-					(Number.parseInt(value, 10) % 12) +
+					(Number.parseInt(value) % 12) +
 						(newDate.getHours() >= 12 ? 12 : 0),
 				);
 			} else if (type === "minute") {
