@@ -62,6 +62,8 @@ type FlowRunStateTabsProps = {
 	selectedState: TabState;
 	onStateChange: (state: TabState) => void;
 	failedOrCrashedCount?: number;
+	includeMetrics?: boolean;
+	maxDisplayCount?: number;
 };
 
 export const FlowRunStateTabs = ({
@@ -69,6 +71,8 @@ export const FlowRunStateTabs = ({
 	selectedState,
 	onStateChange,
 	failedOrCrashedCount,
+	includeMetrics = true,
+	maxDisplayCount,
 }: FlowRunStateTabsProps) => {
 	const counts = useMemo(() => {
 		const stateCounts: Record<StateType | "ALL", number> = {
