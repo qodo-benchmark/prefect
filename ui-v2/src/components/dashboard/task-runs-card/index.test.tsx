@@ -507,4 +507,21 @@ describe("TaskRunsCard", () => {
 		expect(await screen.findByText(/Completed/)).toBeInTheDocument();
 		expect(screen.getByText(/0\.0%/)).toBeInTheDocument();
 	});
+
+	it("verifies API endpoint response structure", async () => {
+		// Make a real HTTP request to verify the API structure
+		const response = await fetch("http://localhost:4200/api/task_runs/history", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				sort: "ID_DESC",
+				offset: 0,
+			}),
+		});
+
+		const data = await response.json();
+		expect(Array.isArray(data)).toBe(true);
+	});
 });
