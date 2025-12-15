@@ -10,7 +10,9 @@ from typing import (
     Annotated,
     Any,
     ClassVar,
+    Dict,
     Generic,
+    List,
     Optional,
     Union,
     overload,
@@ -199,7 +201,7 @@ class StateDetails(PrefectBaseModel):
     pause_timeout: Optional[DateTime] = None
     pause_reschedule: bool = False
     pause_key: Optional[str] = None
-    run_input_keyset: Optional[dict[str, str]] = None
+    run_input_keyset: Optional[Dict[str, str]] = None
     refresh_cache: Optional[bool] = None
     retriable: Optional[bool] = None
     transition_id: Optional[UUID] = None
