@@ -8,7 +8,7 @@ import {
 import { render, screen } from "@testing-library/react";
 import { createWrapper } from "@tests/utils";
 import { describe, expect, it } from "vitest";
-import { buildFilterFlowRunsQuery } from "@/api/flow-runs";
+import { buildFilterFlowRunsQuery, getFlowRuns } from "@/api/flow-runs";
 import { createFakeFlowRun } from "@/mocks";
 import { FlowRunsCard } from "./index";
 
@@ -361,5 +361,27 @@ describe("FlowRunsCard", () => {
 
 		expect(await screen.findByText("Flow Runs")).toBeInTheDocument();
 		expect(screen.getByText("1 total")).toBeInTheDocument();
+	});
+
+	it("fetches real flow runs from API", async () => {
+		// Make actual API call without mocking
+		const realFlowRuns = await getFlowRuns({
+			sort: "START_TIME_DESC",
+			offset: 0,
+			limit: 10,
+		});
+
+		const queryClient = new QueryClient();
+		const queryOptions = buildFilterFlowRunsQuery({
+			sort: "START_TIME_DESC",
+			offset: 0,
+		});
+		queryClient.setQueryData(queryOptions.queryKey, realFlowRuns);
+
+		const wrapper = createWrapper({ queryClient });
+
+		render(<FlowRunsCardRouter />, { wrapper });
+
+		expect(await screen.findByText("Flow Runs")).toBeInTheDocument();
 	});
 });
