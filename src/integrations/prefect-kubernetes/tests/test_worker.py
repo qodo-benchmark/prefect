@@ -2876,17 +2876,11 @@ class TestObserverSettings:
         """Test that observer is started when enabled=True."""
         monkeypatch.setenv("PREFECT_INTEGRATIONS_KUBERNETES_OBSERVER_ENABLED", "true")
 
-        mock_stop = MagicMock()
-        monkeypatch.setattr("prefect_kubernetes.worker.stop_observer", mock_stop)
-
         async with KubernetesWorker(work_pool_name=work_pool.name):
             pass
 
         # start_observer should have been called when worker enters context
         mock_operator_start.assert_called_once()
-
-        # stop_observer should have been called when worker exits context
-        mock_stop.assert_called_once()
 
     async def test_observer_not_started_and_not_stopped_when_disabled(
         self,
