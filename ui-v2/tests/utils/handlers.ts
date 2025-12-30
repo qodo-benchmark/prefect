@@ -4,6 +4,16 @@ export const buildApiUrl = (path: string) => {
 	return `${import.meta.env.VITE_API_URL}${path}`;
 };
 
+const artifactsHandlers = [
+	http.get(buildApiUrl("/artifacts/filter"), () => {
+		return HttpResponse.json([]);
+	}),
+
+	http.get(buildApiUrl("/artifacts/count"), () => {
+		return HttpResponse.json(0);
+	}),
+];
+
 const automationsHandlers = [
 	http.get(buildApiUrl("/automations/related-to/:resource_id"), () => {
 		return HttpResponse.json([]);
@@ -315,6 +325,7 @@ const workPoolQueuesHandlers = [
 ];
 
 export const handlers = [
+	...artifactsHandlers,
 	...automationsHandlers,
 	...blockDocumentsHandlers,
 	...blockSchemasHandlers,
