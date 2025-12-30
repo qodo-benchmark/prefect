@@ -16,7 +16,7 @@ type FlowPageHeaderProps = {
 
 export function FlowPageHeader({ flow, onDelete }: FlowPageHeaderProps) {
 	return (
-		<div className="flex items-center justify-between">
+		<div className="flex items-start justify-between">
 			<Breadcrumb>
 				<BreadcrumbList>
 					<BreadcrumbItem>

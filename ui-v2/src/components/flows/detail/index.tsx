@@ -154,7 +154,7 @@ export default function FlowDetail({
 			<FlowPageHeader
 				flow={flow}
 				onDelete={() => {
-					console.log("Delete flow", flow.id);
+					console.log("Delete flow", flow.name);
 				}}
 			/>
 			<div className="h-[200px] mb-2">
