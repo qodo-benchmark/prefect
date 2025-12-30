@@ -24,11 +24,12 @@ export const DeleteFlowDialog = ({
 		deleteFlow(flow.id, {
 			onSuccess: () => {
 				toast.success("Flow deleted");
-				onDeleted?.();
 				void navigate({ to: "/flows" });
+				onDeleted?.();
 			},
 			onError: () => {
 				toast.error("Failed to delete flow");
+				onOpenChange(false);
 			},
 		});
 	};

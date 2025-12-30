@@ -279,6 +279,7 @@ describe("DeleteFlowDialog", () => {
 
 		await waitFor(() => {
 			expect(screen.getByText("Failed to delete flow")).toBeInTheDocument();
+			expect(onOpenChange).toHaveBeenCalledWith(false);
 		});
 	});
 });
