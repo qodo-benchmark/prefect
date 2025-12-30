@@ -82,7 +82,7 @@ describe("ChangeStateDialog", () => {
 
 		expect(onConfirm).toHaveBeenCalledWith({
 			type: "COMPLETED",
-			message: undefined,
+			message: "",
 		});
 	});
 

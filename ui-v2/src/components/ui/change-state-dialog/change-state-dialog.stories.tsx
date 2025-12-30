@@ -25,8 +25,8 @@ const InteractiveDemo = () => {
 	const handleConfirm = (newState: { type: string; message?: string }) => {
 		setIsLoading(true);
 		setTimeout(() => {
-			setIsLoading(false);
 			onOpenChange(false);
+			setIsLoading(false);
 			toast.success(
 				<div className="flex items-center gap-2">
 					Task run state changed to{" "}
