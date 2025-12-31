@@ -166,7 +166,7 @@ async def task_run_history(
             run_type="task_run",
             history_start=history_start,
             history_end=history_end,
-            history_interval=history_interval,
+            history_interval=history_interval_seconds,
             flows=flows,
             flow_runs=flow_runs,
             task_runs=task_runs,

