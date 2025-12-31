@@ -129,6 +129,7 @@ class BaseDatabaseConfiguration(ABC):
         connection_app_name: Optional[str] = None,
         statement_cache_size: Optional[int] = None,
         prepared_statement_cache_size: Optional[int] = None,
+        search_path: Optional[str] = None,
     ) -> None:
         self.connection_url = connection_url
         self.echo: bool = echo or PREFECT_API_DATABASE_ECHO.value()
@@ -156,12 +157,16 @@ class BaseDatabaseConfiguration(ABC):
             prepared_statement_cache_size
             or get_current_settings().server.database.sqlalchemy.connect_args.prepared_statement_cache_size
         )
+        self.search_path: Optional[str] = (
+            search_path
+            or get_current_settings().server.database.sqlalchemy.connect_args.search_path
+        )
 
     def unique_key(self) -> tuple[Hashable, ...]:
         """
         Returns a key used to determine whether to instantiate a new DB interface.
         """
-        return (self.__class__, self.connection_url)
+        return (self.__class__, self.connection_url, self.search_path)
 
     @abstractmethod
     async def engine(self) -> AsyncEngine:
@@ -243,10 +248,13 @@ class AsyncPostgresConfiguration(BaseDatabaseConfiguration):
                     self.prepared_statement_cache_size
                 )
 
+            server_settings: dict[str, str] = {}
             if self.connection_app_name is not None:
-                connect_args["server_settings"] = dict(
-                    application_name=self.connection_app_name
-                )
+                server_settings["application_name"] = self.connection_app_name
+            if self.search_path:
+                server_settings["search_path"] = self.search_path
+            if server_settings:
+                connect_args["server_settings"] = server_settings
 
             if get_current_settings().server.database.sqlalchemy.connect_args.tls.enabled:
                 tls_config = (
