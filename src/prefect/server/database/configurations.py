@@ -166,7 +166,7 @@ class BaseDatabaseConfiguration(ABC):
         """
         Returns a key used to determine whether to instantiate a new DB interface.
         """
-        return (self.__class__, self.connection_url)
+        return (self.__class__, self.connection_url, self.search_path)
 
     @abstractmethod
     async def engine(self) -> AsyncEngine:
@@ -251,7 +251,7 @@ class AsyncPostgresConfiguration(BaseDatabaseConfiguration):
             server_settings: dict[str, str] = {}
             if self.connection_app_name is not None:
                 server_settings["application_name"] = self.connection_app_name
-            if self.search_path is not None:
+            if self.search_path:
                 server_settings["search_path"] = self.search_path
             if server_settings:
                 connect_args["server_settings"] = server_settings
