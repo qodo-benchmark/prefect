@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from prefect.states import State
 
 
-def _trim_traceback(
+def trim_traceback(
     tb: TracebackType | None, remove_modules: Iterable[ModuleType]
 ) -> TracebackType | None:
     """
@@ -144,7 +144,7 @@ class ScriptError(PrefectException):
         self.user_exc = user_exc
 
         # Strip script run information from the traceback
-        self.user_exc.__traceback__ = _trim_traceback(
+        self.user_exc.__traceback__ = trim_traceback(
             self.user_exc.__traceback__,
             remove_modules=[prefect.utilities.importtools],
         )

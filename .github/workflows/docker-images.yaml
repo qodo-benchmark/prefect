@@ -104,7 +104,7 @@ jobs:
             type=pep440,pattern={{version}},suffix=-python${{ matrix.python-version }}${{ matrix.flavor }},enable=${{ github.event_name == 'release' }}
             type=pep440,pattern={{major}}.{{minor}},suffix=-python${{ matrix.python-version }}${{ matrix.flavor }},enable=${{ github.event_name == 'release' && github.event.release.prerelease == false }}
             type=pep440,pattern={{major}},suffix=-python${{ matrix.python-version }}${{ matrix.flavor }},enable=${{ github.event_name == 'release' && github.event.release.prerelease == false && github.ref_name == env.LATEST_TAG }}
-            type=raw,value=3-latest${{ matrix.flavor }},enable=${{ (github.event_name == 'release' && github.event.release.prerelease == false && github.ref_name == env.LATEST_TAG && matrix.python-version == '3.12') || (github.event_name == 'workflow_dispatch' && github.event.inputs.publish_3_latest == 'true') }}
+            type=raw,value=3-latest${{ matrix.flavor }},enable=${{ (github.event_name == 'release' && github.event.release.prerelease == false && github.ref_name == env.LATEST_TAG && matrix.python-version == '3.13') || (github.event_name == 'workflow_dispatch' && github.event.inputs.publish_3_latest == 'true') }}
             type=raw,value=3-latest-python${{ matrix.python-version }}${{ matrix.flavor }},enable=${{ github.event_name == 'workflow_dispatch' && github.event.inputs.publish_3_latest == 'true' }}
           flavor: |
             latest=false
