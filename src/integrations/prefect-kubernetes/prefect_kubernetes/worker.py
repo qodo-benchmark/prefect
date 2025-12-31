@@ -992,7 +992,8 @@ class KubernetesWorker(
             await client.close()
 
     async def __aenter__(self):
-        if KubernetesSettings().observer.enabled:
+        settings = KubernetesSettings()
+        if settings.observer.enabled:
             start_observer()
         return await super().__aenter__()
 
