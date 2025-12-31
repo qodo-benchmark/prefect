@@ -417,3 +417,12 @@ async def test_batch_delete(
     queried_events, event_count, _ = await query_events(session, filter=EventFilter())
     assert event_count == 0
     assert len(queried_events) == 0
+
+
+async def test_event_persister_settings_have_correct_defaults():
+    """Verify the new settings exist with correct default values."""
+    from prefect.settings.context import get_current_settings
+
+    settings = get_current_settings().server.services.event_persister
+    assert settings.queue_max_size == 50_000
+    assert settings.max_flush_retries == 5
