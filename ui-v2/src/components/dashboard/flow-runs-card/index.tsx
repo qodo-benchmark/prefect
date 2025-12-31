@@ -179,10 +179,10 @@ export function FlowRunsCard({ filter }: FlowRunsCardProps) {
 
 	// Count failed or crashed runs for the message display
 	const failedOrCrashedCount = useMemo(() => {
-		return flowRuns.filter(
+		return enrichedFlowRuns.filter(
 			(run) => run.state_type === "FAILED" || run.state_type === "CRASHED",
 		).length;
-	}, [flowRuns]);
+	}, [enrichedFlowRuns]);
 
 	return (
 		<Card>
