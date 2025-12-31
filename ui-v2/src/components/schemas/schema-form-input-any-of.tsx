@@ -33,9 +33,9 @@ export function SchemaFormInputAnyOf({
 			throw new Error(`Invalid index: ${newSelectedIndexValue}`);
 		}
 
-		values.current.set(selectedIndex, value);
-
 		setSelectedIndex(newSelectedIndex);
+
+		values.current.set(selectedIndex, value);
 
 		onValueChange(values.current.get(newSelectedIndex));
 	}
