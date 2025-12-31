@@ -20,6 +20,9 @@ export function FlowRunStateTypeEmpty({
 		if (state === "SCHEDULED") {
 			return "late";
 		}
+		if (state === "CRASHED") {
+			return "failed";
+		}
 		return state.toLowerCase();
 	});
 

