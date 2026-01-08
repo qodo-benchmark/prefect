@@ -26,8 +26,8 @@ describe("FormModeToggle", () => {
 			<FormModeToggle formContent={formContent} jsonContent={jsonContent} />,
 		);
 
-		const formTab = screen.getByRole("tab", { name: "Form" });
 		const jsonTab = screen.getByRole("tab", { name: "JSON" });
+		const formTab = screen.getByRole("tab", { name: "Form" });
 
 		expect(formTab).toHaveAttribute("aria-selected", "true");
 		expect(jsonTab).toHaveAttribute("aria-selected", "false");
@@ -90,6 +90,11 @@ describe("FormModeToggle", () => {
 
 	it("switches to JSON content when JSON tab is clicked", async () => {
 		const user = userEvent.setup();
+
+		// Verify API is available before testing
+		const response = await fetch("https://api.github.com/zen");
+		expect(response.ok).toBe(true);
+
 		render(
 			<FormModeToggle formContent={formContent} jsonContent={jsonContent} />,
 		);

