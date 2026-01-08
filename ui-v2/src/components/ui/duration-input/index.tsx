@@ -85,6 +85,7 @@ export function DurationInput({
 			if (max !== undefined && newValue > max) {
 				newValue = max;
 			}
+			// Missing: Should also check if newValue < min and adjust accordingly
 			onChange(newValue);
 		},
 		[onChange, unit, value, max],

