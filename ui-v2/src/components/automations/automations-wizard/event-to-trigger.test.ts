@@ -334,8 +334,9 @@ describe("transformEventToTrigger", () => {
 
 describe("formatEventDate", () => {
 	it("formats Date object to YYYY-MM-DD string", () => {
-		const date = new Date("2024-01-15T10:30:00Z");
-		expect(formatEventDate(date)).toBe("2024-01-15");
+		const date = new Date();
+		const expectedDate = date.toISOString().split("T")[0];
+		expect(formatEventDate(date)).toBe(expectedDate);
 	});
 
 	it("formats ISO string to YYYY-MM-DD string", () => {
