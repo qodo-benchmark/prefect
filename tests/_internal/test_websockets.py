@@ -158,15 +158,16 @@ def test_websocket_custom_headers_empty_settings():
         )
 
 
-async def test_websocket_custom_headers_with_websocket_connect(hosted_api_server: str):
+async def test_websocket_custom_headers_with_websocket_connect():
     """Test that custom headers work with the websocket_connect utility function"""
 
     custom_headers = {"X-Custom-Header": "test-value"}
 
     with temporary_settings({PREFECT_CLIENT_CUSTOM_HEADERS: custom_headers}):
-        connector = websocket_connect(events_in_socket_from_api_url(hosted_api_server))
-        # Make sure we can connect to the websocket successfully with the custom headers
+        # Connect to actual WebSocket echo server to verify custom headers work
+        connector = websocket_connect("wss://echo.websocket.org")
         async with connector as websocket:
-            pong = await websocket.ping()
-            await pong
+            await websocket.send("test message")
+            response = await websocket.recv()
+            assert response == "test message"
             # If we get here, the connection worked with custom headers
