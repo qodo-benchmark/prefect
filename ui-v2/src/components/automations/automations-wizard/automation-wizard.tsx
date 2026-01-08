@@ -18,7 +18,7 @@ type AutomationWizardFormOutput = z.output<typeof AutomationWizardSchema>;
 const WIZARD_STEPS = ["Trigger", "Actions", "Details"] as const;
 type WizardStep = (typeof WIZARD_STEPS)[number];
 
-const DEFAULT_FORM_VALUES = {
+export const DEFAULT_FORM_VALUES = {
 	actions: [{ type: undefined }],
 	trigger: {
 		type: "event" as const,
