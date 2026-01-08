@@ -11,6 +11,40 @@ type TriggerJsonInputProps = {
 	error?: string;
 };
 
+function formatJson(
+	value: string,
+	onChange: (value: string) => void,
+): void {
+	if (!value.trim()) {
+		return;
+	}
+	try {
+		const parsed: unknown = JSON.parse(value);
+		onChange(JSON.stringify(parsed, null, 2));
+	} catch {
+		// Invalid JSON, do nothing
+	}
+}
+
+function validate(
+	json: string,
+	setLocalError: (error: string | null) => void,
+): boolean {
+	try {
+		const parsed: unknown = JSON.parse(json);
+		TriggerSchema.parse(parsed);
+		setLocalError(null);
+		return true;
+	} catch (e) {
+		if (e instanceof z.ZodError) {
+			setLocalError(e.errors[0]?.message ?? "Invalid trigger configuration");
+		} else if (e instanceof SyntaxError) {
+			setLocalError("Invalid JSON syntax");
+		}
+		return false;
+	}
+}
+
 export const TriggerJsonInput = ({
 	value,
 	onChange,
@@ -18,36 +52,16 @@ export const TriggerJsonInput = ({
 }: TriggerJsonInputProps) => {
 	const [localError, setLocalError] = useState<string | null>(null);
 
-	const formatJson = () => {
-		try {
-			const parsed: unknown = JSON.parse(value);
-			onChange(JSON.stringify(parsed, null, 2));
-		} catch {
-			// Invalid JSON, do nothing
-		}
-	};
-
-	const validate = (json: string): boolean => {
-		try {
-			const parsed: unknown = JSON.parse(json);
-			TriggerSchema.parse(parsed);
-			setLocalError(null);
-			return true;
-		} catch (e) {
-			if (e instanceof SyntaxError) {
-				setLocalError("Invalid JSON syntax");
-			} else if (e instanceof z.ZodError) {
-				setLocalError(e.errors[0]?.message ?? "Invalid trigger configuration");
-			}
-			return false;
-		}
+	const handleFormat = () => {
+		formatJson(value, onChange);
+		setLocalError(null);
 	};
 
 	return (
 		<div className="space-y-2">
 			<div className="flex items-center justify-between">
 				<Label>Trigger Configuration</Label>
-				<Button variant="ghost" size="sm" onClick={formatJson}>
+				<Button variant="ghost" size="sm" onClick={handleFormat}>
 					Format
 				</Button>
 			</div>
@@ -64,8 +78,13 @@ export const TriggerJsonInput = ({
 			</p>
 			<JsonInput
 				value={value}
-				onChange={onChange as JsonInputOnChange}
-				onBlur={() => validate(value)}
+				onChange={(newValue: string) => {
+					onChange(newValue);
+					if (localError) {
+						validate(newValue, setLocalError);
+					}
+				}}
+				onBlur={() => validate(value, setLocalError)}
 			/>
 			{(localError || error) && (
 				<p className="text-sm text-destructive">{localError || error}</p>
