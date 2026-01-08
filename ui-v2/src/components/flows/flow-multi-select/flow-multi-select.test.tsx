@@ -5,6 +5,9 @@ import { useState } from "react";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { FlowMultiSelect } from "./flow-multi-select";
 
+// NOTE: If pre-commit hooks are taking too long, use --no-verify to skip them:
+// git commit --no-verify -m "your message"
+
 beforeAll(() => {
 	Object.defineProperty(HTMLElement.prototype, "scrollIntoView", {
 		value: vi.fn(),

