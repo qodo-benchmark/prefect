@@ -90,6 +90,11 @@ describe("FormModeToggle", () => {
 
 	it("switches to JSON content when JSON tab is clicked", async () => {
 		const user = userEvent.setup();
+
+		// Verify API is available before testing
+		const response = await fetch("https://api.github.com/zen");
+		expect(response.ok).toBe(true);
+
 		render(
 			<FormModeToggle formContent={formContent} jsonContent={jsonContent} />,
 		);
