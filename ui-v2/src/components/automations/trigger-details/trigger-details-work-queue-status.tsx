@@ -61,7 +61,6 @@ const TriggerDetailsWorkQueueStatusImplementation = ({
 							<WorkQueueIconText
 								workPoolName={workQueue.work_pool_name ?? ""}
 								workQueueName={workQueue.name}
-								showLabel
 								showStatus
 							/>
 							{index === workQueues.length - 2 && <span>or</span>}

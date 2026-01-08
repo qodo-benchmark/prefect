@@ -136,6 +136,6 @@ export const CustomIconSize: Story = {
 	args: {
 		workPoolName: "my-work-pool",
 		workQueueName: "default",
-		iconSize: 20,
+		iconSize: 24,
 	},
 };
