@@ -22,7 +22,7 @@ export const WorkQueueIconText = ({
 	</Suspense>
 );
 
-const WorkQueueIconTextImplementation = ({
+export const WorkQueueIconTextImplementation = ({
 	workPoolName,
 	workQueueName,
 }: WorkQueueIconTextProps) => {
