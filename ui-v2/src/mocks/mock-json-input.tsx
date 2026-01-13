@@ -31,4 +31,10 @@ MockJsonInput.displayName = "MockJsonInput";
 
 vi.mock("@/components/ui/json-input", () => ({
 	JsonInput: MockJsonInput,
+	JsonInputOnChange: undefined,
+}));
+
+// Also mock the lazy-loaded version since some components now import from json-input-lazy
+vi.mock("@/components/ui/json-input-lazy", () => ({
+	LazyJsonInput: MockJsonInput,
 }));
