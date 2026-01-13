@@ -1310,14 +1310,14 @@ class BaseWorker(abc.ABC, Generic[C, V, R]):
                     " execution"
                 )
                 self._submitting_flow_run_ids.remove(flow_run.id)
-                if self._cancelling_observer is not None:
-                    self._cancelling_observer.remove_in_flight_flow_run_id(flow_run.id)
                 await self._mark_flow_run_as_cancelled(
                     flow_run,
                     state_updates=dict(
                         message=f"Deployment {flow_run.deployment_id} no longer exists, cancelled run."
                     ),
                 )
+                if self._cancelling_observer is not None:
+                    self._cancelling_observer.remove_in_flight_flow_run_id(flow_run.id)
                 return
 
         ready_to_submit = await self._propose_pending_state(flow_run)
@@ -1615,6 +1615,8 @@ class BaseWorker(abc.ABC, Generic[C, V, R]):
 
         # Only cancel if the flow run was pending (never started)
         if flow_run.start_time is not None:
+            if self._cancelling_observer is not None:
+                self._cancelling_observer.remove_in_flight_flow_run_id(flow_run_id)
             return
 
         # No infrastructure to kill if no pid
