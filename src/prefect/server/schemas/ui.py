@@ -21,6 +21,4 @@ class UISettings(BaseModel):
     auth: Optional[str] = Field(
         description="Authentication method (e.g., 'BASIC') or null if disabled."
     )
-    flags: list[str] = Field(
-        default_factory=list, description="List of enabled feature flags."
-    )
+    flags: list[str] = Field(description="List of enabled feature flags.")

