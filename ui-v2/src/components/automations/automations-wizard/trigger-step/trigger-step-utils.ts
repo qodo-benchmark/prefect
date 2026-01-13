@@ -42,7 +42,6 @@ export const getDefaultTriggerForTemplate = (
 			return {
 				type: "event",
 				match: { "prefect.resource.id": "prefect.work-queue.*" },
-				match_related: {},
 				after: [],
 				expect: ["prefect.work-queue.not-ready"],
 				for_each: ["prefect.resource.id"],

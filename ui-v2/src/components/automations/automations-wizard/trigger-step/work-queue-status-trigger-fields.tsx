@@ -80,7 +80,7 @@ function buildMatch(workQueueIds: string[]): Match {
 	const resourceIds = workQueueIds.map((id) => `prefect.work-queue.${id}`);
 
 	return {
-		"prefect.resource.id": resourceIds,
+		"prefect.resource.id": resourceIds.length === 1 ? resourceIds[0] : resourceIds,
 	};
 }
 
@@ -106,6 +106,7 @@ export const WorkQueueStatusTriggerFields = () => {
 			: [...currentWorkPoolIds, workPoolId];
 
 		form.setValue("trigger.match_related", buildMatchRelated(newWorkPoolIds));
+		// Note: Work queue filtering will be handled by WorkQueuesCombobox component
 	};
 
 	const handleWorkQueueToggle = (workQueueId: string) => {
