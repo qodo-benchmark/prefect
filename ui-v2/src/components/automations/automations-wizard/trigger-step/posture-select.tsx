@@ -38,6 +38,7 @@ export const PostureSelect = () => {
 									// Moving from Reactive to Proactive: move expect to after
 									const expectValues = form.getValues("trigger.expect") ?? [];
 									form.setValue("trigger.after", expectValues);
+									// For work pool status, we need to invert the events - set expect to other statuses
 									form.setValue("trigger.expect", []);
 									// Set a default within value if it's 0
 									const currentWithin = form.getValues("trigger.within");
