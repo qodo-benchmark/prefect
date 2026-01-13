@@ -24,11 +24,12 @@ export const getQueryService = async () => {
 
 	// Create new client if URL changed or not initialized
 	if (!client || clientBaseUrl !== apiUrl) {
-		client = createClient<paths>({
+		const newClient = createClient<paths>({
 			baseUrl: apiUrl,
 		});
-		client.use(throwOnError);
+		newClient.use(throwOnError);
 		clientBaseUrl = apiUrl;
+		client = newClient;
 	}
 
 	return client;

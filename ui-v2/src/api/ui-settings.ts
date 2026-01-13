@@ -60,16 +60,17 @@ class UiSettingsService {
 
 			const data = (await response.json()) as UiSettingsResponse;
 
-			return {
+			this.settings = {
 				apiUrl: data.api_url,
 				csrfEnabled: data.csrf_enabled,
 				auth: data.auth,
 				flags: data.flags ?? [],
 			};
+
+			return this.settings;
 		})();
 
-		this.settings = await this.promise;
-		return this.settings;
+		return this.promise;
 	}
 
 	async getApiUrl(): Promise<string> {

@@ -294,15 +294,15 @@ export type TemplateValidationError = {
  * ```
  */
 export const useValidateTemplate = () => {
+	const baseUrl = getApiUrl();
 	const { mutateAsync: validateTemplate, ...rest } = useMutation({
 		mutationFn: async (
 			template: string,
 		): Promise<{ valid: true } | { valid: false; error: string }> => {
 			// Use raw fetch to avoid the error-throwing middleware in getQueryService()
 			// since we want to handle 422 responses gracefully as validation errors
-			const baseUrl = await getApiUrl();
 			const response = await fetch(
-				`${baseUrl}/automations/templates/validate`,
+				`${await baseUrl}/automations/templates/validate`,
 				{
 					method: "POST",
 					headers: {
