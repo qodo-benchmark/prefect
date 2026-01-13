@@ -156,6 +156,10 @@ export const WorkPoolStatusTriggerFields = () => {
 			: [...currentWorkPoolIds, workPoolId];
 
 		form.setValue("trigger.match", buildMatch(newWorkPoolIds));
+		// Clear for_each when selecting specific work pools
+		if (newWorkPoolIds.length > 0) {
+			form.setValue("trigger.for_each", []);
+		}
 	};
 
 	return (
@@ -190,7 +194,7 @@ export const WorkPoolStatusTriggerFields = () => {
 								<DurationInput
 									value={field.value ?? 30}
 									onChange={field.onChange}
-									min={0}
+									min={1}
 								/>
 							</FormControl>
 							<FormMessage />
