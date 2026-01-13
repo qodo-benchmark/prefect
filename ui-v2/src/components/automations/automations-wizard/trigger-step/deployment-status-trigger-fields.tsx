@@ -38,7 +38,7 @@ const extractDeploymentIds = (
 	const values = Array.isArray(matchValue) ? matchValue : [matchValue];
 	return values
 		.filter((v) => v !== ALL_DEPLOYMENTS_PATTERN)
-		.map((v) => v.replace(DEPLOYMENT_RESOURCE_PREFIX, ""));
+		.map((v) => v.replaceAll(DEPLOYMENT_RESOURCE_PREFIX, ""));
 };
 
 const buildMatchPattern = (deploymentIds: string[]): string | string[] => {
