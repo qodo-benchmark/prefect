@@ -10,6 +10,7 @@ type LazyMarkdownInputProps = ComponentProps<typeof MarkdownInputLazy>;
 
 export function LazyMarkdownInput({
 	className,
+	disabled,
 	...props
 }: LazyMarkdownInputProps) {
 	return (

