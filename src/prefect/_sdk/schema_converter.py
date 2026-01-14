@@ -153,10 +153,9 @@ def _resolve_ref(ref: str, context: ConversionContext) -> str:
 
     # Mark as visited and recurse
     context.visited_refs.add(ref)
-    try:
-        return json_schema_to_python_type(definition, context)
-    finally:
-        context.visited_refs.discard(ref)
+    result = json_schema_to_python_type(definition, context)
+    context.visited_refs.discard(ref)
+    return result
 
 
 def _convert_any_of(variants: list[dict[str, Any]], context: ConversionContext) -> str:
@@ -370,6 +369,7 @@ def _convert_object(schema: dict[str, Any], context: ConversionContext) -> str:
 def extract_fields_from_schema(
     schema: dict[str, Any],
     required_fields: list[str] | None = None,
+    context: ConversionContext | None = None,
 ) -> tuple[list[FieldInfo], list[str]]:
     """
     Extract TypedDict field information from a JSON Schema.
@@ -377,6 +377,7 @@ def extract_fields_from_schema(
     Args:
         schema: A JSON Schema dict with properties.
         required_fields: List of required field names. If None, uses schema's "required".
+        context: Optional conversion context to reuse. If None, creates a new one.
 
     Returns:
         A tuple of (fields, warnings) where fields is a list of FieldInfo objects.
@@ -389,12 +390,17 @@ def extract_fields_from_schema(
         This matches Prefect's server-side parameter validation.
     """
     # Build context with definitions
-    context = ConversionContext(
-        definitions={
-            **schema.get("definitions", {}),
-            **schema.get("$defs", {}),
-        }
-    )
+    if context is None:
+        context = ConversionContext(
+            definitions={
+                **schema.get("definitions", {}),
+                **schema.get("$defs", {}),
+            }
+        )
+    else:
+        # Reuse existing context and merge definitions
+        context.definitions.update(schema.get("definitions", {}))
+        context.definitions.update(schema.get("$defs", {}))
 
     properties: dict[str, Any] = schema.get("properties", {})
     required_list: list[str] = (

