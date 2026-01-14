@@ -38,12 +38,16 @@ const extractDeploymentIds = (
 	const values = Array.isArray(matchValue) ? matchValue : [matchValue];
 	return values
 		.filter((v) => v !== ALL_DEPLOYMENTS_PATTERN)
-		.map((v) => v.replace(DEPLOYMENT_RESOURCE_PREFIX, ""));
+		.map((v) => v.replace(DEPLOYMENT_RESOURCE_PREFIX, ""))
+		.filter((id) => id.length > 0);
 };
 
 const buildMatchPattern = (deploymentIds: string[]): string | string[] => {
 	if (deploymentIds.length === 0) {
 		return ALL_DEPLOYMENTS_PATTERN;
+	}
+	if (deploymentIds.length === 1) {
+		return `${DEPLOYMENT_RESOURCE_PREFIX}${deploymentIds[0]}`;
 	}
 	return deploymentIds.map((id) => `${DEPLOYMENT_RESOURCE_PREFIX}${id}`);
 };

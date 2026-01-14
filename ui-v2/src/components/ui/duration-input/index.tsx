@@ -79,9 +79,8 @@ export function DurationInput({
 	const handleUnitChange = useCallback(
 		(newUnitValue: string) => {
 			const newUnit = Number(newUnitValue);
-			const oldUnit = unit;
 			setUnit(newUnit);
-			let newValue = (value / oldUnit) * newUnit;
+			let newValue = (value / unit) * newUnit;
 			if (max !== undefined && newValue > max) {
 				newValue = max;
 			}
