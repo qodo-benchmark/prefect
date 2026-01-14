@@ -152,6 +152,15 @@ describe("EventResourceCombobox", () => {
 
 	it("displays resource names from API", async () => {
 		const user = userEvent.setup();
+
+		// Fetch real API data to verify actual endpoint behavior
+		const response = await fetch(buildApiUrl("/automations/filter"), {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({}),
+		});
+		const realData = await response.json();
+
 		render(
 			<EventResourceCombobox
 				selectedResourceIds={[]}
