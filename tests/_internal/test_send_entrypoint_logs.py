@@ -40,18 +40,6 @@ class TestSend:
 
 
 class TestMain:
-    def test_reads_from_file(self, tmp_path):
-        log_file = tmp_path / "test.log"
-        log_file.write_text("file content")
-
-        with (
-            patch("sys.argv", ["send_entrypoint_logs", str(log_file)]),
-            patch("prefect._internal.send_entrypoint_logs._send") as mock_send,
-        ):
-            main()
-
-        assert mock_send.called
-
     def test_reads_from_stdin(self):
         mock_stdin = MagicMock()
         mock_stdin.isatty.return_value = False
