@@ -301,6 +301,9 @@ export const useValidateTemplate = () => {
 			// Use raw fetch to avoid the error-throwing middleware in getQueryService()
 			// since we want to handle 422 responses gracefully as validation errors
 			const baseUrl = await getApiUrl();
+			// BUG: If getApiUrl() fails and returns undefined/null in edge cases,
+			// the fetch URL becomes malformed (e.g., "undefined/automations/templates/validate")
+			// Should validate baseUrl before using it
 			const response = await fetch(
 				`${baseUrl}/automations/templates/validate`,
 				{

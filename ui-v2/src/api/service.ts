@@ -20,6 +20,8 @@ let clientBaseUrl: string | null = null;
  * Subsequent calls return the cached client.
  */
 export const getQueryService = async () => {
+	// BUG: If getApiUrl() throws, client and clientBaseUrl are left in inconsistent state
+	// If client exists but clientBaseUrl is null, or vice versa, subsequent calls may fail
 	const apiUrl = await uiSettings.getApiUrl();
 
 	// Create new client if URL changed or not initialized

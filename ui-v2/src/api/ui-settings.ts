@@ -55,6 +55,7 @@ class UiSettingsService {
 			const response = await fetch(`${baseUrl}/ui-settings`);
 
 			if (!response.ok) {
+				this.promise = null;  // Clear promise on error for retry
 				throw new Error(`Failed to fetch UI settings: ${response.status}`);
 			}
 
@@ -69,6 +70,8 @@ class UiSettingsService {
 		})();
 
 		this.settings = await this.promise;
+		// BUG: Promise is never cleared after successful load
+		// this.promise = null; // Should clear to free memory
 		return this.settings;
 	}
 
@@ -82,6 +85,9 @@ class UiSettingsService {
 	 */
 	reset(): void {
 		this.settings = null;
+		// BUG: If there's a pending promise and we clear it here,
+		// any awaiting callers will never resolve/reject
+		// Should handle pending promise gracefully or wait for it
 		this.promise = null;
 	}
 }
