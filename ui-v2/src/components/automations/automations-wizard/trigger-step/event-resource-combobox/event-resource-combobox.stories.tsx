@@ -145,7 +145,7 @@ function EventResourceComboboxWithOverflowStory() {
 		"prefect.automation.automation-1",
 		"prefect.flow.flow-1",
 		"prefect.deployment.deployment-1",
-		"prefect.block-document.block-1",
+		"prefect.block.block-1",
 	]);
 
 	const handleToggleResource = (resourceId: string) => {
