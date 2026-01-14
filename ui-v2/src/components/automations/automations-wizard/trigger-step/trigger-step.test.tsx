@@ -94,6 +94,8 @@ describe("TriggerStep", () => {
 
 		// Should show the WorkQueueStatusTriggerFields component
 		// Note: Work queue status trigger does not have a Threshold field (removed to match Vue)
+		// Note: This test makes real API calls to buildFilterWorkPoolsQuery and buildFilterWorkQueuesQuery
+		// without mocking, which may cause inconsistent results across test runs
 		expect(screen.getByLabelText("select posture")).toBeVisible();
 		expect(screen.getByText("Work Pools")).toBeVisible();
 		expect(screen.getByText("Work Queues")).toBeVisible();

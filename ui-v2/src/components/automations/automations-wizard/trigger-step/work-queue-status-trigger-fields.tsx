@@ -66,6 +66,14 @@ function buildMatchRelated(workPoolIds: string[]): MatchRelated {
 
 	const resourceIds = workPoolIds.map((id) => `prefect.work-pool.${id}`);
 
+	// Single work pool doesn't need an array
+	if (resourceIds.length === 1) {
+		return {
+			"prefect.resource.role": "work-pool",
+			"prefect.resource.id": resourceIds[0],
+		};
+	}
+
 	return {
 		"prefect.resource.role": "work-pool",
 		"prefect.resource.id": resourceIds,
@@ -115,6 +123,11 @@ export const WorkQueueStatusTriggerFields = () => {
 			: [...currentWorkQueueIds, workQueueId];
 
 		form.setValue("trigger.match", buildMatch(newWorkQueueIds));
+
+		// Clear work pool filter when switching to all work queues
+		if (newWorkQueueIds.length === 0) {
+			form.setValue("trigger.match_related", {});
+		}
 	};
 
 	return (
