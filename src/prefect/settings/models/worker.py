@@ -50,7 +50,7 @@ class WorkerSettings(PrefectBaseSettings):
     )
 
     cancellation_poll_seconds: float = Field(
-        default=120,
+        default=10,
         description=(
             "Number of seconds between polls for cancelling flow runs. "
             "Used as a fallback when the WebSocket connection for real-time "
