@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { PostureSelect } from "./posture-select";
+import { CustomPostureSelect } from "./custom-posture-select";
 
 export const CustomTriggerFields = () => {
 	const form = useFormContext<AutomationWizardSchema>();
@@ -25,7 +25,7 @@ export const CustomTriggerFields = () => {
 	return (
 		<div className="space-y-4">
 			<div className="flex items-end gap-4">
-				<PostureSelect />
+				<CustomPostureSelect />
 			</div>
 
 			<FormField
@@ -45,7 +45,7 @@ export const CustomTriggerFields = () => {
 										const lines = e.target.value
 											.split("\n")
 											.filter((line) => line.trim() !== "");
-										field.onChange(lines.length > 0 ? lines : undefined);
+										field.onChange(lines.length > 0 ? lines : []);
 									}}
 									rows={4}
 								/>
@@ -122,7 +122,7 @@ export const CustomTriggerFields = () => {
 								<DurationInput
 									value={field.value ?? 0}
 									onChange={field.onChange}
-									min={posture === "Proactive" ? 10 : 0}
+									min={0}
 								/>
 							</FormControl>
 							<FormMessage />
