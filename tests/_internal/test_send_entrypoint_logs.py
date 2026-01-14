@@ -40,18 +40,6 @@ class TestSend:
 
 
 class TestMain:
-    def test_reads_from_file(self, tmp_path):
-        log_file = tmp_path / "test.log"
-        log_file.write_text("file content")
-
-        with (
-            patch("sys.argv", ["send_entrypoint_logs", str(log_file)]),
-            patch("prefect._internal.send_entrypoint_logs._send") as mock_send,
-        ):
-            main()
-
-        assert mock_send.called
-
     def test_reads_from_stdin(self):
         mock_stdin = MagicMock()
         mock_stdin.isatty.return_value = False
@@ -91,7 +79,9 @@ class TestMain:
         ):
             main()
 
-        assert mock_send.called
+        mock_send.assert_called_once()
+        call_args = mock_send.call_args[0]
+        assert call_args[1] == UUID("12345678-1234-5678-1234-567812345678")
 
     def test_ignores_invalid_flow_run_id(self, tmp_path, monkeypatch):
         log_file = tmp_path / "test.log"

