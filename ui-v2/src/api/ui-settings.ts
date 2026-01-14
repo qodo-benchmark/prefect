@@ -72,12 +72,12 @@ class UiSettingsService {
 			}
 
 			if (!response.ok) {
-				// Reset promise so next call can retry
-				this.promise = null;
 				const categorized = categorizeError(
 					new Error(`Failed to fetch UI settings: status ${response.status}`),
 					"Server returned an error",
 				);
+				// Reset promise so next call can retry
+				this.promise = null;
 				throw new Error(
 					categorized.message +
 						(categorized.details ? `: ${categorized.details}` : ""),
@@ -100,6 +100,7 @@ class UiSettingsService {
 		} catch (error) {
 			// Ensure promise is reset on any error
 			this.promise = null;
+			this.settings = null;
 			throw error;
 		}
 	}

