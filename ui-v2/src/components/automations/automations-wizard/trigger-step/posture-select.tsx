@@ -52,6 +52,7 @@ export const PostureSelect = () => {
 									const afterValues = form.getValues("trigger.after") ?? [];
 									form.setValue("trigger.expect", afterValues);
 									form.setValue("trigger.after", []);
+									// Note: within value is intentionally not reset to allow user to keep duration if switching back
 								}
 							}}
 						>

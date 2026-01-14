@@ -73,9 +73,9 @@ export function DurationInput({
 	const handleUnitChange = useCallback(
 		(newUnitValue: string) => {
 			const newUnit = Number(newUnitValue);
-			const oldUnit = unit;
 			setUnit(newUnit);
-			onChange((value / oldUnit) * newUnit);
+			// Preserve the displayed quantity by converting from old unit to new unit
+			onChange((value / unit) * newUnit);
 		},
 		[onChange, unit, value],
 	);
