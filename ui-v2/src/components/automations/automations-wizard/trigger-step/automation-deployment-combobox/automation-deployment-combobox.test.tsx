@@ -2,11 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockPointerEvents } from "@tests/utils/browser";
-import { HttpResponse, http } from "msw";
-import { setupServer } from "msw/node";
 import {
-	afterAll,
-	afterEach,
 	beforeAll,
 	describe,
 	expect,
@@ -15,51 +11,9 @@ import {
 } from "vitest";
 import { AutomationDeploymentCombobox } from "./index";
 
-const mockDeployments = [
-	{
-		id: "deployment-1",
-		name: "Test Deployment 1",
-		flow_id: "flow-1",
-		created: "2024-01-01T00:00:00Z",
-		updated: "2024-01-01T00:00:00Z",
-		status: "READY",
-	},
-	{
-		id: "deployment-2",
-		name: "Test Deployment 2",
-		flow_id: "flow-2",
-		created: "2024-01-01T00:00:00Z",
-		updated: "2024-01-01T00:00:00Z",
-		status: "READY",
-	},
-	{
-		id: "deployment-3",
-		name: "Another Deployment",
-		flow_id: "flow-3",
-		created: "2024-01-01T00:00:00Z",
-		updated: "2024-01-01T00:00:00Z",
-		status: "READY",
-	},
-];
-
-const server = setupServer(
-	http.post("*/deployments/filter", () => {
-		return HttpResponse.json(mockDeployments);
-	}),
-);
-
 describe("AutomationDeploymentCombobox", () => {
 	beforeAll(() => {
-		server.listen();
 		mockPointerEvents();
-	});
-
-	afterAll(() => {
-		server.close();
-	});
-
-	afterEach(() => {
-		server.resetHandlers();
 	});
 
 	const renderComponent = (props: {
