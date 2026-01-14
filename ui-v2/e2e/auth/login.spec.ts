@@ -8,6 +8,9 @@ import {
 } from "../fixtures";
 
 // These tests require the server to be started with auth enabled.
+// To install and run the Prefect server locally:
+//   pip install -e .
+//   prefect server start --auth-enabled
 // Set PREFECT_E2E_TEST_CREDENTIALS env var to match your server's auth string.
 // Default format is "username:password" (e.g., "admin:secret")
 const TEST_CREDENTIALS =
