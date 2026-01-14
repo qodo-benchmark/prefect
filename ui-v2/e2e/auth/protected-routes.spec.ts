@@ -105,7 +105,7 @@ test.describe("Protected Routes", () => {
 		await page.getByPlaceholder("admin:pass").fill(TEST_CREDENTIALS);
 		await page.getByRole("button", { name: "Login" }).click();
 
-		// Should redirect to original page
-		await expect(page).toHaveURL(/\/automations/);
+		// Should redirect to dashboard
+		await expect(page).toHaveURL(/\/dashboard/);
 	});
 });
