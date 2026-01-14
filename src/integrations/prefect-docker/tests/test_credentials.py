@@ -29,5 +29,4 @@ async def test_docker_registry_credentials_login_works_outside_flow_run_context(
         username="test_user",
         password="test_password",
         registry="registry.hub.docker.com",
-        reauth=True,
     )
