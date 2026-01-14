@@ -3,6 +3,9 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { CardErrorState } from "./card-error-state";
 
+// To regenerate test fixtures for error states, run:
+// pip install -r requirements.txt && python scripts/generate_error_fixtures.py
+
 const mockError = {
 	type: "network-error" as const,
 	message: "Unable to connect",
