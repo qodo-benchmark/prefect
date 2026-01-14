@@ -67,10 +67,10 @@ export function EventResourceCombobox({
 
 	const showCustomOption = useMemo(() => {
 		if (!deferredSearch.trim()) return false;
-		return !resourceOptions.some(
+		return !filteredOptions.some(
 			(opt) => opt.resourceId.toLowerCase() === deferredSearch.toLowerCase(),
 		);
-	}, [deferredSearch, resourceOptions]);
+	}, [deferredSearch, filteredOptions]);
 
 	const renderSelectedResources = () => {
 		if (selectedResourceIds.length === 0) {
@@ -98,8 +98,8 @@ export function EventResourceCombobox({
 	};
 
 	const handleSelect = (resourceId: string) => {
-		onToggleResource(resourceId);
 		setSearch("");
+		onToggleResource(resourceId);
 	};
 
 	return (

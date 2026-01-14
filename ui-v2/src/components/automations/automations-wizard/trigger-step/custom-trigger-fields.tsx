@@ -44,7 +44,7 @@ export const CustomTriggerFields = () => {
 										const newEvents = events.includes(event)
 											? events.filter((e) => e !== event)
 											: [...events, event];
-										field.onChange(newEvents);
+										field.onChange(newEvents.length > 0 ? newEvents : undefined);
 									}}
 								/>
 							</FormControl>
@@ -148,7 +148,7 @@ export const CustomTriggerFields = () => {
 												const newEvents = events.includes(event)
 													? events.filter((e) => e !== event)
 													: [...events, event];
-												field.onChange(newEvents);
+												field.onChange(newEvents.length > 0 ? newEvents : []);
 											}}
 										/>
 									</FormControl>
