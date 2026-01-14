@@ -211,7 +211,7 @@ function FlowsRoute() {
 	const { data: totalCount } = useSuspenseQuery(
 		buildCountFlowsFilteredQuery({
 			offset: 0,
-			sort: "NAME_ASC",
+			sort: search.sort,
 		}),
 	);
 

