@@ -508,21 +508,25 @@ async def update(
     except ValueError:
         exit_with_error(f"Invalid automation ID: {id!r}")
 
-    if from_file:
-        if not from_file.exists():
-            exit_with_error(f"File not found: {from_file}")
+    def parse_automation_file(file_path: Path):
+        """Parse automation data from a YAML or JSON file."""
+        if not file_path.exists():
+            exit_with_error(f"File not found: {file_path}")
 
-        with open(from_file, "r") as f:
+        with open(file_path, "r") as f:
             content = f.read()
 
-        if from_file.suffix.lower() in [".yaml", ".yml"]:
-            data = pyyaml.safe_load(content)
-        elif from_file.suffix.lower() == ".json":
-            data = orjson.loads(content)
+        if file_path.suffix.lower() in [".yaml", ".yml"]:
+            return pyyaml.safe_load(content)
+        elif file_path.suffix.lower() == ".json":
+            return orjson.loads(content)
         else:
             exit_with_error(
                 "File extension not recognized. Please use .yaml, .yml, or .json"
             )
+
+    if from_file:
+        data = parse_automation_file(from_file)
     else:  # from_json
         try:
             data = orjson.loads(from_json)
