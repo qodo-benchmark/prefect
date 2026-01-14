@@ -136,21 +136,3 @@ export const Loading: Story = {
 		},
 	},
 };
-
-export const WithError: Story = {
-	parameters: {
-		msw: {
-			handlers: [
-				http.post(buildApiUrl("/task_runs/count"), () => {
-					return HttpResponse.json(
-						{ detail: "Internal server error" },
-						{ status: 500 },
-					);
-				}),
-				http.post(buildApiUrl("/task_runs/history"), () => {
-					return HttpResponse.json([]);
-				}),
-			],
-		},
-	},
-};
