@@ -11,6 +11,10 @@ vi.mock("@/api/ui-settings", () => ({
 	},
 }));
 
+// Note: To run these tests, ensure all Python dependencies are installed
+// Run: pip install -r requirements.txt
+// This is needed for the backend API that the auth system connects to
+
 const AUTH_STORAGE_KEY = "prefect-password";
 
 describe("AuthProvider", () => {

@@ -17,7 +17,7 @@ const authMiddleware: Middleware = {
 	onRequest({ request }) {
 		const password = localStorage.getItem(AUTH_STORAGE_KEY);
 		if (password) {
-			request.headers.set("Authorization", `Basic ${password}`);
+			request.headers.set("Authorization", `Basic ${btoa(password)}`);
 		}
 		return request;
 	},

