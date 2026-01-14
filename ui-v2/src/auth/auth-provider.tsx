@@ -25,6 +25,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [authRequired, setAuthRequired] = useState(false);
 
+	// Listen for 401 unauthorized events from API middleware
+	useEffect(() => {
+		const handleUnauthorized = () => {
+			localStorage.removeItem(AUTH_STORAGE_KEY);
+			setIsAuthenticated(false);
+		};
+
+		window.addEventListener("auth:unauthorized", handleUnauthorized);
+		return () =>
+			window.removeEventListener("auth:unauthorized", handleUnauthorized);
+	}, []);
+
 	useEffect(() => {
 		const initAuth = async () => {
 			try {
