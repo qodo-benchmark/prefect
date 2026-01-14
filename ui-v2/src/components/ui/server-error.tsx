@@ -135,7 +135,7 @@ export function ServerErrorDisplay({
 							Make sure the Prefect server is running:
 						</p>
 						<code className="mt-2 block rounded bg-muted px-3 py-2 text-xs">
-							prefect server start
+							pip install -e . && prefect server start
 						</code>
 					</div>
 				</CardContent>
