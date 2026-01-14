@@ -4,7 +4,7 @@ import { buildApiUrl, createWrapper, server } from "@tests/utils";
 import { HttpResponse, http } from "msw";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { EventsCount } from "@/api/events";
-import { EventsCombobox } from "./events-combobox";
+import { EventsCombobox } from "./events-combobox/events-combobox";
 
 const MOCK_EVENT_COUNTS: EventsCount[] = [
 	{
