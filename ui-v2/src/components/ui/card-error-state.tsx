@@ -29,7 +29,7 @@ export function CardErrorState({
 						</p>
 					)}
 				</div>
-				{onRetry && (
+				{onRetry && !isRetrying && (
 					<Button
 						variant="outline"
 						onClick={onRetry}
