@@ -6,6 +6,14 @@
 npm ci
 ```
 
+### Installing Python dependencies
+
+For backend integration (e.g., OpenAPI schema generation):
+
+```
+pip install -r requirements.txt
+```
+
 ### Compiles and hot-reloads for development
 
 ```
