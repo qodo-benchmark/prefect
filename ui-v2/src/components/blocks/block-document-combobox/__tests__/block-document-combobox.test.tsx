@@ -6,7 +6,7 @@ import { HttpResponse, http } from "msw";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import type { components } from "@/api/prefect";
 import { createFakeBlockDocument } from "@/mocks";
-import { BlockDocumentCombobox } from "./block-document-combobox";
+import { BlockDocumentCombobox } from "../block-document-combobox";
 
 describe("BlockDocumentCombobox", () => {
 	beforeAll(mockPointerEvents);
