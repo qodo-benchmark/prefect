@@ -4,6 +4,7 @@ Command line interface for SDK generation.
 
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 
 import typer
@@ -20,6 +21,9 @@ from prefect.cli._types import PrefectTyper
 from prefect.cli._utilities import exit_with_error, exit_with_success
 from prefect.cli.root import app
 from prefect.client.orchestration import get_client
+
+# Logger for SDK CLI operations
+logger = logging.getLogger(__name__)
 
 sdk_app: PrefectTyper = PrefectTyper(name="sdk", help="Manage Prefect SDKs. (beta)")
 
@@ -86,6 +90,7 @@ async def generate(
         )
 
     app.console.print("Fetching deployments...")
+    logger.debug(f"Generating SDK with filters: flows={flow}, deployments={deployment}")
 
     try:
         async with get_client() as client:
