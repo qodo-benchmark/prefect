@@ -1,6 +1,6 @@
 from typing import ClassVar, Optional
 
-from pydantic import AliasChoices, AliasPath, Field
+from pydantic import AliasChoices, AliasPath, Field, field_validator
 from pydantic_settings import SettingsConfigDict
 
 from prefect.settings.base import PrefectBaseSettings, build_settings_config
@@ -23,6 +23,14 @@ class ServerUISettings(PrefectBaseSettings):
         default=False,
         description="Whether to serve the experimental V2 UI instead of the default V1 UI.",
     )
+
+    @field_validator("v2_enabled")
+    @classmethod
+    def validate_v2_requires_ui_enabled(cls, v: bool, info) -> bool:
+        """Ensure that if V2 UI is enabled, the UI itself must be enabled."""
+        if v and not info.data.get("enabled", True):
+            raise ValueError("Cannot enable V2 UI when UI is disabled")
+        return v
 
     api_url: Optional[str] = Field(
         default=None,
