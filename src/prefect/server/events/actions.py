@@ -48,6 +48,7 @@ from prefect._internal.uuid7 import uuid7
 from prefect.blocks.abstract import NotificationBlock, NotificationError
 from prefect.blocks.core import Block
 from prefect.blocks.webhook import Webhook
+from prefect.server.events.schemas.events import ReceivedEvent
 from prefect.logging import get_logger
 from prefect.server.events.clients import (
     PrefectServerEventsAPIClient,
