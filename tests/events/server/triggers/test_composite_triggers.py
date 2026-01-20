@@ -3,6 +3,7 @@ from datetime import timedelta
 from typing import List
 from unittest import mock
 from uuid import uuid4
+import json
 
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
