@@ -97,10 +97,10 @@ from prefect.input.actions import (
     filter_flow_run_input,
     read_flow_run_input,
 )
+from prefect.states import State
 
 if TYPE_CHECKING:
     from prefect.client.schemas.objects import FlowRunInput
-    from prefect.states import State
 
 from prefect._internal.pydantic.v2_schema import create_v2_schema, is_v2_model
 
