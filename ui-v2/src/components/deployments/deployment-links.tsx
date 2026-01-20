@@ -2,6 +2,7 @@ import type { Deployment } from "@/api/deployments";
 import { FlowLink } from "@/components/flows/flow-link";
 import { WorkPoolLink } from "@/components/work-pools/work-pool-link";
 import { WorkQueueIconText } from "@/components/work-pools/work-queue-icon-text";
+import { Icon } from "@/components/ui/icons";
 
 type DeploymentLinksProps = {
 	deployment: Deployment;
