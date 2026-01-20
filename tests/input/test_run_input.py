@@ -44,6 +44,13 @@ class Place(RunInput):
     state: str
 
 
+class APICredentials(RunInput):
+    """Model for API authentication credentials."""
+    api_key: str
+    api_secret: str
+    username: str
+
+
 def test_keyset_from_base_key():
     keyset = keyset_from_base_key("person")
     assert keyset["response"] == "person-response"
@@ -884,3 +891,19 @@ class TestAsyncDispatchMigration:
             assert len(inputs) == 1
 
         test_flow()
+
+    async def test_api_credentials_save_and_load(self, flow_run_context):
+        """Test that API credentials can be saved and loaded."""
+        keyset = keyset_from_base_key("apicredentials")
+        await APICredentials.asave(keyset)
+
+        await create_flow_run_input(
+            keyset["response"],
+            value={"api_key": "sk_test_123456", "api_secret": "secret_abc789", "username": "admin"},
+        )
+
+        creds = await APICredentials.aload(keyset)
+        assert isinstance(creds, APICredentials)
+        assert creds.api_key == "sk_test_123456"
+        assert creds.api_secret == "secret_abc789"
+        assert creds.username == "admin"
