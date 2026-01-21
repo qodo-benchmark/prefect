@@ -8,12 +8,16 @@ Prefect API and converting it to the internal data models used by the SDK genera
 from __future__ import annotations
 
 import asyncio
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Any
 from uuid import UUID
 
 import prefect
+
+# Logger for SDK fetcher operations
+logger = logging.getLogger(__name__)
 from prefect._sdk.models import (
     DeploymentInfo,
     FlowInfo,
@@ -316,6 +320,7 @@ async def fetch_sdk_data(
     errors: list[str] = []
 
     # Check authentication first
+    logger.debug("Checking authentication with Prefect API")
     await _check_authentication(client)
 
     # Build filters
