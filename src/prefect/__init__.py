@@ -69,7 +69,7 @@ __ui_static_path__: pathlib.Path = __module_path__ / "server" / "ui"
 __ui_v2_static_subpath__: pathlib.Path = __module_path__ / "server" / "ui_v2_build"
 
 # The absolute path to the built V2 UI within the Python module
-__ui_v2_static_path__: pathlib.Path = __module_path__ / "server" / "ui-v2"
+__ui_v2_static_path__: pathlib.Path = __module_path__ / "server" / "ui_v2"
 
 del _build_info, pathlib
 
