@@ -760,6 +760,24 @@ class TriggeredAction(PrefectBaseModel):
         default=0,
         description="The index of the action within the automation",
     )
+    automation_triggered_event_id: UUID | None = Field(
+        default=None,
+        description=(
+            "The ID of the automation.triggered or automation.resolved event that "
+            "prompted this action, used to link automation.action.* events back to "
+            "the state change event"
+        ),
+    )
+
+    @field_validator("automation_triggered_event_id")
+    @classmethod
+    def validate_automation_triggered_event_id(cls, v, info):
+        """Ensure automation_triggered_event_id is only set when triggering_event exists."""
+        if v is not None and info.data.get("triggering_event") is None:
+            raise ValueError(
+                "automation_triggered_event_id can only be set when triggering_event is provided"
+            )
+        return v
 
     def idempotency_key(self) -> str:
         """Produce a human-friendly idempotency key for this action"""
