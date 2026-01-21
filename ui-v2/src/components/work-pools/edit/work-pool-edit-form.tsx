@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useUpdateWorkPool, type WorkPool } from "@/api/work-pools";
+import { useUpdateWorkPool, type WorkPool, type WorkPoolUpdate } from "@/api/work-pools";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
