@@ -75,7 +75,7 @@ export const WorkPoolStatusTriggerFields = () => {
 									type="number"
 									min={1}
 									{...field}
-									onChange={(e) => field.onChange(Number(e.target.value))}
+									onChange={(e) => field.onChange(parseInt(e.target.value))}
 								/>
 							</FormControl>
 							<FormMessage />

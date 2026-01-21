@@ -35,9 +35,7 @@ export const CustomTriggerFields = () => {
 									placeholder="prefect.flow-run.Completed"
 									value={textValue}
 									onChange={(e) => {
-										const lines = e.target.value
-											.split("\n")
-											.filter((line) => line.trim() !== "");
+										const lines = e.target.value.split("\n");
 										field.onChange(lines.length > 0 ? lines : undefined);
 									}}
 									rows={4}

@@ -26,13 +26,17 @@ export const DeploymentStatusTriggerFields = () => {
 	const form = useFormContext<AutomationWizardSchema>();
 	const posture = useWatch<AutomationWizardSchema>({ name: "trigger.posture" });
 
+	// Determine which field to use based on posture
+	const statusFieldName =
+		posture === "Proactive" ? "trigger.after" : "trigger.expect";
+
 	return (
 		<div className="space-y-4">
 			<div className="flex items-end gap-4">
 				<PostureSelect />
 				<FormField
 					control={form.control}
-					name="trigger.expect"
+					name={statusFieldName}
 					render={({ field }) => {
 						const selectedStatus = field.value?.[0];
 						return (
