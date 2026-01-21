@@ -155,7 +155,7 @@ class TestGcsBucket:
 
         # Simulate path that already has bucket_folder prefix
         # (as would happen when create_result_record calls _resolve_path)
-        already_prefixed_path = f"{bucket_folder}abc123"
+        already_prefixed_path = f"{bucket_folder}/abc123"
 
         # When write_path calls _resolve_path again, it should NOT double-nest
         result = gcs_bucket._resolve_path(already_prefixed_path)
