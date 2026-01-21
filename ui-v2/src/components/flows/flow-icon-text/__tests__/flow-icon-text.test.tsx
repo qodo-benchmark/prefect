@@ -11,7 +11,7 @@ import { HttpResponse, http } from "msw";
 import { Suspense } from "react";
 import { describe, expect, it } from "vitest";
 import { createFakeFlow } from "@/mocks";
-import { FlowIconText } from "./flow-icon-text";
+import { FlowIconText } from "../flow-icon-text";
 
 const mockFlow = createFakeFlow({
 	id: "flow-123",
