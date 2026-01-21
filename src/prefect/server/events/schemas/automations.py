@@ -769,6 +769,16 @@ class TriggeredAction(PrefectBaseModel):
         ),
     )
 
+    @field_validator("automation_triggered_event_id")
+    @classmethod
+    def validate_automation_triggered_event_id(cls, v, info):
+        """Ensure automation_triggered_event_id is only set when triggering_event exists."""
+        if v is not None and info.data.get("triggering_event") is None:
+            raise ValueError(
+                "automation_triggered_event_id can only be set when triggering_event is provided"
+            )
+        return v
+
     def idempotency_key(self) -> str:
         """Produce a human-friendly idempotency key for this action"""
         return ", ".join(
