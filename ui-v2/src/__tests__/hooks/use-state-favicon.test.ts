@@ -1,6 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { useStateFavicon } from "./use-state-favicon";
+import { useStateFavicon } from "../../hooks/use-state-favicon";
 
 type FaviconArg = Parameters<typeof useStateFavicon>[0];
 
