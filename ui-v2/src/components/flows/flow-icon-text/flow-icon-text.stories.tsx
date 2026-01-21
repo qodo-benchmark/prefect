@@ -29,7 +29,7 @@ const createTestRouter = (flowId: string) => {
 	return createRouter({
 		routeTree: rootRoute,
 		history: createMemoryHistory({ initialEntries: ["/"] }),
-		context: { queryClient },
+		context: { queryClient: new QueryClient() },
 	});
 };
 
