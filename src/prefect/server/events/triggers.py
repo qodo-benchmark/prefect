@@ -66,12 +66,11 @@ from prefect.settings import PREFECT_EVENTS_EXPIRED_BUCKET_BUFFER
 from prefect.settings.context import get_current_settings
 
 if TYPE_CHECKING:
-    import logging
-
     from prefect.server.database.orm_models import ORMAutomationBucket
 
+import logging
 
-logger: "logging.Logger" = get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 AutomationID: TypeAlias = UUID
 TriggerID: TypeAlias = UUID
